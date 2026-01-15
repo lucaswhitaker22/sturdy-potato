@@ -1,133 +1,69 @@
 # Summary
 
-### Phase 1: The "Clicker" Foundation (MVP)
+This plan breaks the game into buildable phases.
 
-Goal: Create a functional single-player loop where you can dig, find a crate, and gamble it.
+Use these docs as canon:
 
-* Logic: Set up the basic state machine (Scrap count, Crate inventory).
-* The Dig: Implement the \[EXTRACT] button with a basic progress bar.
-* The Refiner: Build the 5-stage "Sift" logic. Use simple math for Success/Shatter.
-* Item System: Create a JSON database of 20 "Common" and "Rare" items.
-* UI: A basic functional layout (Buttons, Labels, and a simple List for inventory).
+* [1. The Vision & World Bible](../game-overview/1.-the-vision-and-world-bible.md) (terms, vibe, pillars)
+* [2: The Mechanics](../game-overview/2-the-mechanics.md) (loops, odds, stage names)
+* [3 - The Loot & Collection Schema](../game-overview/3-the-loot-and-collection-schema.md) (tiers, identity, HV/mint/condition)
+* [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro.md) (Bazaar, tax, tri-currency)
+* [5 - RPG Skilling System](../game-overview/5-rpg-skilling-system.md) (OSRS XP curve, mastery perks, Total Level gates)
 
-### Phase 2: The "Amateur Archaeologist" (Progression)
+### Phase 1 — Clicker Foundation (MVP)
 
-Goal: Introduce the OSRS-style grind and the workshop.
+Goal: ship the Field → Lab → Vault loop.
 
-* Skilling Engine: Implement XP tracking for Excavation and Restoration.
-* Workshop: Create the Tool Tier system. Link "Scrap Cost" to "Auto-dig" power.
-* Collection Sets: Implement the "Collection Book." Create the logic that checks if a set is complete and applies a passive buff.
-* Save System: Local browser storage or a simple user account database (Firebase/Supabase).
+* Manual `[EXTRACT]` with a progress bar and cooldown.
+* Extract outcomes align to Mechanics: Scrap / Crate / Anomaly.
+* Lab supports `[CLAIM]` vs `[SIFT]`, with Shatter failures.
+* A tiny starter catalog (20 items) with Archive-style flavor text.
 
-### Phase 3: The "Connected World" (The MMO Layer)
+Plan: [Phase 1: The "Clicker" Foundation (MVP)](phase-1-the-clicker-foundation-mvp/)\
+Build contract: [Phase 1 (MVP) requirements](phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
 
-Goal: Transition from a solo game to a persistent world.
+### Phase 2 — Progression
 
-* Real-time Feed: Implement a "Global Activity Feed" using WebSockets (Socket.io) to show when players find rare items.
-* The Bazaar: Build the Auction House. Focus on "Listing" and "Bidding" logic.
-* Minting Logic: Implement the "Global Serial Number" system so every item has a unique `#ID`.
-* Server Logic: Move the "Sifting" logic to the server-side to prevent players from cheating the RNG.
+Goal: turn the loop into a grind with persistence.
 
-## Phase 3: The "Connected World" (The MMO Layer)
+* Skills: Excavation + Restoration.
+* Workshop tools unlock passive extraction (10s tick).
+* Collections (sets) grant permanent buffs.
+* Supabase persistence, autosave, and offline gains (Battery Capacity cap).
 
-In Phase 3, the game moves from a single-player "clicker" into a living, breathing Massively Multiplayer Online (MMO) environment. This transition focuses on social validation, market competition, and digital scarcity.
+Plan: [Phase 2: The "Amateur Archaeologist" (Progression)](phase-2-the-amateur-archaeologist-progression/)\
+Build contract: [Phase 2 requirements](phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md)
 
-***
+### Phase 3 — MMO layer
 
-### 1. The Global Activity Feed (Social Proof)
+Goal: make it connected and server-authoritative.
 
-The Global Feed is a real-time, scrolling text ticker that appears on every player's screen. It serves as the game's "heartbeat," making the world feel populated even if you are playing solo.
+* Global Activity Feed (Supabase Realtime).
+* Bazaar auctions.
+* Minting (global serial numbers per catalog item).
+* Server authority for RNG and currency writes.
 
-* The Content: The feed broadcasts significant events:
-  * Epic Finds: _"User\_Scavenger just unearthed \[Old World Smartphone #004]!"_
-  * High-Stakes Gambles: _"RNG\_Lord successfully sifted a Crate to Stage 5!"_
-  * Bazaar Sales: _"A \[Vintage GameBoy] was just sold for 1.2M Scrap!"_
-* The Psychology: Seeing other players succeed in real-time creates a "gold rush" effect, encouraging active play and high-risk refining.
+Economy canon:
 
-***
+* Scrap is the Phase 1–3 economy currency.
+* Historical Influence (HI) becomes relevant in Phase 4.
+* Vault Credits (premium) is Phase 5+.
 
-### 2. The Bazaar: The Player-Driven Economy
+Plan: [Phase 3: The "Connected World" (The MMO Layer)](phase-3-the-connected-world-the-mmo-layer/)\
+Build contract: [Phase 3 requirements](phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
 
-The Bazaar is a centralized UI where players trade artifacts. This introduces a "Buy Low, Sell High" meta-game that exists entirely within menus.
+### Phase 4 — Meta-game
 
-#### 2.1 Listing & Bidding Logic
+Goal: ship the Archive loops.
 
-* Listing: Players put an item from their Vault onto the market. They must set a Duration (e.g., 24 hours) and a Reserve Price (Minimum bid).
-* Bidding: Other players place bids using their stored Scrap. When a new bid is placed, the bidder's Scrap is "held" by the Archive.
-* The Outbid: If a player is outbid, their Scrap is instantly returned to their account with a notification: _"You have been outbid on \[Item Name]!"_
-* The Result: At the end of the duration, the highest bidder gets the item, and the seller receives the Scrap (minus a 5% "Archive Tax").
+* Museum, Historical Influence, world events.
+* Advanced skills (Appraisal + Smelting).
 
-***
+Plan: [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)\
+Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
 
-### 3. Minting Logic: The Serial Number System
+### Phase 5 — Juice & launch
 
-To make items truly unique and tradable, every artifact generated is assigned a Global Serial Number (e.g., _Toaster #001_).
+Goal: make the UI feel premium and ship.
 
-* Scarcity: There is only ever one "#001" of any item in the entire game world.
-* Historical Value (HV): Low-digit mints (#1–#10) receive a massive multiplier to their Historical Value.
-* The Pursuit: Players will often prioritize buying a "Common #005" over a "Rare #45,000" because of the prestige and social status associated with early discoveries.
-
-***
-
-### 4. Server Authority: The Security Layer
-
-To ensure the MMO economy remains fair, all "Game Logic" is moved from the player's browser to the Server (Supabase).
-
-* Cheating Prevention: In Phase 1/2, a clever player could potentially "hack" their local browser code to win every gamble. In Phase 3, the player only sends a "Request" to sift. The Server rolls the dice, updates the database, and sends the result back.
-*   The "Handshake": 1. Player clicks \[SIFT].
-
-    2\. Client sends sift\_request to Supabase.
-
-    3\. Server checks: Does player have enough Scrap? Is the crate real?
-
-    4\. Server generates the RNG and updates the Vault.
-
-    5\. Client receives the result and plays the animation.
-
-***
-
-### Phase 3 Success Metrics
-
-1. Market Activity: At least 50 successful player-to-player trades in the Bazaar.
-2. Live Presence: The Global Feed successfully broadcasts a "Rare Find" to all online players simultaneously.
-3. Integrity: Attempting to manually edit "Scrap" values in the browser console results in an error, as the server holds the "Source of Truth."
-4. Value Variance: Players are actively bidding significantly more for "#001" items than for higher-numbered versions of the same item.
-
-***
-
-Would you like me to move on to Phase 4: The "High Curator" (Meta-Game), covering the Global Museum and World Events?
-
-[Supabase Realtime with Vue 3](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3DVO0v4C2U7vM)
-
-This video provides a practical guide on implementing real-time broadcast and database listeners in a Vue 3 application using Supabase, which is essential for building the Global Activity Feed and real-time Bazaar updates mentioned in Phase 3.
-
-### Phase 5: The "Polished Vault" (Juice & Launch)
-
-Goal: Make the UI feel like a premium game, not a spreadsheet.
-
-* Visual Juice: Add screen-shake on sifting, glowing borders for rare items, and CRT-flicker effects.
-* Audio Pass: Implement the tactile "Click," "Clink," and "Shatter" sounds.
-* Monetization: Add the Premium Shop for UI skins and "Stabilizer" charms.
-* Retention: Build the "Daily Logbook" (7-day login streak) and Daily Tasks.
-
-***
-
-#### Implementation Priority Matrix
-
-| **Feature**              | **Difficulty** | **Impact** | **Priority**   |
-| ------------------------ | -------------- | ---------- | -------------- |
-| Sifting RNG Logic        | Low            | Critical   | P0 (Immediate) |
-| Item Minting Database    | Medium         | High       | P0 (Immediate) |
-| Bazaar (Auction House)   | High           | Critical   | P1 (Core MMO)  |
-| Level 99 Masteries       | Medium         | High       | P2 (Mid-Term)  |
-| Sound Effects/Animations | Low            | Very High  | P2 (Mid-Term)  |
-
-***
-
-#### Technical Recommendation for "Simple" Start:
-
-1. Backend: Use Supabase or Pocketbase. They handle the database and user authentication out of the box, allowing you to focus on the game logic.
-2. Frontend: Use React or Vue. The "State" management (tracking XP/Scrap) is much easier in these frameworks.
-3. Hosting: Vercel or Netlify for free/cheap hosting of the UI.
-
-Would you like me to draft a sample "XP Table" for Levels 1–99 or create the specific "Item Attributes" for a JSON database entry?
+Plan: [Phase 5: The "Polished Vault" (Juice & Launch)](phase-5-the-polished-vault-juice-and-launch.md)

@@ -62,7 +62,7 @@ Explicit non-goals for Phase 2:
   * Smelting XP, Smelting perks, and item-to-scrap conversion tuning.
   * Total Level gates, zone unlocks, and blueprint drops at high levels.
 * **Lab and Field extensions**
-  * Anomalies / mini-events from Field extraction.
+  * Anomaly system beyond Phase 1’s log-only anomaly outcome (mini-events, global modifiers, etc).
   * Extra shatter/failure states (Fine Dust payouts, cooldowns, cursed fragments).
   * Any new refine stages, odds, rarities, or rarity UI color canon.
 * **Collections depth beyond Phase 2**
@@ -134,10 +134,17 @@ XP must never decrease.
 
 #### R2 — Level curve
 
-The level curve must follow:
+The level curve must follow the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
 
-* Level 1 requires `100` XP.
-* Each next level requires \~`10%` more XP than the prior level.
+The total XP required for a given level $$L$$ is:
+
+$$
+XP(L) = \sum_{n=1}^{L-1} \lfloor n + 300 \cdot 2^{n/7} \rfloor
+$$
+
+Canon checkpoints:
+
+* Level 99 requires \~`13,034,431` XP total.
 
 The UI must show current level for both skills.
 
@@ -170,7 +177,7 @@ This bonus must be:
 The UI must show the bonus (at least in a tooltip).
 
 {% hint style="info" %}
-Open question: what is the base crate drop rate in Phase 2? Current docs disagree (Phase 1 vs Mechanics). Pick a single canon value.
+Canon: base crate drop rate is `15%` per Extract outcome roll (from Mechanics).
 {% endhint %}
 
 #### R5 — Restoration XP sources
@@ -210,9 +217,9 @@ The Workshop must list tool tiers with:
 Minimum tool list:
 
 * Rusty Shovel — cost 0, level req 1, passive 0 (manual only)
-* Pneumatic Pick — cost 1,500, level req 5, passive 2
-* Ground Radar — cost 10,000, level req 15, passive 10
-* Industrial Drill — cost 50,000, level req 30, passive 50
+* Pneumatic Pick — cost 2,500, level req 5, passive 5
+* Ground Radar — cost 15,000, level req 15, passive 25
+* Industrial Drill — cost 80,000, level req 30, passive 100
 
 #### R8 — Tool purchase gating
 
@@ -242,13 +249,9 @@ If a crate drops:
 * It is added to the crate tray.
 * The player sees a notification.
 
-{% hint style="info" %}
 Open question: how does passive extraction interact with the Phase 1 “tray full” rule? Recommended: if tray is full, crates don’t drop, but Scrap still accrues.
-{% endhint %}
 
-{% hint style="info" %}
-Coverage note: [2: The Mechanics](../../game-overview/2-the-mechanics.md) describes a 10-second “tick” and a “Battery Capacity” offline cap. Phase 2 only requires passive extraction to exist and work online + offline. Tick rate and cap behavior are captured as open questions in R15 and Known conflicts.
-{% endhint %}
+Passive extraction must run on a 10-second tick (Mechanics-aligned).
 
 #### R10 — Collections feature
 
@@ -325,9 +328,11 @@ On login, the game must:
 
 Offline gains must not require the user to keep the tab open.
 
-{% hint style="info" %}
-Open question: do we cap offline gains? If yes, what cap? The Mechanics doc references “Battery Capacity,” but Phase 2 does not.
-{% endhint %}
+Offline gains must be capped by a “Battery Capacity” limit.
+
+The cap value must be a single config constant (hours or seconds).
+
+The UI must show the current cap, or the remaining offline headroom.
 
 ### Security / integrity requirements
 
@@ -387,14 +392,10 @@ Phase 2 is done when:
 4. Completing a 3-item set applies a visible buff.
 5. Refreshing the browser restores state.
 
-### Known conflicts (needs a canon decision)
+### Canon notes (resolved conflicts)
 
-These docs currently disagree on key numbers:
+Phase 2 uses Mechanics as the numeric source of truth for:
 
-* Extract RNG (Phase 1 requirements vs Mechanics).
-* Refining stage count and odds (Phase 1 requirements vs Mechanics).
-* Tool tier costs and outputs (Mechanics vs Phase 2 plan).
-* XP/level curve (OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md) vs simplified curve in R2).
-* Offline cap (“Battery Capacity”) and related UI (Mechanics vs Phase 2 requirements).
-
-Before implementation, pick a single source-of-truth for Phase 2.
+* Tool costs and passive power.
+* Passive extraction tick rate (10 seconds).
+* Offline cap concept (“Battery Capacity”).

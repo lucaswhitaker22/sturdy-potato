@@ -319,12 +319,12 @@ Low mints must be meaningfully special.
 
 Minimum rule:
 
-* Mint numbers 1–10 receive an HV multiplier.
+* Mint numbers 1–10 receive a `+50%` HV multiplier (`1.5x`).
 
 The multiplier must be visible in the UI.
 
 {% hint style="info" %}
-Open question: Phase 1/2 requirements do not model HV. If HV is not yet shipped, expose the prestige as a “Mint Bonus” label. Do not block Phase 3 on HV math.
+If HV is not yet shipped, expose the prestige as a “Low Mint (+50%)” badge. Do not block Phase 3 on HV math.
 {% endhint %}
 
 #### R14 — Server-authoritative RNG and economy
