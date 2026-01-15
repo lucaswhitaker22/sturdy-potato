@@ -8,6 +8,24 @@ This is the build contract for Phase 2.
 
 It turns the Phase 2 plan into concrete requirements.
 
+### Canon and coverage rules
+
+This page is the Phase 2 source of truth.
+
+It must fully “cover” the functionality described in:
+
+* [Game Overview](../../)
+* [0 - Game Loop](../../game-overview/0-game-loop.md)
+* [2: The Mechanics](../../game-overview/2-the-mechanics.md)
+* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
+* [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)
+* [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
+
+Coverage means:
+
+* If it ships in Phase 2, it must be a requirement here.
+* If it does **not** ship in Phase 2, it must be named in **Out of scope**.
+
 ### Scope
 
 Phase 2 extends the Phase 1 loop with progression and persistence:
@@ -21,15 +39,46 @@ Phase 2 extends the Phase 1 loop with progression and persistence:
 Phase 2 assumes Phase 1 is already working:
 
 * Manual Extract in the Field.
-* Crates, Lab sifting, shatter outcomes.
+* Crates and the Lab loop (`[CLAIM]` vs `[SIFT]`), including shatter outcomes.
 * Vault item storage.
+* A crate tray exists (capacity is Phase 1 canon; Mechanics implies 5 slots).
 
 #### Out of scope
 
-* Bazaar, trading, museum, and other MMO features.
-* Appraisal and Smelting skills.
-* Mint number, condition, HV, prismatic variants.
-* New dig sites, zones, or world events.
+Anything in the Game overview docs that isn’t listed as a Phase 2 requirement is out.
+
+Explicit non-goals for Phase 2:
+
+* **Macro / MMO decks**
+  * Bazaar: trading, listing deposits, taxes, certifications, tickers.
+  * Archive: museum themes, leaderboard rewards, Historical Influence, quests.
+  * Global Feed: cross-player announcements and realtime social feed.
+* **Loot identity / economy meta**
+  * Mint number, condition modifiers, Historical Value (HV).
+  * Prismatic (“shiny”) variants and dissolving into Vault Credits.
+  * Vault Credits and any premium-currency flows.
+* **Skills beyond Phase 2**
+  * Appraisal XP, Appraisal perks, and any market-fee reductions.
+  * Smelting XP, Smelting perks, and item-to-scrap conversion tuning.
+  * Total Level gates, zone unlocks, and blueprint drops at high levels.
+* **Lab and Field extensions**
+  * Anomalies / mini-events from Field extraction.
+  * Extra shatter/failure states (Fine Dust payouts, cooldowns, cursed fragments).
+  * Any new refine stages, odds, rarities, or rarity UI color canon.
+* **Collections depth beyond Phase 2**
+  * Buff types beyond `[EXTRACT]` cooldown (e.g., Scrap gain, Stability, Bazaar fees).
+  * Manual “set-lock” UX (Phase 2 only needs auto-locking on completion).
+* **Workshop depth beyond Phase 2**
+  * Tool leveling, exponential upgrade curves, Overclocking / prestige.
+  * Tool stats beyond Phase 2 needs (manual dig speed, crate-find-rate-per-tool, “Extraction Power” formulas).
+  * Tool tiers beyond the minimum list in R7.
+* **New content**
+  * New dig sites, zones, time-boxed world events, and event modifiers.
+* **UI/UX polish beyond Phase 2**
+  * Full 5-deck command bar and navigation spec (beyond adding Workshop + Collections).
+  * Button color language, micro-animations, audio “juice,” and glitch effects.
+  * Desktop vs mobile layout rules.
+  * Full skill dashboard UI (circular progress bars, milestone lists).
 
 ### Data requirements
 
@@ -197,6 +246,10 @@ If a crate drops:
 Open question: how does passive extraction interact with the Phase 1 “tray full” rule? Recommended: if tray is full, crates don’t drop, but Scrap still accrues.
 {% endhint %}
 
+{% hint style="info" %}
+Coverage note: [2: The Mechanics](../../game-overview/2-the-mechanics.md) describes a 10-second “tick” and a “Battery Capacity” offline cap. Phase 2 only requires passive extraction to exist and work online + offline. Tick rate and cap behavior are captured as open questions in R15 and Known conflicts.
+{% endhint %}
+
 #### R10 — Collections feature
 
 The Vault must add a new `[COLLECTIONS]` tab.
@@ -216,6 +269,7 @@ When an item is added to the Vault inventory, the game must run a set check.
 If the item completes a set:
 
 * The set becomes completed.
+* Set items become “locked” (cannot be removed from the set later).
 * The set UI changes to a “Gold glow” state.
 * The player receives the set buff permanently.
 * A toast notification is shown.
@@ -230,6 +284,8 @@ Minimum set to implement:
 Phase 2 must implement a buff/modifier system that can modify:
 
 * `[EXTRACT]` cooldown (required for Phase 2)
+
+Phase 2 does not need any other modifier types.
 
 The buff system must be:
 
@@ -272,6 +328,21 @@ Offline gains must not require the user to keep the tab open.
 {% hint style="info" %}
 Open question: do we cap offline gains? If yes, what cap? The Mechanics doc references “Battery Capacity,” but Phase 2 does not.
 {% endhint %}
+
+### Security / integrity requirements
+
+#### R19 — RNG authority (anti-cheat baseline)
+
+Any RNG that affects player progression must be computed server-side.
+
+Minimum scope for Phase 2:
+
+* Passive extraction crate rolls.
+* Passive extraction Scrap awards (if any variability exists).
+
+Phase 1 already owns the Lab sifting RNG.
+
+If Phase 1 does not have server-authoritative RNG yet, Phase 2 must not introduce new client-side RNG.
 
 ### UI/UX requirements
 
@@ -323,5 +394,7 @@ These docs currently disagree on key numbers:
 * Extract RNG (Phase 1 requirements vs Mechanics).
 * Refining stage count and odds (Phase 1 requirements vs Mechanics).
 * Tool tier costs and outputs (Mechanics vs Phase 2 plan).
+* XP/level curve (OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md) vs simplified curve in R2).
+* Offline cap (“Battery Capacity”) and related UI (Mechanics vs Phase 2 requirements).
 
 Before implementation, pick a single source-of-truth for Phase 2.
