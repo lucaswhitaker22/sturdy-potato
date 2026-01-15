@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public.notifications (
 );
 
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view own notifications" ON public.notifications;
 CREATE POLICY "Users can view own notifications" ON public.notifications FOR SELECT USING (auth.uid() = user_id);
 
 -- 2. Realtime Enabling
@@ -178,9 +179,10 @@ BEGIN
         RETURN jsonb_build_object('success', true, 'outcome', 'expired');
     END IF;
 END;
-$;
+$$;
 
 -- 8. Enable public access to listed items (so buyers can see details)
+DROP POLICY IF EXISTS "Public read listed items" ON public.vault_items;
 CREATE POLICY "Public read listed items" ON public.vault_items FOR SELECT USING (
     EXISTS (SELECT 1 FROM public.market_listings WHERE vault_item_id = vault_items.id AND status = 'active')
 );

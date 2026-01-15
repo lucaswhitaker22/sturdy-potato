@@ -101,10 +101,18 @@ const restorationBonus = computed(() =>
     <!-- Right: Balance & Tools (The "Accounting" Section) -->
     <div class="flex flex-col items-end gap-2">
       <!-- Date Stamp -->
-      <div
-        class="text-[10px] font-mono border border-gray-400 px-2 text-gray-700 mb-1"
-      >
-        DATE: {{ new Date().toISOString().split("T")[0] }}
+      <div class="flex gap-2">
+        <div
+          class="text-[10px] font-mono border border-gray-400 px-2 text-gray-700 mb-1"
+        >
+          DATE: {{ new Date().toISOString().split("T")[0] }}
+        </div>
+        <div
+          class="text-[10px] font-mono border border-gray-400 px-2 text-gray-700 mb-1"
+          title="Max offline accumulation time"
+        >
+          BATTERY: 8.0h
+        </div>
       </div>
 
       <div class="flex gap-8 items-end">
