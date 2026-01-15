@@ -11,7 +11,8 @@ In Phase 5, the transition from a "functional prototype" to a "premium-feel game
 The UI should never feel static. It must feel like a physical machine responding to the player.
 
 * The Glow & Flicker: Use CSS "CRT" filters. Rare items should have a persistent, soft pulse. Mythic items should have "Prismatic" shifting gradients on their borders.
-* The Shake: \* Minor: When the \[EXTRACT] button is clicked.
+* The Shake:
+  * Minor: When the \[EXTRACT] button is clicked.
   * Major: When a high-tier Sift succeeds or an item Shatters.
 * Dynamic Backgrounds: The background of the UI should subtly shift based on the current "Zone." (e.g., drifting dust particles in the _Dusty Suburbs_, or scrolling binary code in the _Data Center_).
 

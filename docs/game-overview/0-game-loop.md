@@ -7,7 +7,7 @@ The loop is a single routine that passes through the five UI “Decks.” Each d
 ### 0.1 The Core Routine (Deck Flow)
 
 1. **\[01] THE FIELD**: Click **\[EXTRACT]** to generate Scrap, Crates, or Anomalies.
-2. **\[02] THE LAB**: Refine Crates. Choose **\[Claim]** or **\[Sift]** at each stage.
+2. **\[02] THE LAB**: Refine Crates. Choose **\[CLAIM]** or **\[SIFT]** at each stage.
 3. **\[03] THE VAULT**: Keep, set-lock, smelt, or prep listings.
 4. **\[04] THE BAZAAR**: Trade items and materials for Scrap and Vault Credits.
 5. **\[05] ARCHIVE**: Compete in the weekly Museum theme for Influence and rewards.

@@ -24,3 +24,13 @@
 * [Phase 4: The "High Curator" (Meta-Game)](implementation-plan/phase-4-the-high-curator-meta-game/README.md)
   * [Phase 4 requirements](implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md)
 * [Phase 5: The "Polished Vault" (Juice & Launch)](implementation-plan/phase-5-the-polished-vault-juice-and-launch.md)
+
+***
+
+* [Expansion Plan](expansion-plan/README.md)
+  * [Skills Expansion](expansion-plan/skills-expansion.md)
+
+## Assets
+
+* [Sprite](assets/sprite.md)
+* [Prompts](assets/prompts.md)
