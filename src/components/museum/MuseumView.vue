@@ -43,7 +43,7 @@
         <div class="relative z-10 flex justify-between items-start">
           <div>
             <span
-              class="block text-xs font-mono uppercase tracking-[0.2em] mb-2 text-gray-500"
+              class="block text-xs font-mono uppercase tracking-[0.2em] mb-2 text-gray-600"
               >Current Exhibition</span
             >
             <h2
@@ -112,7 +112,7 @@
               </div>
             </li>
           </ul>
-          <div v-else class="text-center py-10 text-gray-400 italic">
+          <div v-else class="text-center py-10 text-gray-500 italic">
             No contributions recorded in the log.
           </div>
         </div>
@@ -122,7 +122,7 @@
           class="border-2 border-dashed border-gray-300 p-4 flex flex-col h-full bg-gray-50"
         >
           <h3
-            class="text-lg font-bold uppercase border-b border-gray-300 pb-2 mb-4 text-gray-600"
+            class="text-lg font-bold uppercase border-b border-gray-300 pb-2 mb-4 text-gray-700"
           >
             Available for Loan
           </h3>
@@ -130,7 +130,7 @@
           <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div
               v-if="availableItems.length === 0"
-              class="text-gray-400 text-center py-8 italic font-serif"
+              class="text-gray-500 text-center py-8 italic font-serif"
             >
               No eligible artifacts currently in vault storage.
             </div>
@@ -145,7 +145,7 @@
                 <div class="font-bold text-sm uppercase mb-1">
                   {{ item.item_id }}
                 </div>
-                <div class="text-[10px] font-mono text-gray-500 mb-3">
+                <div class="text-[10px] font-mono text-gray-600 mb-3">
                   Mint #{{ item.mint_number }}
                 </div>
                 <button

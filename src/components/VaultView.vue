@@ -72,7 +72,7 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
         >
           CLASS: {{ selectedItem.tier }}
         </span>
-        <span class="font-mono text-[10px] text-gray-500"
+        <span class="font-mono text-[10px] text-gray-600"
           >REF_ID: {{ selectedItem.id }}</span
         >
       </div>
@@ -82,7 +82,7 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
       </p>
 
       <div
-        class="mt-auto pt-4 border-t border-gray-300 text-[10px] font-mono text-gray-400 uppercase flex justify-between"
+        class="mt-auto pt-4 border-t border-gray-300 text-[10px] font-mono text-gray-500 uppercase flex justify-between"
       >
         <span>Verified by: AGENT_A</span>
         <span>Date: {{ new Date().toLocaleDateString() }}</span>

@@ -78,14 +78,14 @@ const claim = (setId: string, reward: number) => {
                 v-else
               ></span>
             </h3>
-            <div class="text-[10px] font-mono text-gray-400 mt-1">
+            <div class="text-[10px] font-mono text-gray-600 mt-1">
               CASE_ID: {{ set.id.toUpperCase() }}
             </div>
           </div>
 
           <div class="text-right">
             <div class="border border-black px-2 py-1 text-center min-w-[80px]">
-              <div class="text-[9px] uppercase font-bold text-gray-500">
+              <div class="text-[9px] uppercase font-bold text-gray-700">
                 Reward Value
               </div>
               <div class="text-lg font-bold">{{ set.rewardScrap }}</div>

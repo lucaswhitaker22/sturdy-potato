@@ -72,7 +72,7 @@
             class="w-full py-3 font-bold uppercase text-xs border-2 transition-all relative group overflow-hidden"
             :class="
               historicalInfluence < item.cost
-                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                ? 'bg-gray-100 text-gray-500 border-gray-300 cursor-not-allowed'
                 : 'bg-white text-black border-black hover:bg-black hover:text-white'
             "
           >
