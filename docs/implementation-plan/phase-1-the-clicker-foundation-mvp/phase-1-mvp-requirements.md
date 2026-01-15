@@ -8,13 +8,19 @@ This is the build contract for Phase 1.
 
 It turns the Phase 1 plan into concrete requirements.
 
+Canon for Phase 1 terms and odds:
+
+* [2: The Mechanics](../../game-overview/2-the-mechanics.md)
+* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
+
 ### Scope
 
 Phase 1 ships a single-player loop:
 
 * Extract to earn Scrap.
 * Occasionally drop a Crate.
-* Open or Sift the Crate in the Lab.
+* Sometimes trigger an Anomaly (Phase 1: log-only).
+* Claim or Sift the Crate in the Lab.
 * Save successful items into the Vault.
 
 Out of scope:
@@ -31,8 +37,14 @@ Out of scope:
 The game must persist these fields:
 
 * `scrap_balance` (integer, >= 0)
-* `crate_tray_count` (integer, 0–5)
+* `crate_tray` (list of Crate objects, max length 5)
+* `active_crate_id` (string, nullable)
 * `vault_items` (list of item IDs)
+
+Each Crate object must include:
+
+* `id` (string)
+* `stage` (integer, 0–5)
 
 Persistence can be local storage for MVP.
 
@@ -58,7 +70,7 @@ Each item needs:
 
 * The Field shows:
   * Scrap balance.
-  * Crate tray count (e.g. `3/5`).
+  * Crate tray count (e.g. `3/5`) derived from `crate_tray.length`.
   * An `EXTRACT` button.
   * An extraction progress indicator.
   * An action log.
@@ -74,13 +86,20 @@ Each item needs:
 
 Each successful Extract resolves exactly one outcome:
 
-* 90%: add `+10` Scrap.
-* 10%: add `+1` Crate.
+* 80%: add `+10` Scrap.
+* 15%: add `+1` Crate.
+* 5%: trigger an Anomaly.
 
-If the 10% crate outcome occurs:
+If the crate outcome occurs:
 
-* Tray count increments by 1.
+* A new Crate object is appended to `crate_tray`.
+* The new Crate starts at `stage = 0`.
 * A “crate obtained” feedback beat plays.
+
+If the Anomaly outcome occurs:
+
+* No currency or inventory state changes.
+* The log records an anomaly message.
 
 #### R3 — Navigation between modes
 
@@ -96,28 +115,32 @@ State must remain consistent across modes.
 
 #### R4 — Lab screen (Crate selection)
 
-* The Lab shows current tray count.
-* The player can select a Crate to refine.
+* The Lab shows current tray count (0–5).
+* The player can select a Crate from the tray to refine.
 
 If no crates exist:
 
 * The Lab shows an empty state.
-* Sift / Open actions are disabled.
+* Claim / Sift actions are disabled.
 
 #### R5 — Refinement stage model
 
 A Crate has:
 
-* `stage` (integer, 0–4)
-* `is_active` (player is currently refining it)
+* `stage` (integer, 0–5)
+
+The current active Crate is tracked by:
+
+* `active_crate_id` (nullable)
 
 Stage names and odds:
 
-* Stage 0: Raw Breach, 100% success, 100% Junk
-* Stage 1: Surface Clean, 90% success, 80% Junk / 20% Common
-* Stage 2: Sonic Bath, 75% success, 60% Common / 40% Rare
-* Stage 3: Isotope Scan, 50% success, 90% Rare / 10% Epic
-* Stage 4: Quantum Sift, 25% success, 100% Epic
+* Stage 0: Raw Open, 100% success, 100% Junk
+* Stage 1: Surface Brush, 90% success, 80% Junk / 20% Common
+* Stage 2: Chemical Wash, 75% success, 60% Common / 40% Rare
+* Stage 3: Sonic Vibration, 50% success, 90% Rare / 10% Epic
+* Stage 4: Molecular Scan, 25% success, 100% Epic
+* Stage 5: Quantum Reveal, 10% success, 100% Epic
 
 Notes for MVP:
 
@@ -126,11 +149,11 @@ Notes for MVP:
 * For MVP, Epic rewards draw from the Rare pool.
 * This keeps the catalog at 20 items.
 
-#### R6 — Lab actions (Open vs Sift)
+#### R6 — Lab actions (Claim vs Sift)
 
 At any stage, the player can choose:
 
-* `OPEN NOW` (take reward at current stage)
+* `CLAIM` (take reward at current stage)
 * `SIFT` (attempt to advance to next stage)
 
 Rules:
@@ -144,14 +167,14 @@ Rules:
 On shatter:
 
 * The active Crate is destroyed.
-* Tray count decrements by 1.
+* The Crate is removed from `crate_tray`.
 * Player receives `+3` Scrap.
 * The UI plays a clear failure beat.
 * The log records the event.
 
 #### R8 — Reward resolution
 
-On `OPEN NOW`:
+On `CLAIM`:
 
 * The Crate resolves into either:
   * No item (Junk), or
@@ -165,7 +188,6 @@ If a Vault item is awarded:
 After resolution:
 
 * The Crate is removed.
-* Tray count decrements by 1.
 * The active refinement state clears.
 
 #### R9 — Vault screen
@@ -201,7 +223,7 @@ The action log must record:
 
 * Each Extract outcome
 * Each Sift attempt outcome
-* Each Open reward outcome
+* Each Claim reward outcome
 
 ### Success criteria
 

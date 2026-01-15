@@ -159,6 +159,29 @@ Phase 4 must define canonical mappings for:
 * `rarity_tier -> base_hv`
 * `condition -> multiplier`
 
+Canon values (from [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)):
+
+Rarity tiers (minimum supported set):
+
+* `junk`: base HV range `1–5`
+* `common`: base HV `20`
+* `uncommon`: base HV `75`
+* `rare`: base HV `250`
+* `epic`: base HV `1000`
+* `mythic`: base HV `5000` (or higher)
+* `unique`: base HV is allowed to be a special-case constant (pick a value)
+
+Condition multipliers:
+
+* `wasteland_wrecked`: `0.5`
+* `weathered`: `1.0`
+* `preserved`: `1.5`
+* `mint_condition`: `2.5`
+
+Mint prestige:
+
+* Mint numbers `1–10` apply a `+50%` HV multiplier (`1.5x`).
+
 These can be static constants in code.
 
 They must be consistent across:
@@ -170,9 +193,7 @@ They must be consistent across:
 
 #### L1 — XP to level mapping
 
-Appraisal and Smelting must use the same XP-to-level system as existing skills.
-
-If the project has multiple competing curves in earlier docs, Phase 4 must pick one curve and apply it consistently.
+All skills must use the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
 
 The UI must show:
 
@@ -181,11 +202,16 @@ The UI must show:
 
 #### L1a — Elite training gate (90 -> 99)
 
-By default, Appraisal and Smelting progression must stop at level 90.
+To align with [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md), advanced skilling past level 90 requires an Influence Shop unlock.
+
+By default:
+
+* Appraisal progression stops at level 90.
+* Smelting progression stops at level 90.
 
 Buying the “Elite skill training unlock” in the Influence Shop must:
 
-* Lift the cap from 90 to 99.
+* Lift the cap from 90 to 99 for both skills.
 * Apply immediately.
 * Be a one-time purchase.
 
@@ -333,6 +359,24 @@ The Influence Shop must sell permits for at least these dig sites:
 
 Unlocking a permit must immediately unlock access in the Field UI.
 
+#### R8b — Total Level gates (canon)
+
+Access to high-tier dig sites must be dual-gated:
+
+* A Zone Permit (HI purchase), and
+* A Total Level requirement (sum of Excavation + Restoration + Appraisal + Smelting levels).
+
+Minimum gates (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)):
+
+* The Sunken Mall: Total Level `100`
+* The Corporate Archive: Total Level `250`
+* The Sovereign Vault: Total Level `380`
+
+If a player has the permit but lacks Total Level:
+
+* Show the dig site as locked.
+* Show the missing Total Level delta.
+
 **R9 - HI spend integrity**
 
 Purchases must:
@@ -428,6 +472,16 @@ Certification must be allowed only on:
 
 If Phase 4 does not ship sharing, restrict certification to self-owned items.
 
+**R16b — Appraisal mastery: Archive tax reduction**
+
+At Appraisal level 99, the player’s Archive tax rate must be reduced to `2.5%`.
+
+Rules:
+
+* The reduced rate applies only to sales where the seller has Appraisal 99.
+* The UI must show the active tax rate on settlement.
+* Rounding must remain deterministic.
+
 **R17 - Smelting (level 60+): bulk auto-smelt**
 
 Smelting supports auto-smelt by tier:
@@ -446,6 +500,10 @@ Minimum explanation:
 
 * “Smelted 42 Junk items into 1,260 Scrap.”
 
+**R17b — Smelting mastery: Pure Yield**
+
+At Smelting level 99, scrap output from Junk-tier items must be doubled (`2x`).
+
 **R18 - Smelting: cursed fragments**
 
 Smelting supports a small chance to recover Cursed Fragments from high-level shatter sources.
@@ -460,9 +518,9 @@ Full crafting UI can be deferred.
 
 #### Mastery and broadcasts
 
-**R24 — Level 99 mastery announcements (Appraisal + Smelting)**
+**R24 — Level 99 mastery announcements (all skills)**
 
-When a player reaches level 99 in Appraisal or Smelting:
+When a player reaches level 99 in any skill:
 
 * Broadcast a Global Feed message.
 * Award a permanent “Mastery badge” state for that skill.
@@ -471,6 +529,22 @@ The badge must be visible in:
 
 * Museum leaderboard rows, and
 * Bazaar identity surfaces (where the player name is shown).
+
+#### R25 — Level 99 mastery perks (canon)
+
+When a player reaches level 99, the corresponding perk must activate permanently (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)):
+
+* Excavation: “The Endless Vein”
+  * 15% chance for “double loot” on finds.
+  * Blueprint drops can exist as an item/material type (exact economy can be tuned later).
+* Restoration: “Master Preserver”
+  * `+10%` base stability added to all sifting tiers.
+  * Claimed items receive a passive `+1%` HV bonus.
+* Appraisal: “The Oracle” + “Master Trader”
+  * Oracle: can see item Condition pre-open (exact UX can be a tooltip, preview panel, or reveal banner).
+  * Master Trader: fee/tax reduction is covered in R16b.
+* Smelting: “Pure Yield”
+  * Covered in R17b.
 
 ### Security and authority
 

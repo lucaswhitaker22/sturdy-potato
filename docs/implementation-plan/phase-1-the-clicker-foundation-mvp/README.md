@@ -2,7 +2,11 @@
 
 ## Phase 1: The "Clicker" Foundation (MVP)
 
-The MVP focuses on the transition from Raw Materials (Scrap) to Unprocessed Goods (Crates) to High-Value Artifacts (Relics).
+The MVP ships the Micro Loop:
+
+Field → Lab → Vault.
+
+Terms and core odds align to [2: The Mechanics](../../game-overview/2-the-mechanics.md).
 
 Build contract: [Phase 1 (MVP) requirements](phase-1-mvp-requirements.md).
 
@@ -22,34 +26,38 @@ In this phase, the game tracks three simple data points for the player. Even wit
 
 This is the primary interaction on the main screen.
 
-* The Action: Clicking the button triggers a 3-second cooldown.
-* The Visual: A progress bar (The "Extraction Gauge") fills up.
-* The RNG:
-  * 90% Chance: +10 Scrap.
-  * 10% Chance: +1 Encapsulated Crate (and a small screen shake).
-* The Goal: Players click until they have a few crates, watching their Scrap count slowly rise.
+* The Action: Clicking the button runs a short "Survey" progress bar.
+* MVP Timing: fixed 3 seconds per extract (tools can vary this later).
+* The RNG (Mechanics-aligned):
+  * 80% — Scrap gain
+  * 15% — Encapsulated Crate
+  * 5% — Anomaly (Phase 1: log-only, no gameplay effect)
 
 ***
 
-### 3. The Refiner: 5-Stage Sift Logic
+### 3. The Refiner: Stage-based Sift Logic
 
 Once a player has a crate, they enter the Lab. This is the gambling mini-game.
 
 #### The Stages of Refinement
 
-Every crate starts at Stage 0. The player must choose to \[OPEN NOW] (Low reward) or \[SIFT] (Level up the rarity).
+Every crate starts at Stage 0.
+
+At each stage, the player chooses:
+
+* `[CLAIM]` (take the reward now), or
+* `[SIFT]` (risk the crate to reach the next stage).
 
 | **Stage** | **Action Name** | **Success Rate** | **Reward Tier**       |
 | --------- | --------------- | ---------------- | --------------------- |
-| 0         | Raw Breach      | 100%             | 100% Junk             |
-| 1         | Surface Clean   | 90%              | 80% Junk / 20% Common |
-| 2         | Sonic Bath      | 75%              | 60% Common / 40% Rare |
-| 3         | Isotope Scan    | 50%              | 90% Rare / 10% Epic   |
-| 4         | Quantum Sift    | 25%              | 100% Epic             |
+| 0         | Raw Open        | 100%             | 100% Junk             |
+| 1         | Surface Brush   | 90%              | 80% Junk / 20% Common |
+| 2         | Chemical Wash   | 75%              | 60% Common / 40% Rare |
+| 3         | Sonic Vibration | 50%              | 90% Rare / 10% Epic   |
+| 4         | Molecular Scan  | 25%              | 100% Epic             |
+| 5         | Quantum Reveal  | 10%              | 100% Epic             |
 
-This table is the MVP-only version.
-
-Later phases can align to the Part 2 sifting table.
+MVP note: Epic labels exist, but Epic draws from the Rare pool.
 
 The Failure State: If the "Shatter" roll occurs, the item is destroyed. The player receives 3 Scrap (pity reward) and a "System Error" sound effect.
 

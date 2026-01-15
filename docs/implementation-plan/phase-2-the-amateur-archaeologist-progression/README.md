@@ -13,7 +13,7 @@ In this phase, every click counts for more than just Scrap. We introduce the Exp
 #### 1.1 Excavation Skill (The Gatherer)
 
 * XP Source: Every time a manual \[EXTRACT] finishes or an "Auto-dig" tick occurs.
-* The Curve: Level 1 requires 100 XP. Each level increases the requirement by \~10%.
+* The Curve: Use the OSRS-style curve from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
 * The Payoff: Every 5 levels increases your "Crate Drop Rate" by 0.5%.
 
 #### 1.2 Restoration Skill (The Gambler)
@@ -32,16 +32,21 @@ The Workshop is the first major "Scrap Sink." It converts your currency into Pas
 | **Tool Name**    | **Scrap Cost** | **Level Req** | **Passive Power**         |
 | ---------------- | -------------- | ------------- | ------------------------- |
 | Rusty Shovel     | 0              | 1             | 0 Scrap/sec (Manual Only) |
-| Pneumatic Pick   | 1,500          | 5             | 2 Scrap/sec               |
-| Ground Radar     | 10,000         | 15            | 10 Scrap/sec              |
-| Industrial Drill | 50,000         | 30            | 50 Scrap/sec              |
+| Pneumatic Pick   | 2,500          | 5             | 5 Scrap/sec               |
+| Ground Radar     | 15,000         | 15            | 25 Scrap/sec              |
+| Industrial Drill | 80,000         | 30            | 100 Scrap/sec             |
 
 #### 2.2 Automation Logic
 
 Once a player buys a tool, the UI starts "Passive Extraction."
 
 * Visual: A small secondary progress bar on the \[THE FIELD] screen that fills automatically.
-* The Tick: Every time the bar fills, the player gains Scrap. Crates can also drop passively, appearing in the "Crate Tray" with a notification.
+* The Tick: Automation runs on a 10-second tick (Mechanics-aligned).
+* Each tick:
+  * Awards Scrap based on the active tool.
+  * Rolls for a Crate drop.
+* Offline: awards passive Scrap when the player returns.
+  * Offline gains are capped by “Battery Capacity”.
 
 ***
 
