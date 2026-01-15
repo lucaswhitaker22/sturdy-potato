@@ -24,6 +24,7 @@ export const useGameStore = defineStore('game', () => {
   // State
   const userSessionId = ref<string | null>(null);
   const scrapBalance = ref(0);
+  const historicalInfluence = ref(0); // [NEW]
   const trayCount = ref(0);
   const inventory = ref<VaultItem[]>([]);
   const activeListings = ref<MarketListing[]>([]);
@@ -73,6 +74,7 @@ export const useGameStore = defineStore('game', () => {
       
     if (profile) {
       scrapBalance.value = profile.scrap_balance;
+      historicalInfluence.value = profile.historical_influence || 0; // [NEW]
       trayCount.value = profile.tray_count;
       excavationXP.value = profile.excavation_xp || 0;
       restorationXP.value = profile.restoration_xp || 0;
@@ -117,6 +119,7 @@ export const useGameStore = defineStore('game', () => {
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, (payload) => {
         const newProfile = payload.new as any;
         scrapBalance.value = newProfile.scrap_balance;
+        historicalInfluence.value = newProfile.historical_influence || 0; // [NEW]
         trayCount.value = newProfile.tray_count;
         excavationXP.value = newProfile.excavation_xp;
         restorationXP.value = newProfile.restoration_xp;
@@ -311,11 +314,29 @@ export const useGameStore = defineStore('game', () => {
      addLog('Set claiming not fully implemented in RPC yet.');
   }
 
+  async function purchaseInfluenceItem(itemKey: string) {
+      const { data, error } = await supabase.rpc('rpc_purchase_influence_item', { p_item_key: itemKey });
+
+      if (error) {
+          addLog(`Purchase Error: ${error.message}`);
+          return false;
+      }
+
+      if (!data.success) {
+          addLog(`Purchase Failed: ${data.error}`);
+          return false;
+      }
+
+      addLog(`Purchased ${itemKey} from Influence Shop!`);
+      return true;
+  }
+
   // Initialize
   init();
 
   return {
     scrapBalance,
+    historicalInfluence,
     trayCount,
     inventory,
     vaultItems, // backward compat
@@ -342,6 +363,7 @@ export const useGameStore = defineStore('game', () => {
     listItem,
     placeBid,
     upgradeTool,
-    claimSet
+    claimSet,
+    purchaseInfluenceItem
   };
 });

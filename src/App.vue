@@ -10,9 +10,19 @@ import CollectionsView from "@/components/CollectionsView.vue";
 import BazaarView from "@/components/BazaarView.vue";
 import ActivityFeed from "@/components/ActivityFeed.vue";
 import TerminalLog from "@/components/TerminalLog.vue";
+import WorldEventBanner from "@/components/events/WorldEventBanner.vue";
+import MuseumView from "@/components/museum/MuseumView.vue";
+import InfluenceShop from "@/components/shop/InfluenceShop.vue";
 
 const store = useGameStore();
-type Deck = "FIELD" | "LAB" | "WORKSHOP" | "COLLECTIONS" | "BAZAAR";
+type Deck =
+  | "FIELD"
+  | "LAB"
+  | "WORKSHOP"
+  | "COLLECTIONS"
+  | "BAZAAR"
+  | "MUSEUM"
+  | "SHOP";
 const currentDeck = ref<Deck>("FIELD");
 
 const setDeck = (deck: Deck) => {
@@ -23,6 +33,9 @@ const setDeck = (deck: Deck) => {
 
 <template>
   <div class="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-7xl mx-auto">
+    <!-- World Event Banner -->
+    <WorldEventBanner />
+
     <!-- Header Section -->
     <Header />
 
@@ -83,6 +96,28 @@ const setDeck = (deck: Deck) => {
       >
         [05] BAZAAR
       </button>
+      <button
+        @click="setDeck('MUSEUM')"
+        :class="[
+          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
+          currentDeck === 'MUSEUM'
+            ? 'bg-white text-black translate-y-1'
+            : 'bg-black text-white hover:bg-zinc-800',
+        ]"
+      >
+        [06] MUSEUM
+      </button>
+      <button
+        @click="setDeck('SHOP')"
+        :class="[
+          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
+          currentDeck === 'SHOP'
+            ? 'bg-white text-black translate-y-1'
+            : 'bg-black text-white hover:bg-zinc-800',
+        ]"
+      >
+        [07] SHOP
+      </button>
     </nav>
 
     <!-- Main Content Area -->
@@ -99,6 +134,8 @@ const setDeck = (deck: Deck) => {
           <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
           <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
           <BazaarView v-if="currentDeck === 'BAZAAR'" />
+          <MuseumView v-if="currentDeck === 'MUSEUM'" />
+          <InfluenceShop v-if="currentDeck === 'SHOP'" />
         </div>
       </section>
 
