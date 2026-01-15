@@ -20,9 +20,9 @@ The game is organized into five primary "Decks" (Tabs). Navigation is handled vi
 
 #### The Flow: "The Scavenger's Routine"
 
-1. Field: Player clicks \[EXTRACT] $$ $\to$ $$ Progress bar fills $$ $\to$ $$ Crate drops into "Pending" slot.
-2. Lab: Player clicks a Crate $$ $\to$ $$ Opens Refiner UI $$ $\to$ $$ Performs "Sifts" (RNG) $$ $\to$ $$ Item revealed.
-3. Vault: Player views item $$ $\to$ $$ Decides: Equip to Museum, Sell in Bazaar, or Smelt for Scrap.
+1. Field: Player clicks \[EXTRACT] → Progress bar fills → Crate drops into "Pending" slot.
+2. Lab: Player clicks a Crate → Opens Refiner UI → Performs "Sifts" (RNG) → Item revealed.
+3. Vault: Player views item → Decides: Equip to Museum, Sell in Bazaar, or Smelt for Scrap.
 
 ***
 
