@@ -31,22 +31,10 @@ onUnmounted(() => {
   if (passiveAnimInterval) clearInterval(passiveAnimInterval);
 });
 
-// Local survey state
-const inSurvey = ref(false);
-const surveyComplete = ref(false);
-
 async function handleExtract() {
-  if (store.isExtracting || store.isCooldown || inSurvey.value) return;
-
-  inSurvey.value = true;
-  surveyComplete.value = false;
-
-  // Animate survey bar
-  setTimeout(() => {
-    inSurvey.value = false;
-    surveyComplete.value = true;
-    store.extract();
-  }, store.surveyDurationMs);
+  // Check local store for cooldown/extracting
+  if (store.isExtracting || store.isCooldown) return;
+  store.extract();
 }
 </script>
 
@@ -54,7 +42,7 @@ async function handleExtract() {
   <div
     class="flex-1 flex flex-col items-center justify-center min-h-[400px] gap-8 relative p-8"
   >
-    <!-- Background: subtle graph paper grid handled by parent, but maybe a local border -->
+    <!-- Background: subtle graph paper grid handled by parent -->
     <div
       class="absolute inset-4 border-2 border-black opacity-10 pointer-events-none transform rotate-[0.5deg]"
     ></div>
@@ -86,10 +74,7 @@ async function handleExtract() {
       <button
         @click="handleExtract"
         :disabled="
-          store.isExtracting ||
-          store.isCooldown ||
-          inSurvey ||
-          store.trayCount >= 5
+          store.isExtracting || store.isCooldown || store.trayCount >= 5
         "
         class="group relative inline-flex items-center justify-center focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
       >
@@ -97,7 +82,7 @@ async function handleExtract() {
         <div
           class="relative w-64 h-24 bg-[#EBEBE0] border-4 border-ink-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center overflow-hidden"
           :class="
-            store.isExtracting || inSurvey || store.isCooldown
+            store.isExtracting || store.isCooldown
               ? 'bg-gray-100'
               : 'bg-[#FFFFF0]'
           "
@@ -112,9 +97,9 @@ async function handleExtract() {
             class="font-black text-4xl tracking-widest text-ink-black uppercase transform group-hover:-rotate-2 transition-transform select-none font-serif"
           >
             {{
-              inSurvey
+              store.isExtracting
                 ? "SURVEYING"
-                : store.isExtracting || store.isCooldown
+                : store.isCooldown
                 ? "COOLDOWN"
                 : "[ EXTRACT ]"
             }}
@@ -125,7 +110,7 @@ async function handleExtract() {
 
     <!-- Progress Readout (Typed Style) -->
     <div
-      class="w-full max-w-lg z-10 font-mono text-xs border-t border-b border-gray-300 py-4 bg-[#white]/50 flex flex-col gap-4"
+      class="w-full max-w-lg z-10 font-mono text-xs border-t border-b border-gray-300 py-4 bg-white/50 flex flex-col gap-4"
     >
       <!-- Manual Gauge -->
       <div>
@@ -135,9 +120,9 @@ async function handleExtract() {
           >
           <span class="bg-black text-white px-2">
             {{
-              inSurvey
-                ? "SURVEYING..."
-                : store.isExtracting || store.isCooldown
+              store.isExtracting
+                ? "SCANNING..."
+                : store.isCooldown
                 ? "COOLDOWN"
                 : "STANDBY"
             }}
@@ -157,16 +142,12 @@ async function handleExtract() {
           <div
             class="h-full bg-ink-black transition-all ease-linear relative"
             :style="{
-              width: inSurvey
-                ? '100%'
-                : store.isExtracting || store.isCooldown
+              width: store.isExtracting
+                ? `${store.surveyProgress}%`
+                : store.isCooldown
                 ? '100%'
                 : '0%',
-              transitionDuration: inSurvey
-                ? `${store.surveyDurationMs}ms`
-                : store.isExtracting || store.isCooldown
-                ? `${store.cooldownMs}ms`
-                : '0ms',
+              transitionDuration: store.isExtracting ? '50ms' : '0ms',
             }"
           >
             <div
@@ -199,9 +180,9 @@ async function handleExtract() {
 
       <div class="mt-2 text-center text-gray-700 italic">
         {{
-          inSurvey
-            ? ">> Calibrating tools..."
-            : store.isExtracting || store.isCooldown
+          store.isExtracting
+            ? ">> Scanning sub-surface layers..."
+            : store.isCooldown
             ? ">> Writing data to disk..."
             : ">> System ready for input."
         }}

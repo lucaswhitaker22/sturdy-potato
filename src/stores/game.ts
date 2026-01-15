@@ -256,21 +256,26 @@ export const useGameStore = defineStore('game', () => {
 
   // Core Loop
   async function extract() {
-    if (isExtracting.value) return;
+    if (isExtracting.value || isCooldown.value) return;
     isExtracting.value = true;
+    surveyProgress.value = 0;
     
-    // 1. Survey Phase (Manual interaction)
-    addLog('Surveying the field...');
-    
-    // Wait for survey duration
-    await new Promise(resolve => setTimeout(resolve, surveyDurationMs.value));
+    addLog('Bio-Scanners initializing...');
+
+    // 1. Survey Phase (Manual interaction) - Animate progress
+    const steps = 20;
+    const stepDuration = surveyDurationMs.value / steps;
+    for (let i = 0; i <= steps; i++) {
+        surveyProgress.value = (i / steps) * 100;
+        await new Promise(resolve => setTimeout(resolve, stepDuration));
+    }
 
     try {
       const { data, error } = await supabase.rpc('rpc_extract');
       if (error) throw error;
       if (data.success) {
         if (data.result === 'ANOMALY') {
-          addLog('⚠ ANOMALY DETECTED: Temporal instability recorded. Rare energy surge synchronized.');
+          addLog('⚠ ANOMALY DETECTED: Temporal instability recorded.');
         } else if (data.crate_dropped) {
           addLog('CRATE FOUND! Return to lab to analyze.');
         } else if (data.result === 'SCRAP_FOUND') {
@@ -278,7 +283,8 @@ export const useGameStore = defineStore('game', () => {
         } else {
           addLog('Nothing found in this sector.');
         }
-        lastExtractAt.value = new Date(); // Local sync
+        // Use local time for immediate cooldown to avoid server drift issues
+        lastExtractAt.value = new Date(); 
       } else {
         addLog(`Error: ${data.error}`);
       }
@@ -286,6 +292,7 @@ export const useGameStore = defineStore('game', () => {
       addLog(`System Error: ${err.message}`);
     } finally {
       isExtracting.value = false;
+      surveyProgress.value = 0;
     }
   }
 
@@ -541,6 +548,7 @@ export const useGameStore = defineStore('game', () => {
     overclockTool,
     overclockBonus,
     surveyDurationMs,
+    surveyProgress,
     isCooldown,
     lastExtractAt
   };
