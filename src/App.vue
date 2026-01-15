@@ -5,12 +5,15 @@ import Header from "@/components/Header.vue";
 import FieldView from "@/components/FieldView.vue";
 import LabView from "@/components/LabView.vue";
 import VaultView from "@/components/VaultView.vue";
+import WorkshopView from "@/components/WorkshopView.vue";
+import CollectionsView from "@/components/CollectionsView.vue";
 import TerminalLog from "@/components/TerminalLog.vue";
 
 const store = useGameStore();
-const currentDeck = ref<"FIELD" | "LAB">("FIELD");
+type Deck = "FIELD" | "LAB" | "WORKSHOP" | "COLLECTIONS";
+const currentDeck = ref<Deck>("FIELD");
 
-const setDeck = (deck: "FIELD" | "LAB") => {
+const setDeck = (deck: Deck) => {
   currentDeck.value = deck;
   store.addLog(`Switched to ${deck} deck.`);
 };
@@ -45,6 +48,28 @@ const setDeck = (deck: "FIELD" | "LAB") => {
       >
         [02] THE LAB
       </button>
+      <button
+        @click="setDeck('WORKSHOP')"
+        :class="[
+          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
+          currentDeck === 'WORKSHOP'
+            ? 'bg-white text-black translate-y-1'
+            : 'bg-black text-white hover:bg-zinc-800',
+        ]"
+      >
+        [03] WORKSHOP
+      </button>
+      <button
+        @click="setDeck('COLLECTIONS')"
+        :class="[
+          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
+          currentDeck === 'COLLECTIONS'
+            ? 'bg-white text-black translate-y-1'
+            : 'bg-black text-white hover:bg-zinc-800',
+        ]"
+      >
+        [04] SETS
+      </button>
     </nav>
 
     <!-- Main Content Area -->
@@ -58,6 +83,8 @@ const setDeck = (deck: "FIELD" | "LAB") => {
         <div class="flex-1 flex flex-col">
           <FieldView v-if="currentDeck === 'FIELD'" />
           <LabView v-if="currentDeck === 'LAB'" />
+          <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
+          <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
         </div>
       </section>
 

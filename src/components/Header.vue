@@ -5,43 +5,68 @@ const store = useGameStore();
 
 <template>
   <header
-    class="border-4 border-white p-6 bg-black flex flex-col md:flex-row justify-between items-center shadow-[8px_8px_0px_0px_rgba(255,190,0,1)] gap-4"
+    class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white text-black p-4 border-b-8 border-black shadow-[8px_8px_0px_0px_rgba(255,255,255,1)]"
   >
-    <div class="flex items-center gap-4">
-      <div
-        class="w-12 h-12 bg-brutalist-yellow border-2 border-white flex items-center justify-center"
-      >
-        <span class="text-black font-black text-2xl">RV</span>
-      </div>
+    <div class="flex flex-col">
       <h1
-        class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white"
+        class="text-5xl font-black uppercase italic tracking-tighter leading-none"
       >
-        Relic Vault
-        <span class="text-xs not-italic border border-white px-1 align-top"
-          >V1.0-MVP</span
-        >
+        RELIC_VAULT
       </h1>
+      <div class="flex gap-4 mt-2">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-black bg-black text-white px-1"
+            >EXCAV_LVL</span
+          >
+          <span class="text-xl font-black italic">{{
+            store.excavationLevel
+          }}</span>
+          <div
+            class="w-24 h-2 bg-zinc-200 border border-black relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brutalist-yellow transition-all duration-500"
+              :style="{ width: `${excavationProgress}%` }"
+            ></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-black bg-black text-white px-1"
+            >RESTOR_LVL</span
+          >
+          <span class="text-xl font-black italic">{{
+            store.restorationLevel
+          }}</span>
+          <div
+            class="w-24 h-2 bg-zinc-200 border border-black relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brutalist-green transition-all duration-500"
+              :style="{ width: `${restorationProgress}%` }"
+            ></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 text-xl w-full md:w-auto">
-      <div class="flex flex-1 border-2 border-white overflow-hidden">
-        <div class="bg-white text-black px-3 font-black flex items-center">
-          SCRAP
+    <!-- Right Side Stats -->
+    <div class="flex flex-col items-end gap-1">
+      <div class="flex gap-4 items-center">
+        <div class="text-right">
+          <div class="text-[10px] font-black uppercase text-zinc-500">
+            Active_Equipment
+          </div>
+          <div class="text-lg font-black uppercase tracking-tight">
+            {{ activeTool?.name }}
+          </div>
         </div>
-        <div class="bg-black text-white px-4 py-1 font-mono flex-1 text-right">
-          {{ store.scrapBalance.toLocaleString() }}
-        </div>
-      </div>
-      <div class="flex border-2 border-white overflow-hidden">
-        <div
-          class="bg-brutalist-yellow text-black px-3 font-black flex items-center uppercase"
-        >
-          Tray
-        </div>
-        <div
-          class="bg-black text-white px-4 py-1 font-mono min-w-[80px] text-center"
-        >
-          {{ store.trayCount }}/5
+        <div class="flex flex-col items-end">
+          <div class="text-[10px] font-black uppercase text-zinc-500 italic">
+            Global_Scrap
+          </div>
+          <div class="text-4xl font-black leading-none text-brutalist-yellow">
+            {{ store.scrapBalance.toLocaleString() }}
+          </div>
         </div>
       </div>
     </div>
