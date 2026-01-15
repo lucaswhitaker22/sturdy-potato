@@ -8,6 +8,24 @@ This is the build contract for Phase 3.
 
 It turns the Phase 3 plan into concrete requirements.
 
+### Canon and coverage rules
+
+This page is the Phase 3 source of truth.
+
+It must fully “cover” the functionality described in:
+
+* [Game Overview](../../)
+* [0 - Game Loop](../../game-overview/0-game-loop.md)
+* [2: The Mechanics](../../game-overview/2-the-mechanics.md)
+* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
+* [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md)
+* [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
+
+Coverage means:
+
+* If it ships in Phase 3, it must be a requirement here.
+* If it does **not** ship in Phase 3, it must be named in **Out of scope**.
+
 ### Scope
 
 Phase 3 turns the game into a connected, server-authoritative MMO layer:
@@ -26,11 +44,32 @@ Phase 3 assumes Phase 2 is already working:
 
 #### Out of scope
 
-* Museum / Archive weekly events.
-* Vault Credits monetization.
-* Guilds, friends, chat.
-* Cross-region servers.
-* Anti-bot / anti-multibox hardening beyond server authority.
+Anything in the Game overview docs that isn’t listed as a Phase 3 requirement is out.
+
+Explicit non-goals for Phase 3:
+
+* **Archive / Museum layer**
+  * Weekly themes, donations, leaderboards, reward payout.
+  * Historical Influence and any Influence shop.
+  * Global quests.
+* **Currencies beyond Scrap**
+  * Vault Credits (premium currency) and any monetization flows.
+  * Prismatic dissolving into Vault Credits.
+* **Loot identity beyond mint**
+  * Condition modifiers.
+  * Full Historical Value (HV) economy math (unless already shipped earlier).
+  * Prismatic (“shiny”) variants (rolls, visuals, value multipliers).
+* **Bazaar features not required to ship auctions**
+  * Appraisal-based “certified listings” and any skill-gated market perks.
+  * Advanced search filters and category browsing.
+  * Listing slots / storefront UX.
+* **Social systems**
+  * Guilds, friends, chat, DMs.
+* **Infrastructure**
+  * Cross-region servers.
+* **Security hardening beyond server authority**
+  * Anti-bot / anti-multibox enforcement beyond server-authoritative state.
+  * Fraud detection, chargebacks, customer support tooling.
 
 ### Data requirements
 
@@ -175,6 +214,23 @@ On listing creation:
 
 * The item must be escrowed.
 * The seller must not be able to use the item.
+
+#### R6a — Listing deposit (anti-spam)
+
+Creating a listing must require a fixed Scrap deposit.
+
+Rules:
+
+* The deposit amount must be a single constant (Phase 3 can pick any value).
+* The deposit must be held in escrow while the listing is active.
+* On settlement:
+  * If the item sells, the deposit is returned to the seller.
+  * If the item does not sell, the deposit is returned to the seller.
+* If Phase 3 ships seller-cancel (see Open questions), define whether the deposit is returned or burned.
+
+{% hint style="info" %}
+This matches the “listing deposit to reduce spam” mechanic described in the Macro economy doc.
+{% endhint %}
 
 #### R7 — Listing browsing
 
@@ -359,6 +415,7 @@ Phase 3 is done when:
 
 * What is the minimum rarity threshold for feed broadcasts?
 * Do we allow sellers to cancel listings early?
+* If sellers can cancel: is the listing deposit returned or burned?
 * Do we cap active listings per user?
 * Do we implement “held Scrap” as a separate balance (`scrap_available` vs `scrap_held`)?
 * Do we ship HV now, or defer and only ship mint prestige UI?
