@@ -50,7 +50,7 @@ onMounted(async () => {
     >
       <div
         v-if="events.length === 0"
-        class="text-center py-8 text-gray-400 italic font-serif"
+        class="text-center py-8 text-gray-500 italic font-serif"
       >
         -- No signals on wire --
       </div>
@@ -58,10 +58,12 @@ onMounted(async () => {
       <div
         v-for="event in events"
         :key="event.id"
-        class="relative pb-2 border-b border-gray-100 last:border-0"
+        class="relative pb-2 border-b border-gray-300 last:border-0"
       >
         <!-- Ticker Timestamp -->
-        <div class="absolute right-0 top-0 text-[9px] text-gray-400 font-bold">
+        <div
+          class="absolute right-0 top-0 text-[10px] text-gray-600 font-bold bg-gray-100 px-1 border border-gray-300"
+        >
           {{
             new Date(event.created_at).toLocaleTimeString([], {
               hour: "2-digit",
@@ -72,8 +74,10 @@ onMounted(async () => {
 
         <div v-if="event.event_type === 'find'" class="pr-8">
           <div class="flex items-center gap-1 mb-1">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-            <span class="font-bold text-blue-800 uppercase text-[10px]"
+            <span
+              class="w-2 h-2 rounded-full bg-blue-600 border border-blue-800"
+            ></span>
+            <span class="font-bold text-blue-900 uppercase text-[10px]"
               >Discovery</span
             >
           </div>

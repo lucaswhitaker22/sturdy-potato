@@ -118,7 +118,7 @@ const upgrade = (toolId: string, cost: number) => {
                 ? 'bg-white border-black hover:bg-black hover:text-white'
                 : tool.canAfford
                 ? 'bg-white border-black shadow-[4px_4px_0_0_#999] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0_0_#999]'
-                : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed',
+                : 'bg-gray-100 text-gray-500 border-gray-300 cursor-not-allowed',
             ]"
           >
             <div
@@ -129,7 +129,7 @@ const upgrade = (toolId: string, cost: number) => {
           </button>
           <div
             v-else
-            class="flex-1 py-2 text-center text-xs font-bold text-gray-400 border border-gray-200 bg-gray-50 italic"
+            class="flex-1 py-2 text-center text-xs font-bold text-gray-500 border border-gray-300 bg-gray-100 italic"
           >
             Currently Assigned
           </div>

@@ -129,7 +129,7 @@ const claim = (setId: string, reward: number) => {
             :class="[
               set.isComplete
                 ? 'bg-white border-black text-black hover:bg-black hover:text-white shadow-[4px_4px_0_0_#000]'
-                : 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed',
+                : 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed',
             ]"
           >
             {{ set.isComplete ? "SUBMIT COMPLETED SET" : "AWAITING EVIDENCE" }}

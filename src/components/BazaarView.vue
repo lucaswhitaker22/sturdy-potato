@@ -170,21 +170,24 @@ const sellableItems = computed(() => [...store.inventory].reverse());
           </div>
 
           <div
-            class="space-y-2 mb-4 font-mono text-xs text-gray-600 bg-white p-2 border border-gray-100"
+            class="space-y-2 mb-4 font-mono text-xs text-gray-800 bg-white p-2 border border-gray-200"
           >
-            <div class="flex justify-between border-b border-gray-100 pb-1">
-              <span>Reserve Price:</span>
+            <div class="flex justify-between border-b border-gray-200 pb-1">
+              <span class="text-gray-600">Reserve Price:</span>
               <span class="font-bold">{{ listing.reserve_price }}</span>
             </div>
-            <div class="flex justify-between border-b border-gray-100 pb-1">
-              <span>Current Bid:</span>
-              <span class="font-bold bg-yellow-100 px-1">{{
-                listing.highest_bid || "--"
-              }}</span>
+            <div class="flex justify-between border-b border-gray-200 pb-1">
+              <span class="text-gray-600">Current Bid:</span>
+              <span
+                class="font-bold bg-yellow-100 px-1 border border-yellow-200"
+                >{{ listing.highest_bid || "--" }}</span
+              >
             </div>
             <div class="flex justify-between">
-              <span>Closes:</span>
-              <span>{{ new Date(listing.ends_at).toLocaleDateString() }}</span>
+              <span class="text-gray-600">Closes:</span>
+              <span class="font-bold">{{
+                new Date(listing.ends_at).toLocaleDateString()
+              }}</span>
             </div>
           </div>
 

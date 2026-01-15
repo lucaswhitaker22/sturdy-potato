@@ -111,7 +111,7 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
             <div
               class="flex-1 w-full flex items-center justify-center bg-gray-100 overflow-hidden relative"
               :class="
-                item.found ? 'grayscale contrast-125 sepia-[.3]' : 'opacity-20'
+                item.found ? 'grayscale contrast-125 sepia-[.3]' : 'opacity-40'
               "
             >
               <span class="text-2xl">{{
@@ -138,7 +138,7 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
               v-else
               class="h-4 w-full mt-1 flex items-center justify-center"
             >
-              <span class="text-[8px] text-gray-300">MISSING</span>
+              <span class="text-[8px] text-gray-400 font-bold">MISSING</span>
             </div>
           </div>
 

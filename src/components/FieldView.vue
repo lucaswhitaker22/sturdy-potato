@@ -98,7 +98,7 @@ const store = useGameStore();
         </div>
       </div>
 
-      <div class="mt-2 text-center text-gray-500 italic">
+      <div class="mt-2 text-center text-gray-700 italic">
         {{
           store.isExtracting
             ? ">> Writing data to disk..."

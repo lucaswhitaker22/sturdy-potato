@@ -30,11 +30,13 @@ const stabilityRates = ["90%", "75%", "50%", "25%", "10%"];
       class="flex-1 flex flex-col items-center justify-center gap-6"
     >
       <div
-        class="w-48 h-48 border-4 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 rounded-sm"
+        class="w-48 h-48 border-4 border-dashed border-gray-400 flex items-center justify-center bg-gray-100 rounded-sm"
       >
-        <div class="text-center opacity-30 grayscale rotate-12">
+        <div class="text-center opacity-70 grayscale rotate-12">
           <span class="text-6xl block mb-2">📦</span>
-          <span class="font-serif font-bold italic">No Specimen</span>
+          <span class="font-serif font-bold italic text-gray-500"
+            >No Specimen</span
+          >
         </div>
       </div>
 
@@ -120,13 +122,13 @@ const stabilityRates = ["90%", "75%", "50%", "25%", "10%"];
 
           <div class="font-mono text-xs mb-6 border-b border-gray-200 pb-4">
             <div class="flex justify-between mb-1">
-              <span class="text-gray-500">Subject ID:</span>
+              <span class="text-gray-600">Subject ID:</span>
               <span class="font-bold"
                 >UNK-{{ Math.floor(Math.random() * 9999) }}</span
               >
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Potential:</span>
+              <span class="text-gray-600">Potential:</span>
               <span
                 class="font-bold px-1"
                 :class="store.labState.currentStage >= 3 ? 'bg-yellow-200' : ''"

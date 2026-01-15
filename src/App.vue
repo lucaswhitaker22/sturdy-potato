@@ -55,10 +55,11 @@ const setDeck = (deck: Deck) => {
             'px-6 py-2 font-serif font-bold text-sm uppercase border-t-2 border-l-2 border-r-2 border-ink-black rounded-t-md transition-all',
             currentDeck === deck
               ? 'bg-[#FDFDFB] translate-y-[2px] pb-3 z-20'
-              : 'bg-[#E0E0D5] text-gray-600 hover:bg-[#EBEBE0] hover:text-black mb-[2px]',
+              : 'bg-[#D6D6C2] text-gray-800 hover:bg-[#EBEBE0] hover:text-black mb-[2px]',
           ]"
         >
-          <span class="mr-2 opacity-40 text-xs font-sans"
+          <span
+            class="mr-2 opacity-60 text-xs font-sans text-ink-black font-bold"
             >REF:{{
               String(
                 [

@@ -91,7 +91,7 @@ const activeTool = computed(
     <div class="flex flex-col items-end gap-2">
       <!-- Date Stamp -->
       <div
-        class="text-[10px] font-mono border border-gray-400 px-2 text-gray-500 mb-1"
+        class="text-[10px] font-mono border border-gray-400 px-2 text-gray-700 mb-1"
       >
         DATE: {{ new Date().toISOString().split("T")[0] }}
       </div>
@@ -99,7 +99,7 @@ const activeTool = computed(
       <div class="flex gap-8 items-end">
         <div class="text-right">
           <div
-            class="text-[10px] uppercase font-bold text-gray-500 tracking-wider"
+            class="text-[10px] uppercase font-bold text-gray-600 tracking-wider"
           >
             Assigned Equipment
           </div>
@@ -112,7 +112,7 @@ const activeTool = computed(
 
         <div class="text-right group cursor-help">
           <div
-            class="text-[10px] uppercase font-bold text-gray-500 tracking-wider"
+            class="text-[10px] uppercase font-bold text-gray-600 tracking-wider"
           >
             Funds Allocated
           </div>
