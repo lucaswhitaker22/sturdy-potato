@@ -20,85 +20,119 @@ const upgrade = (toolId: string, cost: number) => {
 </script>
 
 <template>
-  <div
-    class="p-6 flex flex-col gap-6 h-full overflow-y-auto custom-scrollbar bg-black text-white"
-  >
-    <div class="border-b-4 border-white pb-4 mb-4">
-      <h2 class="text-4xl font-black uppercase tracking-tighter italic">
-        > THE_WORKSHOP
-      </h2>
-      <p class="text-xs font-mono text-zinc-500 mt-2 uppercase">
-        Convert scrap to efficiency. Automation is the only path to the core.
-      </p>
+  <div class="h-full flex flex-col gap-6 p-1">
+    <!-- Header -->
+    <div class="border-b-2 border-black pb-2 flex justify-between items-end">
+      <div>
+        <h2
+          class="text-2xl font-serif font-black uppercase text-ink-black tracking-tight"
+        >
+          Equipment Requisition
+        </h2>
+        <p
+          class="text-xs font-mono text-gray-500 uppercase tracking-widest mt-1"
+        >
+          Department of Efficiency // A-99
+        </p>
+      </div>
+      <div
+        class="text-[10px] font-mono border border-gray-400 px-2 py-1 bg-white"
+      >
+        FORM: REQ-01
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Grid of Requisition Forms -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto pr-2 custom-scrollbar flex-1"
+    >
       <div
         v-for="tool in tools"
         :key="tool.id"
-        :class="[
-          'p-4 border-4 transition-all flex flex-col gap-2 relative overflow-hidden',
+        class="border transition-all flex flex-col gap-2 relative bg-white shadow-sm p-4 hover:shadow-md"
+        :class="
           tool.isActive
-            ? 'border-brutalist-green bg-zinc-900'
-            : 'border-white bg-black hover:bg-zinc-950',
-        ]"
+            ? 'border-2 border-black ring-1 ring-black'
+            : 'border border-gray-300'
+        "
       >
-        <!-- Status Badge -->
+        <!-- Paper punch holes visual -->
         <div
-          v-if="tool.isActive"
-          class="absolute top-0 right-0 bg-brutalist-green text-black px-2 py-0.5 text-[10px] font-black uppercase"
-        >
-          ACTIVE_UNIT
-        </div>
-        <div
-          v-else-if="tool.isOwned"
-          class="absolute top-0 right-0 bg-white text-black px-2 py-0.5 text-[10px] font-black uppercase"
-        >
-          OWNED
+          class="absolute top-2 left-2 w-3 h-3 rounded-full bg-gray-100 border border-gray-300 shadow-inner"
+        ></div>
+
+        <!-- Status -->
+        <div class="absolute top-4 right-4 transform rotate-6 z-10">
+          <span
+            v-if="tool.isActive"
+            class="stamp-box border-stamp-blue text-stamp-blue border-2"
+          >
+            DEPLOYED
+          </span>
+          <span
+            v-else-if="tool.isOwned"
+            class="stamp-box border-gray-400 text-gray-500 border-2 text-[10px]"
+          >
+            INVENTORY
+          </span>
         </div>
 
-        <h3 class="text-xl font-black uppercase">{{ tool.name }}</h3>
-        <p class="text-xs text-zinc-400 font-mono leading-tight">
-          {{ tool.flavorText }}
-        </p>
+        <div class="pl-6 pt-1">
+          <h3
+            class="text-lg font-serif font-bold uppercase border-b border-gray-200 inline-block mb-1"
+          >
+            {{ tool.name }}
+          </h3>
+          <p
+            class="text-xs font-serif italic text-gray-600 leading-relaxed max-w-[85%]"
+          >
+            "{{ tool.flavorText }}"
+          </p>
+        </div>
 
         <div
-          class="grid grid-cols-2 gap-2 mt-4 text-[10px] font-mono border-t border-white/20 pt-2"
+          class="mt-4 bg-[#F5F5F0] p-3 border border-gray-200 text-xs font-mono w-full"
         >
-          <div>
-            <span class="text-zinc-500 uppercase block">Automation:</span>
-            <span class="text-brutalist-green"
-              >{{ tool.automationRate }} SCRAP/S</span
-            >
+          <div class="flex justify-between border-b border-gray-300 pb-1 mb-1">
+            <span>Specs:</span>
+            <span class="font-bold">{{ tool.id }}</span>
           </div>
-          <div>
-            <span class="text-zinc-500 uppercase block">Find_Rate:</span>
-            <span class="text-brutalist-yellow"
-              >+{{ (tool.findRateBonus * 100).toFixed(0) }}%</span
-            >
+          <div class="flex justify-between">
+            <span>Auto-Rate:</span>
+            <span>{{ tool.automationRate }}/s</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Find-Bonus:</span>
+            <span>+{{ (tool.findRateBonus * 100).toFixed(0) }}%</span>
           </div>
         </div>
 
-        <button
-          v-if="!tool.isActive"
-          @click="upgrade(tool.id, tool.cost)"
-          :disabled="!tool.canAfford && !tool.isOwned"
-          :class="[
-            'mt-4 py-2 font-black uppercase border-2 transition-all',
-            tool.isOwned
-              ? 'bg-white text-black border-white hover:bg-zinc-200'
-              : tool.canAfford
-              ? 'bg-brutalist-yellow text-black border-brutalist-yellow hover:-translate-y-1'
-              : 'bg-zinc-800 text-zinc-500 border-zinc-800 cursor-not-allowed',
-          ]"
-        >
-          {{ tool.isOwned ? "ACTIVATE" : `PURCHASE [${tool.cost} SCRAP]` }}
-        </button>
-        <div
-          v-else
-          class="mt-4 py-2 text-center text-[10px] font-black text-brutalist-green uppercase border-2 border-brutalist-green/20"
-        >
-          STATION_ENGAGED
+        <div class="mt-auto pt-4 flex gap-2">
+          <button
+            v-if="!tool.isActive"
+            @click="upgrade(tool.id, tool.cost)"
+            :disabled="!tool.canAfford && !tool.isOwned"
+            class="flex-1 py-2 font-bold uppercase border-2 text-xs transition-all relative overflow-hidden group"
+            :class="[
+              tool.isOwned
+                ? 'bg-white border-black hover:bg-black hover:text-white'
+                : tool.canAfford
+                ? 'bg-white border-black shadow-[4px_4px_0_0_#999] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0_0_#999]'
+                : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed',
+            ]"
+          >
+            <div
+              v-if="tool.canAfford && !tool.isOwned"
+              class="absolute inset-0 bg-yellow-200 opacity-0 group-hover:opacity-30 transition-opacity"
+            ></div>
+            {{ tool.isOwned ? "Deploy Unit" : `Authorize: ${tool.cost} Scrap` }}
+          </button>
+          <div
+            v-else
+            class="flex-1 py-2 text-center text-xs font-bold text-gray-400 border border-gray-200 bg-gray-50 italic"
+          >
+            Currently Assigned
+          </div>
         </div>
       </div>
     </div>

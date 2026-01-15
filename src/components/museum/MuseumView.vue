@@ -1,79 +1,162 @@
 <template>
-  <div class="museum-view p-4 text-green-400 font-mono">
-    <div v-if="isLoading" class="text-center">Loading Museum Archives...</div>
+  <div class="h-full p-4 font-serif text-ink-black flex flex-col gap-6">
+    <div
+      v-if="isLoading"
+      class="text-center font-mono text-sm animate-pulse mt-20"
+    >
+      Accessing Curatorial Archives...
+    </div>
 
     <div
       v-else-if="!activeWeek"
-      class="text-center border border-green-800 p-8"
+      class="text-center border-2 border-double border-gray-400 p-12 bg-[#fafafa]"
     >
-      <h2 class="text-xl">No Exhibition Currently Open</h2>
-      <p class="mt-2 text-green-600">
-        Please check back later for the next curatorial theme.
+      <div
+        class="w-16 h-16 border-4 border-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl text-gray-300"
+      >
+        🏛️
+      </div>
+      <h2 class="text-xl font-bold uppercase tracking-widest text-gray-500">
+        Exhibit Closed
+      </h2>
+      <p class="mt-2 text-sm text-gray-400 font-mono italic">
+        The gallery is currently being rotated. Check back for the next
+        curatorial theme.
       </p>
     </div>
 
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Left Panel: Theme & Info -->
-      <div class="border border-green-600 p-4 bg-black/50">
-        <h2 class="text-2xl font-bold mb-2 glitch-text">
-          {{ activeWeek.theme_name }}
-        </h2>
-        <p class="mb-4 text-sm whitespace-pre-wrap">
-          {{ activeWeek.description }}
-        </p>
-
-        <div class="text-sm border-t border-green-800 pt-2 mt-4">
-          <p>
-            Exhibition Ends: {{ new Date(activeWeek.ends_at).toLocaleString() }}
-          </p>
-          <p class="mt-2">Submissions: {{ userSubmissions.length }} / 10</p>
-        </div>
-      </div>
-
-      <!-- Right Panel: My Submissions -->
-      <div class="border border-green-600 p-4">
-        <h3 class="text-xl mb-4 text-green-300">My Contributions</h3>
-        <ul v-if="userSubmissions.length > 0" class="space-y-2">
-          <li
-            v-for="sub in userSubmissions"
-            :key="sub.vault_item_id"
-            class="flex justify-between items-center bg-green-900/20 p-2 border border-green-800"
-          >
-            <span
-              >{{ sub.item_details.item_id }} #{{
-                sub.item_details.mint_number
-              }}</span
-            >
-            <span class="text-yellow-400 font-bold">{{ sub.score }} HV</span>
-          </li>
-        </ul>
-        <div v-else class="text-green-700 italic">
-          You have not submitted any relics yet.
-        </div>
-      </div>
-    </div>
-
-    <!-- Submission Interface -->
-    <div v-if="activeWeek" class="mt-6 border-t-2 border-green-800 pt-6">
-      <h3 class="text-xl mb-4">Eligible Artifacts from Vault</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div v-else class="flex flex-col gap-6 h-full">
+      <!-- Exhibition Poster Header -->
+      <div
+        class="border-4 border-ink-black p-6 bg-white shadow-lg relative overflow-hidden"
+      >
+        <!-- Background Texture -->
         <div
-          v-for="item in availableItems"
-          :key="item.id"
-          class="border border-green-700 p-3 hover:bg-green-900/30 cursor-pointer transition-colors"
-          @click="submit(item)"
-        >
-          <div class="font-bold">{{ item.item_id }}</div>
-          <div class="text-xs text-green-500">Mint #{{ item.mint_number }}</div>
-          <button
-            class="mt-2 w-full bg-green-800 text-green-100 text-xs py-1 hover:bg-green-700"
+          class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/linen.png')]"
+        ></div>
+
+        <!-- Decorative Corner -->
+        <div
+          class="absolute top-0 right-0 w-16 h-16 bg-black transform rotate-45 translate-x-8 -translate-y-8"
+        ></div>
+
+        <div class="relative z-10 flex justify-between items-start">
+          <div>
+            <span
+              class="block text-xs font-mono uppercase tracking-[0.2em] mb-2 text-gray-500"
+              >Current Exhibition</span
+            >
+            <h2
+              class="text-4xl font-black uppercase leading-none tracking-tighter mb-4 border-b-2 border-black inline-block pb-1"
+            >
+              {{ activeWeek.theme_name }}
+            </h2>
+            <p
+              class="text-sm max-w-2xl font-serif leading-relaxed text-gray-800 border-l-2 border-gray-300 pl-4 italic"
+            >
+              "{{ activeWeek.description }}"
+            </p>
+          </div>
+
+          <div
+            class="text-right font-mono text-xs border border-black p-2 bg-gray-50 transform rotate-1 shadow-sm"
           >
-            Submit
-          </button>
+            <p class="font-bold border-b border-gray-200 pb-1 mb-1">
+              EXHIBIT DETAILS
+            </p>
+            <p>
+              Closes: {{ new Date(activeWeek.ends_at).toLocaleDateString() }}
+            </p>
+            <p>Capacity: {{ userSubmissions.length }} / 10 Spots</p>
+          </div>
         </div>
       </div>
-      <div v-if="availableItems.length === 0" class="text-green-700">
-        No available items found in your vault.
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1 min-h-0">
+        <!-- My Submissions (Contributor Log) -->
+        <div
+          class="border border-gray-300 p-4 bg-[#FDFDFB] flex flex-col h-full shadow-sm"
+        >
+          <h3
+            class="text-lg font-bold uppercase border-b border-black pb-2 mb-4 flex justify-between items-center"
+          >
+            <span>Contributor Log</span>
+            <span
+              class="text-[10px] font-mono bg-black text-white px-2 py-0.5 rounded-full"
+              >{{ userSubmissions.length }} Entries</span
+            >
+          </h3>
+
+          <ul
+            v-if="userSubmissions.length > 0"
+            class="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar"
+          >
+            <li
+              v-for="sub in userSubmissions"
+              :key="sub.vault_item_id"
+              class="flex justify-between items-center p-3 border border-gray-200 bg-white hover:border-gray-400 transition-colors shadow-sm"
+            >
+              <div class="flex flex-col">
+                <span class="font-bold uppercase text-sm">{{
+                  sub.item_details.item_id
+                }}</span>
+                <span class="text-[10px] font-mono text-gray-500"
+                  >MINT #{{ sub.item_details.mint_number }}</span
+                >
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="font-black text-lg">{{ sub.score }}</span>
+                <span class="text-[9px] uppercase font-mono text-gray-400"
+                  >Appraisal Value</span
+                >
+              </div>
+            </li>
+          </ul>
+          <div v-else class="text-center py-10 text-gray-400 italic">
+            No contributions recorded in the log.
+          </div>
+        </div>
+
+        <!-- Submission Interface (Eligible Artifacts) -->
+        <div
+          class="border-2 border-dashed border-gray-300 p-4 flex flex-col h-full bg-gray-50"
+        >
+          <h3
+            class="text-lg font-bold uppercase border-b border-gray-300 pb-2 mb-4 text-gray-600"
+          >
+            Available for Loan
+          </h3>
+
+          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+            <div
+              v-if="availableItems.length === 0"
+              class="text-gray-400 text-center py-8 italic font-serif"
+            >
+              No eligible artifacts currently in vault storage.
+            </div>
+
+            <div v-else class="grid grid-cols-2 gap-4">
+              <div
+                v-for="item in availableItems"
+                :key="item.id"
+                class="bg-white border border-gray-200 p-3 cursor-pointer hover:shadow-md hover:border-black transition-all group"
+                @click="submit(item)"
+              >
+                <div class="font-bold text-sm uppercase mb-1">
+                  {{ item.item_id }}
+                </div>
+                <div class="text-[10px] font-mono text-gray-500 mb-3">
+                  Mint #{{ item.mint_number }}
+                </div>
+                <button
+                  class="w-full border border-black text-black text-[10px] font-bold uppercase py-1 group-hover:bg-black group-hover:text-white transition-colors"
+                >
+                  Prepare for Transport
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -106,7 +189,7 @@ const availableItems = computed(() => {
 async function submit(item: any) {
   if (
     !confirm(
-      `Submit ${item.item_id} to the Museum? It will be locked until the exhibition ends.`
+      `Loan ${item.item_id} to the Museum? It will be locked until the exhibition ends.`
     )
   )
     return;
@@ -115,7 +198,5 @@ async function submit(item: any) {
 </script>
 
 <style scoped>
-.glitch-text {
-  text-shadow: 2px 2px #0f0, -1px -1px #f0f;
-}
+/* Scoped styles replaced by Tailwind classes */
 </style>

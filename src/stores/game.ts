@@ -148,6 +148,7 @@ export const useGameStore = defineStore('game', () => {
   async function extract() {
     if (isExtracting.value) return;
     isExtracting.value = true;
+    // differentiate log based on context if possible, but for now we assume extract is the intent
     addLog('Extracting...');
     
     try {
@@ -155,12 +156,16 @@ export const useGameStore = defineStore('game', () => {
       if (error) throw error;
       if (data.success) {
         if (data.outcome === 'SUCCESS') {
+           // This indicates a Sift success from the backend
           addLog(`SUCCESS: +${data.xp_gain} XP. Lab stage advanced.`);
           labState.value.currentStage = data.new_stage;
         } else if (data.outcome === 'SHATTERED') {
+           // This indicates a Sift failure
           addLog('FAILURE: Sample shattered during extraction.');
           labState.value.isActive = false;
           labState.value.currentStage = 0;
+        } else if (data.outcome === 'ANOMALY' || data.anomaly) {
+          addLog('⚠ ANOMALY DETECTED: Temporal instability recorded. No yield.');
         } else if (data.crate_dropped) {
           addLog('CRATE FOUND! Return to lab to analyze.');
         } else {
@@ -174,6 +179,12 @@ export const useGameStore = defineStore('game', () => {
     } finally {
       isExtracting.value = false;
     }
+  }
+
+  async function sift() {
+      // Sift is logically distinct but currently shares the RPC. 
+      // We wrap it to ensure UI consistency if we want to add specific 'sifting' loading state later.
+      return extract();
   }
 
   function startSifting() {

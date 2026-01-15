@@ -37,58 +37,83 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="flex flex-col h-full bg-black text-white p-2 md:p-4 font-mono text-xs overflow-hidden border-4 border-zinc-800 shadow-[4px_4px_0px_0px_rgba(236,72,153,0.3)]"
-  >
-    <h3
-      class="font-black mb-2 text-brutalist-pink uppercase tracking-widest border-b border-zinc-800 pb-2"
+  <div class="h-full flex flex-col font-mono text-xs overflow-hidden">
+    <div class="mb-2 text-center border-b-2 border-dashed border-gray-300 pb-1">
+      <span
+        class="bg-gray-200 px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest text-gray-600"
+        >Global Wire Service</span
+      >
+    </div>
+
+    <div
+      class="flex-1 overflow-y-auto px-1 custom-scrollbar flex flex-col gap-3"
     >
-      > GLOBAL_NET_FEED
-    </h3>
-    <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2">
-      <div v-if="events.length === 0" class="text-zinc-600 italic">
-        Listening for global frequencies...
+      <div
+        v-if="events.length === 0"
+        class="text-center py-8 text-gray-400 italic font-serif"
+      >
+        -- No signals on wire --
       </div>
+
       <div
         v-for="event in events"
         :key="event.id"
-        class="border-b border-zinc-900 pb-2"
+        class="relative pb-2 border-b border-gray-100 last:border-0"
       >
-        <div class="text-[10px] text-zinc-500 mb-1">
-          {{ new Date(event.created_at).toLocaleTimeString() }}
+        <!-- Ticker Timestamp -->
+        <div class="absolute right-0 top-0 text-[9px] text-gray-400 font-bold">
+          {{
+            new Date(event.created_at).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          }}
         </div>
 
-        <div v-if="event.event_type === 'find'">
-          <span class="text-brutalist-cyan font-bold">ANOMALY DETECTED</span>
-          <div class="text-zinc-300 mt-1">
-            User unearthed
-            <span class="text-white font-bold">{{
+        <div v-if="event.event_type === 'find'" class="pr-8">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            <span class="font-bold text-blue-800 uppercase text-[10px]"
+              >Discovery</span
+            >
+          </div>
+          <div class="text-ink-black ml-3 leading-tight">
+            New specimen
+            <span class="font-bold underline">{{
               event.details.item_id?.toUpperCase()
             }}</span>
-            <span class="bg-zinc-800 text-white px-1 ml-1 rounded"
-              >#{{ event.details.mint_number }}</span
+            catalogued.
+            <span class="text-[10px] text-gray-500 block mt-0.5"
+              >Mint #{{ event.details.mint_number }}</span
             >
           </div>
         </div>
 
-        <div v-else-if="event.event_type === 'listing'">
-          <span class="text-brutalist-yellow font-bold">NEW_LISTING</span>
-          <div class="text-zinc-300 mt-1">
-            Auction started:
-            <span class="text-white font-bold">{{
+        <div v-else-if="event.event_type === 'listing'" class="pr-8">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+            <span class="font-bold text-yellow-800 uppercase text-[10px]"
+              >Auction</span
+            >
+          </div>
+          <div class="text-ink-black ml-3 leading-tight">
+            <span class="font-bold border-b border-dashed border-black">{{
               event.details.item_id?.toUpperCase()
             }}</span>
-            <div class="text-brutalist-green">
-              {{ event.details.price }} SCRAP
-            </div>
+            listed for
+            <span class="bg-yellow-100 px-1 font-bold"
+              >{{ event.details.price }} SCRAP</span
+            >.
           </div>
         </div>
 
-        <div v-else>
-          <span class="text-zinc-400">{{
-            event.event_type.toUpperCase()
+        <div v-else class="pr-8">
+          <span class="font-bold uppercase text-[10px] text-gray-500">{{
+            event.event_type
           }}</span>
-          <div class="text-zinc-500">{{ JSON.stringify(event.details) }}</div>
+          <div class="text-gray-600 ml-3 truncate">
+            {{ JSON.stringify(event.details) }}
+          </div>
         </div>
       </div>
     </div>

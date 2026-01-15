@@ -1,3 +1,109 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-paper-bg: #F5F5F0;
+  --color-paper-dark: #EBEBE0;
+  --color-ink-black: #1a1a1a;
+  --color-ink-subtle: #4a4a4a;
+  --color-highlighter: #FFFF00;
+  --color-stamp-red: #CC3333;
+  --color-stamp-blue: #0033CC;
+  
+  --font-serif: 'Courier Prime', 'Courier New', monospace; /* Typewriter feel */
+  --font-sans: 'Inter', sans-serif; /* Clean headers */
+}
+
+body {
+  background-color: var(--color-paper-bg);
+  color: var(--color-ink-black);
+  font-family: var(--font-serif);
+  /* Subtle grain texture overlay can be done with an image if available, for now simple color */
+}
+
+/* Scrollbar overrides for "Paper" feel - thin and unobtrusive */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-left: 1px solid rgba(0,0,0,0.1);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--color-paper-bg);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.4);
+}
+
+/* Utility Classes for Archive/Ledger Theme */
+
+.paper-panel {
+  background-color: #FDFDFB;
+  border: 2px solid var(--color-ink-black);
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.paper-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-ink-black);
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.05);
+}
+
+/* "Ink Bleed" effect on text for headers */
+.ink-title {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--color-ink-black);
+  text-transform: uppercase;
+}
+
+/* Highlighter effect */
+.highlight-marker {
+  background-color: var(--color-highlighter);
+  color: var(--color-ink-black);
+  padding: 0 4px;
+  /* Multiply blend mode handles "highlighter over text" look best if background allows, 
+     but standard bg-color works for safety */
+  mix-blend-mode: multiply; 
+}
+/* Fallback if mix-blend-mode acts up on parent */
+.highlight-marker-bg {
+    background-color: var(--color-highlighter);
+    color: var(--color-ink-black);
+}
+
+/* Stamp Effect */
+.stamp-box {
+  border: 3px solid var(--color-stamp-red);
+  color: var(--color-stamp-red);
+  text-transform: uppercase;
+  font-weight: bold;
+  opacity: 0.8;
+  transform: rotate(-2deg);
+  display: inline-block;
+  padding: 4px 8px;
+  mix-blend-mode: multiply; 
+}
+
+/* Form Line */
+.form-line {
+  border-bottom: 1px solid #999;
+}
+
+/* Ledger Grid Lines */
+.ledger-grid-bg {
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Filter for "Ink Sketch" images */
+.ink-filter {
+    filter: grayscale(100%) contrast(150%) brightness(0.9) sepia(0.2);
+}

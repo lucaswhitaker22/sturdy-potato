@@ -21,9 +21,8 @@ const formatMint = (num: number | null | undefined) => {
 // Bidding Logic
 const handleBid = async (listing: any) => {
   const minBid = (listing.highest_bid || listing.reserve_price) + 1;
-  // Simple prompt for MVP - can be replaced with modal
   const bidStr = prompt(
-    `Place bid on ${listing.item_id.toUpperCase()}?\nMinimum: ${minBid} Scrap\nYour Balance: ${
+    `SUBMIT BID FOR LOT: ${listing.item_id.toUpperCase()}?\nMinimum: ${minBid} Scrap\nYour Funds: ${
       store.scrapBalance
     }`,
     minBid.toString()
@@ -33,12 +32,12 @@ const handleBid = async (listing: any) => {
   const amount = parseInt(bidStr);
 
   if (isNaN(amount) || amount < minBid) {
-    alert("Invalid bid amount.");
+    alert("BID REJECTED: INVALID AMOUNT.");
     return;
   }
 
   if (amount > store.scrapBalance) {
-    alert("Insufficient funds.");
+    alert("BID REJECTED: INSUFFICIENT FUNDS.");
     return;
   }
 
@@ -54,7 +53,7 @@ const handleList = async () => {
   if (!selectedSellItem.value) return;
 
   if (sellPrice.value < 0) {
-    alert("Price cannot be negative.");
+    alert("ERROR: Negative Valuation.");
     return;
   }
 
@@ -63,7 +62,7 @@ const handleList = async () => {
     selectedSellItem.value = null;
     activeTab.value = "MARKET";
     store.fetchMarket();
-    alert("Item listed successfully.");
+    alert("CONSIGNMENT ACCEPTED.");
   }
 };
 
@@ -71,111 +70,129 @@ const sellableItems = computed(() => [...store.inventory].reverse());
 </script>
 
 <template>
-  <div
-    class="h-full flex flex-col bg-black text-white p-6 relative overflow-hidden"
-  >
+  <div class="h-full flex flex-col p-6 h-full p-2">
     <!-- Header -->
     <div
-      class="flex justify-between items-end border-b-4 border-white pb-4 mb-6"
+      class="flex justify-between items-end border-b-2 border-black pb-2 mb-4"
     >
       <div>
-        <h2 class="text-4xl font-black uppercase italic tracking-tighter">
-          > BAZAAR_NET
+        <h2
+          class="text-2xl font-serif font-black uppercase text-ink-black tracking-tight"
+        >
+          Public Auction House
         </h2>
-        <p class="text-xs font-mono text-zinc-500 mt-2">
-          GLOBAL_TRADE_ROUTER // LATENCY: 12ms
+        <p class="text-xs font-mono text-gray-500 mt-1 uppercase">
+          Official Trading Post // Network Latency: 12ms
         </p>
       </div>
-      <div class="text-right">
-        <div class="text-xs font-mono text-zinc-500">YOUR_LIQUIDITY</div>
-        <div class="text-3xl font-black text-brutalist-green">
-          {{ store.scrapBalance }} SCRAP
+      <div class="border border-black p-2 bg-white">
+        <div
+          class="text-[9px] font-mono text-gray-500 uppercase tracking-widest text-right"
+        >
+          Available Liquidity
+        </div>
+        <div class="text-xl font-bold font-serif text-right mt-1">
+          {{ store.scrapBalance.toLocaleString() }}
+          <span class="text-xs text-gray-500">SCRAP</span>
         </div>
       </div>
     </div>
 
     <!-- Tabs -->
-    <div class="flex gap-4 mb-6">
+    <div class="flex gap-2 mb-4 border-b border-gray-300">
       <button
         @click="activeTab = 'MARKET'"
-        :class="[
-          'px-6 py-2 font-black uppercase text-sm border-2 transition-all',
+        class="px-6 py-2 font-bold uppercase text-sm border-t border-l border-r rounded-t-sm transition-all relative top-[1px]"
+        :class="
           activeTab === 'MARKET'
-            ? 'bg-white text-black border-white translate-x-1'
-            : 'bg-black text-white border-zinc-700 hover:border-white',
-        ]"
+            ? 'bg-[#FDFDFB] border-black border-b-white z-10'
+            : 'bg-gray-100 border-gray-300 text-gray-500 hover:bg-gray-50'
+        "
       >
-        Live_Auctions
+        Live Lots
       </button>
       <button
         @click="activeTab = 'SELL'"
-        :class="[
-          'px-6 py-2 font-black uppercase text-sm border-2 transition-all',
+        class="px-6 py-2 font-bold uppercase text-sm border-t border-l border-r rounded-t-sm transition-all relative top-[1px]"
+        :class="
           activeTab === 'SELL'
-            ? 'bg-white text-black border-white translate-x-1'
-            : 'bg-black text-white border-zinc-700 hover:border-white',
-        ]"
+            ? 'bg-[#FDFDFB] border-black border-b-white z-10'
+            : 'bg-gray-100 border-gray-300 text-gray-500 hover:bg-gray-50'
+        "
       >
-        Create_Listing
+        Consign Item
       </button>
+
       <button
         @click="refreshMarket"
-        class="px-4 py-2 ml-auto font-mono text-xs border text-zinc-500 border-zinc-800 hover:text-white"
+        class="ml-auto text-[10px] font-mono uppercase text-blue-600 hover:underline flex items-center gap-1"
       >
-        REFRESH_FEED
+        <span>↻</span> Sync Ledger
       </button>
     </div>
 
     <!-- Market View -->
     <div
       v-if="activeTab === 'MARKET'"
-      class="flex-1 overflow-y-auto custom-scrollbar"
+      class="flex-1 overflow-y-auto custom-scrollbar bg-white border border-gray-200 p-4 shadow-inner"
     >
       <div
         v-if="store.activeListings.length === 0"
-        class="text-zinc-600 font-mono text-center mt-20"
+        class="text-gray-400 font-serif italic text-center mt-20"
       >
-        NO SIGNAL DETECTED. MARKET IS QUIET.
+        -- No active lots currently on the block --
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div
           v-for="listing in store.activeListings"
           :key="listing.id"
-          class="border-2 border-zinc-800 p-4 hover:border-brutalist-yellow transition-colors group"
+          class="border-2 border-dashed border-gray-300 p-4 hover:border-black transition-colors group relative bg-[#fafafa]"
         >
-          <div class="flex justify-between items-start mb-2">
-            <div class="font-black text-xl uppercase">
-              {{ listing.item_id }}
-            </div>
-            <div
-              class="bg-zinc-900 text-zinc-400 px-2 py-1 text-xs font-mono rounded"
-            >
-              {{ formatMint(listing.mint_number) }}
-            </div>
+          <!-- Lot Number Stamp -->
+          <div
+            class="absolute -top-3 -left-3 bg-white border border-black px-2 py-0.5 text-[10px] font-bold shadow-sm transform -rotate-3 group-hover:rotate-0 transition-transform"
+          >
+            LOT #{{ listing.id.substring(0, 4).toUpperCase() }}
           </div>
 
-          <div class="space-y-1 my-4 font-mono text-xs text-zinc-400">
-            <div class="flex justify-between">
-              <span>Reserve:</span>
-              <span class="text-white">{{ listing.reserve_price }}</span>
+          <div class="flex justify-between items-start mb-4 mt-2">
+            <h3
+              class="font-bold text-lg font-serif uppercase tracking-wide border-b border-gray-200 pb-1 w-full"
+            >
+              {{ listing.item_id }}
+            </h3>
+            <span
+              class="text-[10px] font-mono text-gray-400 absolute top-4 right-4"
+            >
+              {{ formatMint(listing.mint_number) }}
+            </span>
+          </div>
+
+          <div
+            class="space-y-2 mb-4 font-mono text-xs text-gray-600 bg-white p-2 border border-gray-100"
+          >
+            <div class="flex justify-between border-b border-gray-100 pb-1">
+              <span>Reserve Price:</span>
+              <span class="font-bold">{{ listing.reserve_price }}</span>
             </div>
-            <div class="flex justify-between">
-              <span>Highest Bid:</span>
-              <span class="text-brutalist-green font-bold">{{
+            <div class="flex justify-between border-b border-gray-100 pb-1">
+              <span>Current Bid:</span>
+              <span class="font-bold bg-yellow-100 px-1">{{
                 listing.highest_bid || "--"
               }}</span>
             </div>
             <div class="flex justify-between">
-              <span>Ends In:</span>
+              <span>Closes:</span>
               <span>{{ new Date(listing.ends_at).toLocaleDateString() }}</span>
             </div>
           </div>
 
           <button
             @click="handleBid(listing)"
-            class="w-full bg-zinc-900 text-white font-black uppercase py-2 hover:bg-brutalist-yellow hover:text-black transition-colors"
+            class="w-full border-2 border-black text-black font-bold uppercase py-2 hover:bg-black hover:text-white transition-all text-xs tracking-widest"
           >
-            PLACE_BID
+            Submit Bid
           </button>
         </div>
       </div>
@@ -184,12 +201,14 @@ const sellableItems = computed(() => [...store.inventory].reverse());
     <!-- Sell View -->
     <div
       v-if="activeTab === 'SELL'"
-      class="flex-1 overflow-y-auto custom-scrollbar flex gap-6"
+      class="flex-1 overflow-y-auto custom-scrollbar flex gap-6 bg-white border border-gray-200 p-4"
     >
       <!-- Inventory List -->
-      <div class="w-1/2 border-r-2 border-zinc-900 pr-4">
-        <div class="text-xs font-mono text-zinc-500 mb-4">
-          SELECT_ITEM_TO_LIST
+      <div class="w-1/2 border-r border-gray-200 pr-4">
+        <div
+          class="text-xs font-serif font-bold text-gray-400 mb-4 uppercase tracking-widest border-b border-gray-100 pb-2"
+        >
+          Select Artifact for Consignment
         </div>
         <div class="space-y-2">
           <div
@@ -197,53 +216,64 @@ const sellableItems = computed(() => [...store.inventory].reverse());
             :key="item.id"
             @click="selectedSellItem = item.id"
             :class="[
-              'cursor-pointer p-3 border border-zinc-800 flex justify-between items-center transition-all',
+              'cursor-pointer p-3 border flex justify-between items-center transition-all hover:shadow-sm',
               selectedSellItem === item.id
-                ? 'bg-zinc-800 border-white'
-                : 'hover:border-zinc-700',
+                ? 'bg-gray-50 border-black shadow-md'
+                : 'bg-white border-gray-200 hover:border-gray-300',
             ]"
           >
-            <span class="font-bold text-sm uppercase">{{ item.item_id }}</span>
-            <span class="text-xs font-mono text-zinc-500">{{
-              formatMint(item.mint_number)
+            <span class="font-bold text-xs uppercase font-serif">{{
+              item.item_id
             }}</span>
+            <span
+              class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1 rounded"
+              >{{ formatMint(item.mint_number) }}</span
+            >
           </div>
         </div>
       </div>
 
       <!-- Listing Form -->
-      <div class="w-1/2 flex flex-col justify-center">
-        <div
-          v-if="selectedSellItem"
-          class="p-6 border-4 border-white bg-zinc-900/50"
-        >
-          <h3 class="text-2xl font-black mb-6 uppercase">Confirm Listing</h3>
+      <div class="w-1/2 flex flex-col justify-center pl-4 bg-[#f9f9f9]">
+        <div v-if="selectedSellItem" class="p-4">
+          <h3
+            class="text-xl font-serif font-black mb-6 uppercase border-b-2 border-black pb-2"
+          >
+            Consignment Form
+          </h3>
 
-          <div class="mb-6">
-            <label class="block text-xs font-mono text-zinc-500 mb-2"
-              >RESERVE_PRICE (SCRAP)</label
+          <div class="mb-6 bg-white p-4 border border-gray-200 shadow-sm">
+            <label
+              class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2"
+              >Set Reserve Price (Scrap)</label
             >
             <input
               v-model="sellPrice"
               type="number"
-              class="w-full bg-black border-2 border-zinc-700 p-4 text-2xl font-mono focus:border-brutalist-yellow outline-none"
+              class="w-full bg-gray-50 border-b-2 border-gray-300 p-2 text-2xl font-mono focus:border-black focus:outline-none focus:bg-white transition-colors"
             />
           </div>
 
-          <div class="text-xs font-mono text-zinc-500 mb-6">
-            * Listing duration is fixed at 24 hours.
-            <br />* Listing fee: 0 Scrap (Standard License).
+          <div
+            class="text-[10px] font-mono text-gray-500 mb-6 italic border-l-2 border-gray-300 pl-2"
+          >
+            NOTICE: <br />
+            * Auction duration fixed at 24 hours.<br />
+            * Standard House Commission: 0%.
           </div>
 
           <button
             @click="handleList"
-            class="w-full bg-white text-black font-black uppercase py-4 text-xl hover:bg-brutalist-green hover:text-white transition-all hover:-translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            class="w-full bg-ink-black text-white font-bold uppercase py-3 hover:bg-gray-800 transition-all shadow-md active:translate-y-1 active:shadow-none"
           >
-            PUBLISH_TO_NETWORK
+            Confirm & Publish Listing
           </button>
         </div>
-        <div v-else class="text-center text-zinc-700 font-mono italic">
-          Select an artifact from the manifest...
+        <div
+          v-else
+          class="text-center text-gray-400 font-serif italic border-2 border-dashed border-gray-200 p-12 rounded-lg"
+        >
+          Select an item from the manifest to begin consignment process.
         </div>
       </div>
     </div>

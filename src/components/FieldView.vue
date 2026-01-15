@@ -5,112 +5,128 @@ const store = useGameStore();
 
 <template>
   <div
-    class="panel-brutalist flex-1 flex flex-col items-center justify-center min-h-[400px] gap-8 relative overflow-hidden group"
+    class="flex-1 flex flex-col items-center justify-center min-h-[400px] gap-8 relative p-8"
   >
-    <!-- Flickering CRT Overlay -->
+    <!-- Background: subtle graph paper grid handled by parent, but maybe a local border -->
     <div
-      class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] z-20"
-    ></div>
-    <div
-      class="absolute inset-0 pointer-events-none z-20 animate-[pulse_4s_infinite] bg-gradient-to-b from-transparent via-white/5 to-transparent h-1 opacity-20"
+      class="absolute inset-4 border-2 border-black opacity-10 pointer-events-none transform rotate-[0.5deg]"
     ></div>
 
+    <!-- Status Header -->
     <div
-      class="absolute inset-0 opacity-10 pointer-events-none"
-      style="
-        background-image: radial-gradient(#fff 1px, transparent 1px);
-        background-size: 20px 20px;
-      "
-    ></div>
-
-    <div class="text-center z-10">
+      class="text-center z-10 relative bg-white px-6 py-4 shadow-sm border border-gray-200 transform -rotate-1 rotate-hover outline outline-2 outline-offset-2 outline-gray-100"
+    >
       <h2
-        class="text-2xl mb-2 uppercase font-black text-brutalist-yellow animate-[flicker_3s_infinite]"
+        class="text-xl mb-1 font-serif font-black tracking-widest text-ink-black uppercase border-b-2 border-black inline-block"
       >
-        > FIELD_STATUS: OPERATIONAL
+        Field Report: SEC-07
       </h2>
-      <p class="text-xs text-gray-500 font-mono">
-        SCANNING SECTOR 7-G FOR ANCIENT SIGNALS...
+      <p class="text-xs font-mono text-gray-500 mt-2">
+        SURFACE STATUS:
+        <span
+          :class="
+            store.isExtracting
+              ? 'text-stamp-blue animate-pulse font-bold'
+              : 'text-black'
+          "
+          >{{ store.isExtracting ? "SCANNING..." : "STABLE" }}</span
+        >
       </p>
     </div>
 
-    <div class="relative z-10">
+    <!-- The Main Action Stamp -->
+    <div class="relative z-10 my-8">
       <button
         @click="store.extract()"
         :disabled="store.isExtracting || store.trayCount >= 5"
-        class="group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-yellow-400 to-orange-600 hover:text-white dark:text-white focus:ring-3 focus:outline-none focus:ring-yellow-800 disabled:opacity-50 disabled:cursor-not-allowed"
+        class="group relative inline-flex items-center justify-center focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
       >
+        <!-- Button Body (The Stamp Handle) -->
         <div
-          :class="[
-            'relative px-16 py-12 transition-all ease-in duration-75 bg-black text-white border-4 border-white text-7xl font-black uppercase tracking-widest',
-            !store.isExtracting &&
-              'hover:bg-brutalist-yellow hover:text-black hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-8px_8px_0px_0px_rgba(255,255,255,1)]',
-          ]"
+          class="relative w-64 h-24 bg-[#EBEBE0] border-4 border-ink-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center overflow-hidden"
+          :class="store.isExtracting ? 'bg-gray-100' : 'bg-[#FFFFF0]'"
         >
-          <span :class="store.isExtracting && 'animate-pulse'">{{
-            store.isExtracting ? "SCANNING" : "EXTRACT"
-          }}</span>
+          <!-- Highlighter Hover Effect -->
+          <div
+            class="absolute inset-0 bg-[#FFFF00] opacity-0 group-hover:opacity-20 transition-opacity mix-blend-multiply"
+          ></div>
+
+          <!-- Stamp Text -->
+          <span
+            class="font-black text-4xl tracking-widest text-ink-black uppercase transform group-hover:-rotate-2 transition-transform select-none font-serif"
+          >
+            {{ store.isExtracting ? "SCANNING" : "[ EXTRACT ]" }}
+          </span>
         </div>
       </button>
     </div>
 
-    <div class="w-full max-w-xl px-8 z-10">
-      <div class="flex justify-between mb-1">
-        <span class="text-xs font-bold text-white uppercase tracking-tighter"
-          >Bio-Scanner Frequency</span
+    <!-- Progress Readout (Typed Style) -->
+    <div
+      class="w-full max-w-lg z-10 font-mono text-xs border-t border-b border-gray-300 py-4 bg-[#white]/50"
+    >
+      <div class="flex justify-between mb-2 px-2">
+        <span class="uppercase font-bold text-gray-600"
+          >Bio-Scan Frequency:</span
         >
-        <span class="text-xs font-bold text-white">{{
-          store.isExtracting ? "SYNCING..." : "IDLE"
+        <span class="bg-black text-white px-2">{{
+          store.isExtracting ? "ACQUIRING..." : "STANDBY"
         }}</span>
       </div>
-      <div class="w-full bg-zinc-900 border-2 border-white h-10 relative">
+
+      <!-- Progress Bar (Ink Fill) -->
+      <div class="w-full h-4 border-2 border-black bg-white relative">
+        <!-- Ticks -->
+        <div class="absolute inset-0 flex justify-between px-1">
+          <div class="w-px h-full bg-gray-200"></div>
+          <div class="w-px h-full bg-gray-200"></div>
+          <div class="w-px h-full bg-gray-200"></div>
+          <div class="w-px h-full bg-gray-200"></div>
+        </div>
+        <!-- Fill -->
         <div
-          class="bg-brutalist-yellow h-full transition-all ease-linear"
+          class="h-full bg-ink-black transition-all ease-linear relative"
           :style="{
             width: store.isExtracting ? '100%' : '0%',
             transitionDuration: store.isExtracting ? '3000ms' : '0ms',
           }"
-        ></div>
-        <div
-          class="absolute inset-0 flex items-center justify-center font-mono text-xs font-black mix-blend-difference"
         >
-          {{
-            store.isExtracting
-              ? "SAMPLING CRUST LAYERS..."
-              : "READY for analysis"
-          }}
+          <!-- Texture on the ink -->
+          <div
+            class="absolute inset-0 opacity-50 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+          ></div>
         </div>
+      </div>
+
+      <div class="mt-2 text-center text-gray-500 italic">
+        {{
+          store.isExtracting
+            ? ">> Writing data to disk..."
+            : ">> System ready for input."
+        }}
       </div>
     </div>
 
+    <!-- Warning Note -->
     <div
       v-if="store.trayCount >= 5"
-      class="mt-4 p-2 bg-brutalist-red text-black font-black uppercase text-sm animate-bounce border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+      class="mt-4 p-4 bg-[#FFEEEE] border-2 border-stamp-red text-stamp-red font-bold font-serif shadow-md transform rotate-1 absolute bottom-4 right-4 max-w-xs"
     >
-      !! TRAY FULL - PROCEED TO LAB !!
+      <div
+        class="border-2 border-stamp-red rounded-full px-2 py-1 inline-block mb-1 text-xs transform -rotate-6"
+      >
+        URGENT
+      </div>
+      <p class="uppercase text-sm">
+        Tray Capacity Reached. Return to Lab for Processing.
+      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
-@keyframes flicker {
-  0% {
-    opacity: 1;
-  }
-  5% {
-    opacity: 0.8;
-  }
-  10% {
-    opacity: 1;
-  }
-  15% {
-    opacity: 0.9;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
+.rotate-hover:hover {
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
 }
 </style>

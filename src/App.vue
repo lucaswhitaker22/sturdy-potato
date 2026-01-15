@@ -27,166 +27,137 @@ const currentDeck = ref<Deck>("FIELD");
 
 const setDeck = (deck: Deck) => {
   currentDeck.value = deck;
-  store.addLog(`Switched to ${deck} deck.`);
+  store.addLog(`Opened file: ${deck}`);
 };
 </script>
 
 <template>
-  <div class="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-7xl mx-auto">
+  <div
+    class="min-h-screen p-2 md:p-6 mx-auto max-w-[1400px] flex flex-col gap-4 text-ink-black"
+  >
     <!-- World Event Banner -->
     <WorldEventBanner />
 
-    <!-- Header Section -->
-    <Header />
+    <!-- Main Container - Looks like a large clipboard or desk surface -->
+    <div class="flex flex-col gap-6">
+      <!-- Header: The "Letterhead" -->
+      <Header />
 
-    <!-- Navigation Tabs (Brutalist Style) -->
-    <nav class="flex gap-2">
-      <button
-        @click="setDeck('FIELD')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'FIELD'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
+      <!-- Navigation Tabs: File Folder look -->
+      <nav
+        class="flex px-4 border-b-2 border-ink-black gap-1 translate-y-[2px] z-10 flex-wrap"
       >
-        [01] THE FIELD
-      </button>
-      <button
-        @click="setDeck('LAB')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'LAB'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [02] THE LAB
-      </button>
-      <button
-        @click="setDeck('WORKSHOP')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'WORKSHOP'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [03] WORKSHOP
-      </button>
-      <button
-        @click="setDeck('COLLECTIONS')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'COLLECTIONS'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [04] SETS
-      </button>
-      <button
-        @click="setDeck('BAZAAR')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'BAZAAR'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [05] BAZAAR
-      </button>
-      <button
-        @click="setDeck('MUSEUM')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'MUSEUM'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [06] MUSEUM
-      </button>
-      <button
-        @click="setDeck('SHOP')"
-        :class="[
-          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
-          currentDeck === 'SHOP'
-            ? 'bg-white text-black translate-y-1'
-            : 'bg-black text-white hover:bg-zinc-800',
-        ]"
-      >
-        [07] SHOP
-      </button>
-    </nav>
-
-    <!-- Main Content Area -->
-    <main
-      class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden min-h-[600px]"
-    >
-      <!-- Workspace Left (8/12 cols) -->
-      <section
-        class="lg:col-span-8 flex flex-col h-full border-4 border-white shadow-[12px_12px_0px_0px_rgba(255,255,255,1)]"
-      >
-        <div class="flex-1 flex flex-col">
-          <FieldView v-if="currentDeck === 'FIELD'" />
-          <LabView v-if="currentDeck === 'LAB'" />
-          <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
-          <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
-          <BazaarView v-if="currentDeck === 'BAZAAR'" />
-          <MuseumView v-if="currentDeck === 'MUSEUM'" />
-          <InfluenceShop v-if="currentDeck === 'SHOP'" />
-        </div>
-      </section>
-
-      <!-- Sidebar Right (4/12 cols) -->
-      <aside class="lg:col-span-4 flex flex-col gap-6 h-full">
-        <!-- Activity Feed -->
-        <div class="h-64 shadow-[8px_8px_0px_0px_rgba(236,72,153,0.3)]">
-          <ActivityFeed />
-        </div>
-
-        <!-- Action Log -->
-        <div
-          class="flex-1 min-h-[250px] shadow-[8px_8px_0px_0px_rgba(74,222,128,0.3)]"
+        <button
+          v-for="deck in ['FIELD', 'LAB', 'WORKSHOP', 'COLLECTIONS', 'BAZAAR', 'MUSEUM', 'SHOP'] as Deck[]"
+          :key="deck"
+          @click="setDeck(deck)"
+          :class="[
+            'px-6 py-2 font-serif font-bold text-sm uppercase border-t-2 border-l-2 border-r-2 border-ink-black rounded-t-md transition-all',
+            currentDeck === deck
+              ? 'bg-[#FDFDFB] translate-y-[2px] pb-3 z-20'
+              : 'bg-[#E0E0D5] text-gray-600 hover:bg-[#EBEBE0] hover:text-black mb-[2px]',
+          ]"
         >
-          <TerminalLog />
-        </div>
+          <span class="mr-2 opacity-40 text-xs font-sans"
+            >REF:{{
+              String(
+                [
+                  "FIELD",
+                  "LAB",
+                  "WORKSHOP",
+                  "COLLECTIONS",
+                  "BAZAAR",
+                  "MUSEUM",
+                  "SHOP",
+                ].indexOf(deck) + 1
+              ).padStart(2, "0")
+            }}</span
+          >
+          {{ deck }}
+        </button>
+      </nav>
 
-        <!-- Vault View -->
-        <div class="h-80 shadow-[8px_8px_0px_0px_rgba(250,204,21,0.3)]">
-          <VaultView />
-        </div>
-      </aside>
-    </main>
+      <!-- Main Workspace: The "Paper Page" -->
+      <main
+        class="grid grid-cols-1 lg:grid-cols-12 gap-8 paper-panel p-6 -mt-6 z-0 min-h-[700px]"
+      >
+        <!-- Ledger Grid Background Overlay -->
+        <div
+          class="absolute inset-0 ledger-grid-bg pointer-events-none opacity-50 z-[-1]"
+        ></div>
 
-    <!-- Footer Stats -->
-    <footer
-      class="border-t-2 border-white/20 pt-4 flex justify-between items-center text-[10px] font-mono uppercase text-gray-500 tracking-widest"
-    >
-      <div>SYSTEM_TIME: {{ new Date().toLocaleTimeString() }}</div>
-      <div>CORE_AUTH: ANONYMOUS_SESSION</div>
-      <div class="flex gap-4">
-        <span>UNIQUE_RELICS: {{ store.uniqueItemsFound }}/20</span>
-        <span class="text-brutalist-green">READY</span>
-      </div>
-    </footer>
+        <!-- Left Workspace (Main Task) -->
+        <section
+          class="lg:col-span-8 flex flex-col h-full bg-white/50 border border-gray-300 p-4 shadow-inner"
+        >
+          <div class="flex-1 flex flex-col">
+            <FieldView v-if="currentDeck === 'FIELD'" />
+            <LabView v-if="currentDeck === 'LAB'" />
+            <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
+            <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
+            <BazaarView v-if="currentDeck === 'BAZAAR'" />
+            <MuseumView v-if="currentDeck === 'MUSEUM'" />
+            <InfluenceShop v-if="currentDeck === 'SHOP'" />
+          </div>
+        </section>
+
+        <!-- Right Workspace (The "Notepad" Side) -->
+        <aside class="lg:col-span-4 flex flex-col gap-6 h-full">
+          <!-- Activity Feed: Ticker Tape Style -->
+          <div
+            class="h-64 paper-card p-3 relative overflow-hidden bg-[#FAF9F6]"
+          >
+            <!-- "Tape" visual -->
+            <div
+              class="absolute top-0 left-0 right-0 h-4 bg-[repeating-linear-gradient(45deg,#ddd,#ddd_10px,#eee_10px,#eee_20px)] border-b border-gray-300"
+            ></div>
+            <div class="mt-4 h-full">
+              <ActivityFeed />
+            </div>
+          </div>
+
+          <!-- Action Log: Typed Manifest -->
+          <div
+            class="flex-1 min-h-[250px] paper-card p-3 bg-white font-mono text-xs border-t-4 border-black"
+          >
+            <TerminalLog />
+          </div>
+
+          <!-- Vault View: Mini Reference Card -->
+          <div
+            class="h-80 paper-card p-2 bg-[#F5F5F0] border-2 border-dashed border-gray-400"
+          >
+            <VaultView />
+          </div>
+        </aside>
+      </main>
+
+      <!-- Footer: Stamped Footer -->
+      <footer
+        class="mt-4 border-t-2 border-black border-dashed pt-4 flex justify-between items-center text-xs font-mono text-gray-600 uppercase"
+      >
+        <div class="flex items-center gap-4">
+          <span>System_Ref: {{ new Date().toLocaleDateString() }}</span>
+          <span
+            >Session_ID:
+            {{ Math.random().toString(36).substring(7).toUpperCase() }}</span
+          >
+        </div>
+        <div class="flex gap-4 items-center">
+          <span
+            >Relics_Catalogued:
+            <b class="text-black">{{ store.uniqueItemsFound }}/20</b></span
+          >
+          <span class="stamp-box text-[10px] scale-75 border-2">APPROVED</span>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 
 <style>
-/* Global overrides for customs scrollbars */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #666;
+/* Global overrides that might be specific to main layout structure */
+body {
+  background-color: #f5f5f0;
 }
 </style>
