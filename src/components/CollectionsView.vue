@@ -102,7 +102,7 @@ const claim = (setId: string, reward: number) => {
             :class="[
               item.isCollected
                 ? 'bg-white text-ink-black border-black/20'
-                : 'bg-gray-100 text-gray-400 border-dashed border-gray-300',
+                : 'bg-gray-100 text-gray-500 border-dashed border-gray-300',
             ]"
           >
             <!-- Checkbox visual -->

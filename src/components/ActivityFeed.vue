@@ -1,39 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { supabase } from "@/lib/supabase";
+import { useMMOStore, type GlobalEvent } from "@/stores/mmo";
+import { computed } from "vue";
 
-interface GlobalEvent {
-  id: string;
-  event_type: "find" | "listing" | "sale";
-  details: any;
-  created_at: string;
-}
+const store = useMMOStore();
+const events = computed(() => store.feed);
 
-const events = ref<GlobalEvent[]>([]);
-
-onMounted(async () => {
-  // Fetch recent
-  const { data } = await supabase
-    .from("global_events")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(20);
-
-  if (data) events.value = data as GlobalEvent[];
-
-  // Subscribe
-  supabase
-    .channel("global_feed")
-    .on(
-      "postgres_changes",
-      { event: "INSERT", schema: "public", table: "global_events" },
-      (payload) => {
-        events.value.unshift(payload.new as GlobalEvent);
-        if (events.value.length > 50) events.value.pop();
-      }
-    )
-    .subscribe();
-});
+// We rely on the store to handle subscription and fetching
 </script>
 
 <template>
@@ -108,6 +80,39 @@ onMounted(async () => {
             <span class="bg-yellow-100 px-1 font-bold"
               >{{ event.details.price }} SCRAP</span
             >.
+          </div>
+        </div>
+
+        <div v-else-if="event.event_type === 'sale'" class="pr-8">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            <span class="font-bold text-green-800 uppercase text-[10px]"
+              >Market Sale</span
+            >
+          </div>
+          <div class="text-ink-black ml-3 leading-tight">
+            <span class="font-bold border-b border-dashed border-black">{{
+              event.details.item_id?.toUpperCase()
+            }}</span>
+            sold for
+            <span class="bg-green-100 px-1 font-bold"
+              >{{ event.details.price }} SCRAP</span
+            >.
+          </div>
+        </div>
+
+        <div v-else-if="event.event_type === 'gamble'" class="pr-8">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+            <span class="font-bold text-purple-800 uppercase text-[10px]"
+              >High Stakes</span
+            >
+          </div>
+          <div class="text-ink-black ml-3 leading-tight">
+            Sift reached
+            <span class="font-bold text-purple-700"
+              >Stage {{ event.details.stage }}</span
+            >!
           </div>
         </div>
 

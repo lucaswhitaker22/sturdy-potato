@@ -21,7 +21,7 @@ const store = useGameStore();
       >
         Field Report: SEC-07
       </h2>
-      <p class="text-xs font-mono text-gray-500 mt-2">
+      <p class="text-xs font-mono text-gray-600 mt-2">
         SURFACE STATUS:
         <span
           :class="
@@ -88,7 +88,9 @@ const store = useGameStore();
           class="h-full bg-ink-black transition-all ease-linear relative"
           :style="{
             width: store.isExtracting ? '100%' : '0%',
-            transitionDuration: store.isExtracting ? '3000ms' : '0ms',
+            transitionDuration: store.isExtracting
+              ? `${store.cooldownMs}ms`
+              : '0ms',
           }"
         >
           <!-- Texture on the ink -->

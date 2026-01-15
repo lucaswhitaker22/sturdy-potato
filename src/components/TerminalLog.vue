@@ -31,7 +31,7 @@ const store = useGameStore();
             : 'border-gray-300 text-gray-600',
         ]"
       >
-        <span class="font-bold mr-2 text-[10px] text-gray-500"
+        <span class="font-bold mr-2 text-[10px] text-gray-600"
           >{{ (50 - index).toString().padStart(2, "0") }}:</span
         >
         <span class="font-serif">{{ line }}</span>

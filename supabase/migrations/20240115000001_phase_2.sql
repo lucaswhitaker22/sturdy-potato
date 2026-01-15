@@ -29,7 +29,10 @@ CREATE TABLE IF NOT EXISTS public.completed_sets (
 ALTER TABLE public.owned_tools ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.completed_sets ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own tools" ON public.owned_tools;
 CREATE POLICY "Users can view own tools" ON public.owned_tools FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can view own completed sets" ON public.completed_sets;
 CREATE POLICY "Users can view own completed sets" ON public.completed_sets FOR SELECT USING (auth.uid() = user_id);
 
 -- 4. Updated RPC: rpc_extract

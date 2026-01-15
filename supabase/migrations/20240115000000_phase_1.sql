@@ -30,8 +30,13 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.vault_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.lab_state ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
 CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can view own vault" ON public.vault_items;
 CREATE POLICY "Users can view own vault" ON public.vault_items FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can view own lab state" ON public.lab_state;
 CREATE POLICY "Users can view own lab state" ON public.lab_state FOR SELECT USING (auth.uid() = user_id);
 
 -- RPC: handle_extraction

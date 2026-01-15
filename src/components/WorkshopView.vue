@@ -30,7 +30,7 @@ const upgrade = (toolId: string, cost: number) => {
           Equipment Requisition
         </h2>
         <p
-          class="text-xs font-mono text-gray-500 uppercase tracking-widest mt-1"
+          class="text-xs font-mono text-gray-600 uppercase tracking-widest mt-1"
         >
           Department of Efficiency // A-99
         </p>

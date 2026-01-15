@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
+import { computed } from "vue";
 const store = useGameStore();
 
-const stabilityRates = ["90%", "75%", "50%", "25%", "10%"];
+const currentStability = computed(() => {
+  const stage = store.labState.currentStage;
+  let base = 0;
+  if (stage === 0) base = 90;
+  else if (stage === 1) base = 75;
+  else if (stage === 2) base = 50;
+  else if (stage === 3) base = 25;
+  else if (stage === 4) base = 10;
+
+  const bonus = store.restorationLevel * 0.1;
+  return (base + bonus).toFixed(1) + "%";
+});
 </script>
 
 <template>
@@ -32,9 +44,9 @@ const stabilityRates = ["90%", "75%", "50%", "25%", "10%"];
       <div
         class="w-48 h-48 border-4 border-dashed border-gray-400 flex items-center justify-center bg-gray-100 rounded-sm"
       >
-        <div class="text-center opacity-70 grayscale rotate-12">
-          <span class="text-6xl block mb-2">📦</span>
-          <span class="font-serif font-bold italic text-gray-500"
+        <div class="text-center grayscale rotate-12">
+          <span class="text-6xl block mb-2 opacity-50">📦</span>
+          <span class="font-serif font-bold italic text-gray-600"
             >No Specimen</span
           >
         </div>
@@ -69,7 +81,7 @@ const stabilityRates = ["90%", "75%", "50%", "25%", "10%"];
               class="bg-gray-100 border-2 border-dashed border-red-500 text-red-600 px-3 py-1 font-black font-mono text-sm shadow-sm"
             >
               STABILITY:
-              {{ stabilityRates[store.labState.currentStage] || "0%" }}
+              {{ currentStability }}
             </div>
             <!-- Tape effect -->
             <div

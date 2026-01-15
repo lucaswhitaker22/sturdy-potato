@@ -13,8 +13,12 @@ import TerminalLog from "@/components/TerminalLog.vue";
 import WorldEventBanner from "@/components/events/WorldEventBanner.vue";
 import MuseumView from "@/components/museum/MuseumView.vue";
 import InfluenceShop from "@/components/shop/InfluenceShop.vue";
+import { useMMOStore } from "@/stores/mmo";
+import NotificationManager from "@/components/mmo/NotificationManager.vue";
 
 const store = useGameStore();
+const mmoStore = useMMOStore();
+mmoStore.init();
 type Deck =
   | "FIELD"
   | "LAB"
@@ -153,6 +157,7 @@ const setDeck = (deck: Deck) => {
         </div>
       </footer>
     </div>
+    <NotificationManager />
   </div>
 </template>
 

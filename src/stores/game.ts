@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
+import { TOOL_CATALOG } from '@/constants/items';
 
 export interface VaultItem {
   id: string; // UUID
@@ -52,11 +53,60 @@ export const useGameStore = defineStore('game', () => {
   const uniqueItemsFound = computed(() => new Set(inventory.value.map(i => i.item_id)).size);
   const excavationLevel = computed(() => Math.floor(excavationXP.value / 100) + 1);
   const restorationLevel = computed(() => Math.floor(restorationXP.value / 100) + 1);
+  const cooldownMs = computed(() => {
+    return completedSetIds.value.includes('morning_ritual') ? 2500 : 3000;
+  });
 
   // Actions
   function addLog(message: string) {
     log.value.unshift(`> ${message}`);
     if (log.value.length > 50) log.value.pop();
+  }
+
+  // Phase 2: Passive Loop
+  let passiveInterval: any = null;
+
+  function startPassiveLoop() {
+    if (passiveInterval) clearInterval(passiveInterval);
+    
+    // Check if we have a passive tool
+    const tool = TOOL_CATALOG.find(t => t.id === activeToolId.value);
+    if (!tool || tool.automationRate <= 0) return;
+
+    // 10s Tick (aligns with mechanics)
+    passiveInterval = setInterval(async () => {
+      // Optimistic or Real check? R19 says server authority.
+      // logic is in rpc_passive_tick
+      try {
+        const { data, error } = await supabase.rpc('rpc_passive_tick');
+        if (error) throw error;
+        if (data.success) {
+           // Silent update usually, or maybe small log?
+           // Only log crates?
+           if (data.crate_dropped) {
+             addLog(`PASSIVE: Automated unit found a Crate!`);
+             // State updated via subscription usually, but we can patch local given the payload return
+             scrapBalance.value = data.new_balance; // Ensure sync
+           }
+        }
+      } catch (err) {
+        console.error('Passive tick error', err);
+      }
+    }, 10000);
+  }
+
+  // Phase 2: Offline Gains
+  async function checkOfflineGains() {
+    try {
+      const { data, error } = await supabase.rpc('rpc_handle_offline_gains');
+      if (error) throw error;
+      if (data.success && data.scrap_gain > 0) {
+        addLog(`OFFLINE REPORT: Systems active for ${data.seconds_offline}s. Yield: +${data.scrap_gain} Scrap.`);
+        // State updated via subscription potentially
+      }
+    } catch (err) {
+      console.error('Offline gains error', err);
+    }
   }
 
   // Initial Data Fetch & Subscription
@@ -142,6 +192,17 @@ export const useGameStore = defineStore('game', () => {
          }
       })
       .subscribe();
+
+    // Phase 2 Startup
+    await checkOfflineGains();
+    startPassiveLoop();
+    
+    // Watch active tool to restart loop if it changes
+    // But we are outside setup(), so we need to validly watch?
+    // Pinia stores don't have implicit watchers unless we use storeToRefs inside components?
+    // Actually we can use `activeToolId` ref directly here or subscribe?
+    // Pinia stores can just subscribe to themselves? 
+    // Simplified: Just restart loop on `upgradeTool` action success and `init`.
   }
 
   // Core Loop
@@ -305,24 +366,29 @@ export const useGameStore = defineStore('game', () => {
      const { data, error } = await supabase.rpc('rpc_upgrade_tool', { p_tool_id: toolId, p_cost: cost });
      if (data?.success) {
         addLog(`Tool upgraded to ${toolId}`);
+        ownedToolIds.value.push(toolId); // optimistic
+        activeToolId.value = toolId; // optimistic
+        startPassiveLoop(); // Restart loop with new tool speed (or capability)
         // Subscriptions update state
-     }
+      }
   }
 
   async function claimSet(setId: string, reward: number) {
-     // Check if we have items locally first to prevent spam?
-     // We need an RPC for this from Phase 2
-     // `rpc_claim_set`? I didn't see it in the Phase 2 file I read.
-     // I read `20240115000001_phase_2.sql` but it was truncated.
-     // Assuming it exists or I should add it.
-     // If it's missing, I'll add it to Phase 3 migration? 
-     // Let's assume it exists for now, or just do client side check + server side RPC if I forgot it.
-     // To be safe, I'll implement a `rpc_claim_set` call.
-     
-     // For now, I'll assume the user implemented it or I'll implement it in Phase 3 if needed. 
-     // The Phase 2 file was truncated... 
-     // Let's just log it for now.
-     addLog('Set claiming not fully implemented in RPC yet.');
+      // Use RPC
+      const { data, error } = await supabase.rpc('rpc_claim_set', { p_set_id: setId });
+      
+      if (error) {
+        addLog(`Claim Error: ${error.message}`);
+        return;
+      }
+
+      if (data.success) {
+        addLog(`SET COMPLETED: ${setId}. Reward: ${data.reward_scrap > 0 ? '+' + data.reward_scrap + ' Scrap' : 'BUFF APPLIED'}`);
+        completedSetIds.value.push(setId);
+        // Refresh profile via subscription usually, but optimistic update helps UI
+      } else {
+        addLog(`Claim Failed: ${data.error}`);
+      }
   }
 
   async function purchaseInfluenceItem(itemKey: string) {
@@ -364,6 +430,7 @@ export const useGameStore = defineStore('game', () => {
     uniqueItemsFound,
     excavationLevel,
     restorationLevel,
+    cooldownMs,
     extract,
     sift: extract, // Alias if needed
     claim,

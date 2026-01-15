@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { useGameStore } from "@/stores/game";
+import { useMMOStore } from "@/stores/mmo";
 
 const store = useGameStore();
 const activeTab = ref<"MARKET" | "SELL">("MARKET");
@@ -45,6 +46,22 @@ const handleBid = async (listing: any) => {
   store.fetchMarket();
 };
 
+// Settlement Logic
+const mmoStore = useMMOStore();
+const handleSettle = async (listing: any) => {
+  const result = await mmoStore.settleListing(listing.id);
+  if (result && result.success) {
+    alert(`SETTLEMENT COMPLETE: ${result.outcome.toUpperCase()}`);
+    store.fetchMarket();
+  } else {
+    alert("SETTLEMENT FAILED.");
+  }
+};
+
+const isExpired = (ends_at: string) => {
+  return new Date(ends_at) < new Date();
+};
+
 // Selling Logic
 const sellPrice = ref(100);
 const selectedSellItem = ref<string | null>(null);
@@ -54,6 +71,19 @@ const handleList = async () => {
 
   if (sellPrice.value < 0) {
     alert("ERROR: Negative Valuation.");
+    return;
+  }
+
+  if (store.scrapBalance < 50) {
+    alert("ERROR: Insufficient funds for listing deposit (50 Scrap).");
+    return;
+  }
+
+  if (
+    !confirm(
+      `List ${selectedSellItem.value} for ${sellPrice.value} Scrap?\nDeposit of 50 Scrap will be deducted.`
+    )
+  ) {
     return;
   }
 
@@ -163,7 +193,7 @@ const sellableItems = computed(() => [...store.inventory].reverse());
               {{ listing.item_id }}
             </h3>
             <span
-              class="text-[10px] font-mono text-gray-400 absolute top-4 right-4"
+              class="text-[10px] font-mono text-gray-500 absolute top-4 right-4"
             >
               {{ formatMint(listing.mint_number) }}
             </span>
@@ -192,10 +222,18 @@ const sellableItems = computed(() => [...store.inventory].reverse());
           </div>
 
           <button
+            v-if="!isExpired(listing.ends_at)"
             @click="handleBid(listing)"
             class="w-full border-2 border-black text-black font-bold uppercase py-2 hover:bg-black hover:text-white transition-all text-xs tracking-widest"
           >
             Submit Bid
+          </button>
+          <button
+            v-else
+            @click="handleSettle(listing)"
+            class="w-full border-2 border-red-800 text-red-800 font-bold uppercase py-2 hover:bg-red-800 hover:text-white transition-all text-xs tracking-widest bg-red-50"
+          >
+            Settle Auction
           </button>
         </div>
       </div>
@@ -209,7 +247,7 @@ const sellableItems = computed(() => [...store.inventory].reverse());
       <!-- Inventory List -->
       <div class="w-1/2 border-r border-gray-200 pr-4">
         <div
-          class="text-xs font-serif font-bold text-gray-400 mb-4 uppercase tracking-widest border-b border-gray-100 pb-2"
+          class="text-xs font-serif font-bold text-gray-500 mb-4 uppercase tracking-widest border-b border-gray-100 pb-2"
         >
           Select Artifact for Consignment
         </div>
@@ -229,7 +267,7 @@ const sellableItems = computed(() => [...store.inventory].reverse());
               item.item_id
             }}</span>
             <span
-              class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1 rounded"
+              class="text-[10px] font-mono text-gray-500 bg-gray-100 px-1 rounded"
               >{{ formatMint(item.mint_number) }}</span
             >
           </div>
@@ -247,7 +285,7 @@ const sellableItems = computed(() => [...store.inventory].reverse());
 
           <div class="mb-6 bg-white p-4 border border-gray-200 shadow-sm">
             <label
-              class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2"
+              class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2"
               >Set Reserve Price (Scrap)</label
             >
             <input
@@ -262,7 +300,8 @@ const sellableItems = computed(() => [...store.inventory].reverse());
           >
             NOTICE: <br />
             * Auction duration fixed at 24 hours.<br />
-            * Standard House Commission: 0%.
+            * Listing Deposit: 50 Scrap (Refunded if sold/expired).<br />
+            * Archive Tax: 5% of final sale price.
           </div>
 
           <button

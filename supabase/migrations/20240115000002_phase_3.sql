@@ -48,19 +48,22 @@ ALTER TABLE public.market_bids ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.global_events ENABLE ROW LEVEL SECURITY;
 
 -- Everyone can read mints (though mostly internal)
+DROP POLICY IF EXISTS "Public read mints" ON public.item_mints;
 CREATE POLICY "Public read mints" ON public.item_mints FOR SELECT USING (true);
 
--- Everyone can read active listings
+DROP POLICY IF EXISTS "Public read listings" ON public.market_listings;
 CREATE POLICY "Public read listings" ON public.market_listings FOR SELECT USING (true);
--- Sellers can update own listings (e.g. cancel)
+
+DROP POLICY IF EXISTS "Sellers update own listings" ON public.market_listings;
 CREATE POLICY "Sellers update own listings" ON public.market_listings FOR UPDATE USING (auth.uid() = seller_id);
 
--- Everyone can read bids
+DROP POLICY IF EXISTS "Public read bids" ON public.market_bids;
 CREATE POLICY "Public read bids" ON public.market_bids FOR SELECT USING (true);
--- Bidders can insert
+
+DROP POLICY IF EXISTS "Bidders insert bids" ON public.market_bids;
 CREATE POLICY "Bidders insert bids" ON public.market_bids FOR INSERT WITH CHECK (auth.uid() = bidder_id);
 
--- Everyone can read events
+DROP POLICY IF EXISTS "Public read events" ON public.global_events;
 CREATE POLICY "Public read events" ON public.global_events FOR SELECT USING (true);
 
 -- 4. RPC Updates for Minting

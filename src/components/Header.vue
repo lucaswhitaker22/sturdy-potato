@@ -10,6 +10,13 @@ const restorationProgress = computed(() => store.restorationXP % 100);
 const activeTool = computed(
   () => TOOL_CATALOG.find((t) => t.id === store.activeToolId) || TOOL_CATALOG[0]
 );
+
+const excavationBonus = computed(() =>
+  (Math.floor(store.excavationLevel / 5) * 0.5).toFixed(1)
+);
+const restorationBonus = computed(() =>
+  (store.restorationLevel * 0.1).toFixed(1)
+);
 </script>
 
 <template>
@@ -33,7 +40,9 @@ const activeTool = computed(
         <div class="flex items-center gap-2">
           <span class="font-bold underline">EXCAVATION:</span>
           <div class="flex flex-col items-center">
-            <span class="text-xl font-bold leading-none"
+            <span
+              class="text-xl font-bold leading-none"
+              :title="`Bonus: +${excavationBonus}% Crate Chance`"
               >Lvl. {{ store.excavationLevel }}</span
             >
             <!-- Hand-drawn style progress bar -->
@@ -61,7 +70,9 @@ const activeTool = computed(
         <div class="flex items-center gap-2">
           <span class="font-bold underline">RESTORATION:</span>
           <div class="flex flex-col items-center">
-            <span class="text-xl font-bold leading-none"
+            <span
+              class="text-xl font-bold leading-none"
+              :title="`Bonus: +${restorationBonus}% Stability`"
               >Lvl. {{ store.restorationLevel }}</span
             >
             <div class="w-24 h-2 border border-black relative">

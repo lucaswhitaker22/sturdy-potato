@@ -19,6 +19,8 @@ export const ITEM_CATALOG: Item[] = [
   { id: 'soda_tab', name: 'Soda Tab', tier: 'common', flavorText: 'Small aluminum currency? Purpose unknown.' },
   { id: 'safety_pin', name: 'Safety Pin', tier: 'common', flavorText: 'A primitive emergency garment fastener.' },
   { id: 'rubber_band', name: 'Rubber Band', tier: 'common', flavorText: 'High-elasticity synthetic binding.' },
+  { id: 'rusty_toaster', name: 'Rusty Toaster', tier: 'common', flavorText: 'A spring-loaded bread warmer.' },
+  { id: 'spoon', name: 'Spoon', tier: 'common', flavorText: 'A shallow scoop for liquid consumption.' },
 
   // Rare Tier (8)
   { id: 'calculated_tablet', name: 'Calculated Tablet', tier: 'rare', flavorText: 'A solar-powered math-engine (Casio).' },
@@ -45,8 +47,6 @@ export const TOOL_CATALOG: Tool[] = [
   { id: 'pneumatic_pick', name: 'Pneumatic Pick', cost: 2500, automationRate: 5, findRateBonus: 0.05, flavorText: 'High-frequency vibration to shake loose the past.' },
   { id: 'ground_radar', name: 'Ground Radar', cost: 15000, automationRate: 25, findRateBonus: 0.12, flavorText: 'See through the silt with ultrasound.' },
   { id: 'industrial_drill', name: 'Industrial Drill', cost: 80000, automationRate: 100, findRateBonus: 0.18, flavorText: 'Pure mechanical force for deep extraction.' },
-  { id: 'seismic_array', name: 'Seismic Array', cost: 500000, automationRate: 500, findRateBonus: 0.25, flavorText: 'Mapping the entire sector via resonance.' },
-  { id: 'satellite_uplink', name: 'Satellite Uplink', cost: 2500000, automationRate: 2500, findRateBonus: 0.40, flavorText: 'Orbital scanning for tectonic-scale finds.' },
 ];
 
 export interface CollectionSet {
@@ -57,6 +57,12 @@ export interface CollectionSet {
 }
 
 export const COLLECTION_SETS: CollectionSet[] = [
+  {
+    id: 'morning_ritual',
+    name: 'The Morning Ritual',
+    itemIds: ['ceramic_mug', 'rusty_toaster', 'spoon'],
+    rewardScrap: 0, // Incentive is buff (Caffeine Rush)
+  },
   {
     id: 'basic_electronics',
     name: 'Dead Tech',

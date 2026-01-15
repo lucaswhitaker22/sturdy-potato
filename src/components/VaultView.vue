@@ -6,10 +6,20 @@ import { computed, ref } from "vue";
 const store = useGameStore();
 
 const vaultGrid = computed(() => {
-  return ITEM_CATALOG.map((item) => ({
-    ...item,
-    found: store.vaultItems.includes(item.id),
-  }));
+  return ITEM_CATALOG.map((item) => {
+    const ownedInstances = store.inventory.filter((i) => i.item_id === item.id);
+    const bestMint =
+      ownedInstances.length > 0
+        ? Math.min(...ownedInstances.map((i) => i.mint_number || 999999))
+        : null;
+
+    return {
+      ...item,
+      found: ownedInstances.length > 0,
+      count: ownedInstances.length,
+      bestMint,
+    };
+  });
 });
 
 const selectedItem = ref<Item | null>(null);
@@ -75,6 +85,22 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
         <span class="font-mono text-[10px] text-gray-600"
           >REF_ID: {{ selectedItem.id }}</span
         >
+        <div
+          v-if="(selectedItem as any).bestMint"
+          class="flex items-center gap-1"
+        >
+          <span
+            class="font-mono text-[10px] font-bold bg-black text-white px-1"
+          >
+            #{{ (selectedItem as any).bestMint }}
+          </span>
+          <span
+            v-if="(selectedItem as any).bestMint <= 10"
+            class="text-[9px] font-bold text-yellow-600 uppercase tracking-widest border border-yellow-600 px-1"
+          >
+            PRESTIGE
+          </span>
+        </div>
       </div>
 
       <p class="font-serif italic text-gray-800 leading-[24px mt-2 flex-1">
@@ -138,8 +164,15 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
               v-else
               class="h-4 w-full mt-1 flex items-center justify-center"
             >
-              <span class="text-[8px] text-gray-400 font-bold">MISSING</span>
+              <span class="text-[8px] text-gray-600 font-bold">MISSING</span>
             </div>
+
+            <!-- Mint Badge on Thumbnail -->
+            <div
+              v-if="item.found && item.bestMint && item.bestMint <= 10"
+              class="absolute top-[2px] right-[2px] w-2 h-2 bg-yellow-500 rounded-full border border-black z-10"
+              title="Prestige Mint"
+            ></div>
           </div>
 
           <!-- Rare Sticker -->
