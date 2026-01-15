@@ -7,10 +7,12 @@ import LabView from "@/components/LabView.vue";
 import VaultView from "@/components/VaultView.vue";
 import WorkshopView from "@/components/WorkshopView.vue";
 import CollectionsView from "@/components/CollectionsView.vue";
+import BazaarView from "@/components/BazaarView.vue";
+import ActivityFeed from "@/components/ActivityFeed.vue";
 import TerminalLog from "@/components/TerminalLog.vue";
 
 const store = useGameStore();
-type Deck = "FIELD" | "LAB" | "WORKSHOP" | "COLLECTIONS";
+type Deck = "FIELD" | "LAB" | "WORKSHOP" | "COLLECTIONS" | "BAZAAR";
 const currentDeck = ref<Deck>("FIELD");
 
 const setDeck = (deck: Deck) => {
@@ -70,6 +72,17 @@ const setDeck = (deck: Deck) => {
       >
         [04] SETS
       </button>
+      <button
+        @click="setDeck('BAZAAR')"
+        :class="[
+          'px-8 py-3 font-black uppercase border-t-4 border-l-4 border-r-4 border-white transition-all',
+          currentDeck === 'BAZAAR'
+            ? 'bg-white text-black translate-y-1'
+            : 'bg-black text-white hover:bg-zinc-800',
+        ]"
+      >
+        [05] BAZAAR
+      </button>
     </nav>
 
     <!-- Main Content Area -->
@@ -85,11 +98,17 @@ const setDeck = (deck: Deck) => {
           <LabView v-if="currentDeck === 'LAB'" />
           <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
           <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
+          <BazaarView v-if="currentDeck === 'BAZAAR'" />
         </div>
       </section>
 
       <!-- Sidebar Right (4/12 cols) -->
       <aside class="lg:col-span-4 flex flex-col gap-6 h-full">
+        <!-- Activity Feed -->
+        <div class="h-64 shadow-[8px_8px_0px_0px_rgba(236,72,153,0.3)]">
+          <ActivityFeed />
+        </div>
+
         <!-- Action Log -->
         <div
           class="flex-1 min-h-[250px] shadow-[8px_8px_0px_0px_rgba(74,222,128,0.3)]"

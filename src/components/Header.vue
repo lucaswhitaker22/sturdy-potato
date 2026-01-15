@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
+import { TOOL_CATALOG } from "@/constants/items";
+import { computed } from "vue";
+
 const store = useGameStore();
+
+const excavationProgress = computed(() => store.excavationXP % 100);
+const restorationProgress = computed(() => store.restorationXP % 100);
+const activeTool = computed(
+  () => TOOL_CATALOG.find((t) => t.id === store.activeToolId) || TOOL_CATALOG[0]
+);
 </script>
 
 <template>
