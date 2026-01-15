@@ -155,26 +155,55 @@ export const useGameStore = defineStore('game', () => {
 
   // Initial Data Fetch & Subscription
   async function init() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    console.log('[Store] Initializing system sequence...');
+    let { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      console.log('[Store] No active session. Using local identity...');
+      // Primary fix: Use localStorage for identity since anonymous auth is disabled on Supabase
+      let localId = localStorage.getItem('local_user_id');
+      if (!localId) {
+        localId = crypto.randomUUID();
+        localStorage.setItem('local_user_id', localId);
+      }
+      
+      // We'll treat this localId as the user.id for our RPC calls
+      // Note: We're mimicking the user object for internal logic consistency
+      user = { id: localId } as any;
+      console.log('[Store] Local identity established:', user?.id);
+    }
+
+    if (!user) {
+      addLog('CRITICAL: Access Denied. Sector lock active.');
+      return;
+    }
+
     userSessionId.value = user.id;
+    addLog(`Operator Identified. Welcome back, ${user.id.substring(0, 8)}.`);
 
     // 1. Fetch Profile
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
       .single();
+
+    if (profileError && profileError.code !== 'PGRST116') { // PGRST116 is 'no rows'
+        console.error('[Store] Profile Fetch Error:', profileError);
+    }
       
     if (profile) {
+      console.log('[Store] Profile state recovered:', profile);
       scrapBalance.value = Number(profile.scrap_balance || 0);
       historicalInfluence.value = Number(profile.historical_influence || 0);
       trayCount.value = Number(profile.tray_count || 0);
-      excavationXP.value = profile.excavation_xp || 0;
-      restorationXP.value = profile.restoration_xp || 0;
+      excavationXP.value = Number(profile.excavation_xp || 0);
+      restorationXP.value = Number(profile.restoration_xp || 0);
       activeToolId.value = profile.active_tool_id || 'rusty_shovel';
-      overclockBonus.value = profile.overclock_bonus || 0;
+      overclockBonus.value = Number(profile.overclock_bonus || 0);
       lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
+    } else {
+      console.log('[Store] No existing profile. New ledger created.');
     }
 
     // 2. Fetch Lab State
@@ -277,7 +306,8 @@ export const useGameStore = defineStore('game', () => {
     }
 
     try {
-      const { data, error } = await supabase.rpc('rpc_extract');
+      // Note: We use the local userSessionId as a param if auth is NULL on server
+      const { data, error } = await supabase.rpc('rpc_extract', { p_user_id: userSessionId.value });
       if (error) throw error;
       if (data.success) {
         if (data.result === 'ANOMALY') {
@@ -314,7 +344,7 @@ export const useGameStore = defineStore('game', () => {
     isExtracting.value = true;
     
     try {
-      const { data, error } = await supabase.rpc('rpc_sift');
+      const { data, error } = await supabase.rpc('rpc_sift', { p_user_id: userSessionId.value });
       if (error) throw error;
       
       if (data.success) {
@@ -348,31 +378,25 @@ export const useGameStore = defineStore('game', () => {
     if (trayCount.value > 0 && !labState.value.isActive) {
       labState.value.isActive = true;
       labState.value.currentStage = 0;
-      addLog('Crate moved to Lab. Preparing for analysis.');
-      // In a real app we might want to sync this state to DB if we want "Lab is Busy" persistence
-      // But currently lab_state is updated via rpc_extract or similar? 
-      // Wait, startSifting just moves state. The DB `lab_state` table exists.
-      // We should probably have an RPC to "activate" the crate to be safe, 
-      // but for now client-side optimistic is okay if the next action (extract) verifies it.
-      // Actually, let's just update the local state. DB is updated when we CLAIM or SHATTER. 
-      // But `rpc_extract` checks `is_active` in DB.
-      // So checking the migration `rpc_extract`: It checks `v_lab.is_active`.
-      // So we DO need to tell the server we started sifting.
-      // Phase 1 migration didn't have `rpc_start_sift`.
-      // It seems users just "have" a crate? 
-      // Let's check `rpc_extract`: 
-      // `IF v_lab IS NULL OR NOT v_lab.is_active THEN ...`
-      // So we need to activate it. 
-      // We need a helper RPC or direct update.
-      supabase.from('lab_state').update({ is_active: true, current_stage: 0 }).eq('user_id', userSessionId.value).then(({ error }) => {
-        if (error) addLog(`Error activating lab: ${error.message}`);
-      });
+      // Using RPC for start sifting
+      supabase.rpc('rpc_start_sifting', { p_user_id: userSessionId.value })
+        .then(({ data, error }) => {
+          if (error) {
+            addLog(`Error activating lab: ${error.message}`);
+          } else if (data && data.success) {
+            labState.value.isActive = true;
+            labState.value.currentStage = 0;
+            addLog('Crate moved to Lab. Preparing for analysis.');
+          } else {
+            addLog(`Error activating lab: ${data?.error || 'Unknown error'}`);
+          }
+        });
     }
   }
 
   async function claim() {
     try {
-      const { data, error } = await supabase.rpc('rpc_claim');
+      const { data, error } = await supabase.rpc('rpc_claim', { p_user_id: userSessionId.value });
       if (error) throw error;
       if (data.success) {
         addLog(`ANALYSIS COMPLETE: Identified ${data.tier} item: ${data.item_id.toUpperCase()} #${data.mint_number}`);
@@ -423,7 +447,8 @@ export const useGameStore = defineStore('game', () => {
     const { data, error } = await supabase.rpc('rpc_list_item', {
       p_vault_item_id: vaultItemId,
       p_price: price,
-      p_hours: 24
+      p_hours: 24,
+      p_user_id: userSessionId.value
     });
     
     if (error) {
@@ -441,7 +466,8 @@ export const useGameStore = defineStore('game', () => {
   async function placeBid(listingId: string, amount: number) {
     const { data, error } = await supabase.rpc('rpc_place_bid', {
       p_listing_id: listingId,
-      p_amount: amount
+      p_amount: amount,
+      p_user_id: userSessionId.value
     });
     
     if (error) {
@@ -458,7 +484,11 @@ export const useGameStore = defineStore('game', () => {
   
   // Other Actions
   async function upgradeTool(toolId: string, cost: number) {
-     const { data, error } = await supabase.rpc('rpc_upgrade_tool', { p_tool_id: toolId, p_cost: cost });
+      const { data, error } = await supabase.rpc('rpc_upgrade_tool', {
+        p_tool_id: toolId,
+        p_cost: cost,
+        p_user_id: userSessionId.value
+      });
      if (data?.success) {
         const newLevel = data.new_level || (getToolLevel(toolId) + 1);
         addLog(`Tool ${toolId.toUpperCase()} reached Level ${newLevel}`);
@@ -504,7 +534,10 @@ export const useGameStore = defineStore('game', () => {
   }
 
   async function purchaseInfluenceItem(itemKey: string) {
-      const { data, error } = await supabase.rpc('rpc_purchase_influence_item', { p_item_key: itemKey });
+      const { data, error } = await supabase.rpc('rpc_purchase_influence_item', { 
+        p_item_key: itemKey,
+        p_user_id: userSessionId.value
+      });
 
       if (error) {
           addLog(`Purchase Error: ${error.message}`);
@@ -521,7 +554,11 @@ export const useGameStore = defineStore('game', () => {
   }
 
   async function overclockTool(toolId: string, cost: number) {
-     const { data, error } = await supabase.rpc('rpc_overclock_tool', { p_tool_id: toolId, p_cost: cost });
+     const { data, error } = await supabase.rpc('rpc_overclock_tool', { 
+       p_tool_id: toolId, 
+       p_cost: cost,
+       p_user_id: userSessionId.value
+     });
      if (data?.success) {
         addLog(`TECH PRESTIGE: Tool overclocked! Sift stability increased by 5%.`);
         overclockBonus.value = data.new_bonus;
