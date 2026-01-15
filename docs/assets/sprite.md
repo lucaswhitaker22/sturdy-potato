@@ -160,13 +160,13 @@ Treat this list as “must have an icon” once the item is in a drop table.
 | `item-steel-fork`         | Steel Fork         | Common         | ![](<../.gitbook/assets/image (12).png>) |
 | `item-lightbulb`          | Lightbulb          | Common         | ![](<../.gitbook/assets/image (13).png>) |
 | `item-ballpoint-pen`      | Ballpoint Pen      | Common         | ![](<../.gitbook/assets/image (14).png>) |
-| `item-rusty-key`          | Rusty Key          | Common         | none                                     |
-| `item-eyeglass-frame`     | Eyeglass Frame     | Common         | none                                     |
-| `item-soda-tab`           | Soda Tab           | Common         | none                                     |
-| `item-safety-pin`         | Safety Pin         | Common         | none                                     |
-| `item-rubber-band`        | Rubber Band        | Common         | none                                     |
-| `item-calculated-tablet`  | Calculated Tablet  | Rare           | none                                     |
-| `item-wrist-chronometer`  | Wrist Chronometer  | Rare           | none                                     |
+| `item-rusty-key`          | Rusty Key          | Common         | ![](<../.gitbook/assets/image (15).png>) |
+| `item-eyeglass-frame`     | Eyeglass Frame     | Common         | ![](<../.gitbook/assets/image (16).png>) |
+| `item-soda-tab`           | Soda Tab           | Common         | ![](<../.gitbook/assets/image (17).png>) |
+| `item-safety-pin`         | Safety Pin         | Common         | ![](<../.gitbook/assets/image (18).png>) |
+| `item-rubber-band`        | Rubber Band        | Common         | ![](<../.gitbook/assets/image (19).png>) |
+| `item-calculated-tablet`  | Calculated Tablet  | Rare           | ![](<../.gitbook/assets/image (21).png>) |
+| `item-wrist-chronometer`  | Wrist Chronometer  | Rare           | ![](<../.gitbook/assets/image (23).png>) |
 | `item-compact-disc`       | Compact Disc       | Rare           | none                                     |
 | `item-remote-control`     | Remote Control     | Rare           | none                                     |
 | `item-computer-mouse`     | Computer Mouse     | Rare           | none                                     |
