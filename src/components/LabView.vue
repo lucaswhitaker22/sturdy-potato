@@ -12,7 +12,7 @@ const currentStability = computed(() => {
   else if (stage === 3) base = 25;
   else if (stage === 4) base = 10;
 
-  const bonus = store.restorationLevel * 0.1;
+  const bonus = store.restorationLevel * 0.1 + store.overclockBonus * 100;
   return (base + bonus).toFixed(1) + "%";
 });
 </script>
@@ -157,11 +157,14 @@ const currentStability = computed(() => {
           <div class="flex flex-col gap-3">
             <button
               @click="store.sift()"
-              class="w-full py-3 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors relative overflow-hidden group"
+              :disabled="store.isExtracting"
+              class="w-full py-3 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors relative overflow-hidden group disabled:opacity-50"
             >
-              <span class="relative z-10"
-                >Process Layer {{ store.labState.currentStage + 1 }}</span
-              >
+              <span class="relative z-10">{{
+                store.isExtracting
+                  ? "Stabilizing..."
+                  : `Process Layer ${store.labState.currentStage + 1}`
+              }}</span>
               <!-- Ink fill hover effect could go here -->
             </button>
             <div class="text-center font-mono text-[10px] text-gray-400 py-1">
@@ -169,7 +172,8 @@ const currentStability = computed(() => {
             </div>
             <button
               @click="store.claim()"
-              class="w-full py-3 border-2 border-dashed border-green-600 text-green-700 font-bold uppercase hover:bg-green-50 transition-colors"
+              :disabled="store.isExtracting"
+              class="w-full py-3 border-2 border-dashed border-green-600 text-green-700 font-bold uppercase hover:bg-green-50 transition-colors disabled:opacity-50"
             >
               Catalog Now
             </button>

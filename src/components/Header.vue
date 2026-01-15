@@ -5,8 +5,26 @@ import { computed } from "vue";
 
 const store = useGameStore();
 
-const excavationProgress = computed(() => store.excavationXP % 100);
-const restorationProgress = computed(() => store.restorationXP % 100);
+function getLevelProgress(xp: number) {
+  let threshold = 0;
+  let prevThreshold = 0;
+  for (let i = 1; i <= 99; i++) {
+    prevThreshold = threshold;
+    threshold += Math.floor(i + 300 * Math.pow(2, i / 7));
+    if (xp < threshold) {
+      const progress =
+        ((xp - prevThreshold) / (threshold - prevThreshold)) * 100;
+      return Math.min(100, Math.max(0, progress));
+    }
+  }
+  return 100;
+}
+
+const excavationProgress = computed(() => getLevelProgress(store.excavationXP));
+const restorationProgress = computed(() =>
+  getLevelProgress(store.restorationXP)
+);
+
 const activeTool = computed(
   () => TOOL_CATALOG.find((t) => t.id === store.activeToolId) || TOOL_CATALOG[0]
 );
@@ -15,7 +33,7 @@ const excavationBonus = computed(() =>
   (Math.floor(store.excavationLevel / 5) * 0.5).toFixed(1)
 );
 const restorationBonus = computed(() =>
-  (store.restorationLevel * 0.1).toFixed(1)
+  (store.restorationLevel * 0.1 + store.overclockBonus * 100).toFixed(1)
 );
 </script>
 
@@ -142,6 +160,20 @@ const restorationBonus = computed(() =>
             {{ store.scrapBalance.toLocaleString() }}
           </div>
           <div class="text-[10px] text-gray-400">SCRAP UNITS</div>
+        </div>
+
+        <div class="text-right group cursor-help">
+          <div
+            class="text-[10px] uppercase font-bold text-gray-600 tracking-wider"
+          >
+            Vault Credits
+          </div>
+          <div
+            class="text-2xl font-mono font-bold relative inline-block text-stamp-blue"
+          >
+            {{ store.historicalInfluence.toLocaleString() }}
+          </div>
+          <div class="text-[10px] text-gray-400">HI UNITS</div>
         </div>
       </div>
     </div>

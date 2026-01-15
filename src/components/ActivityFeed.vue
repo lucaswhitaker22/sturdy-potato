@@ -47,16 +47,30 @@ const events = computed(() => store.feed);
         <div v-if="event.event_type === 'find'" class="pr-8">
           <div class="flex items-center gap-1 mb-1">
             <span
-              class="w-2 h-2 rounded-full bg-blue-600 border border-blue-800"
+              class="w-2 h-2 rounded-full border"
+              :class="
+                event.details.tier === 'rare'
+                  ? 'bg-yellow-400 border-yellow-600 animate-pulse'
+                  : 'bg-blue-600 border-blue-800'
+              "
             ></span>
-            <span class="font-bold text-blue-900 uppercase text-[10px]"
-              >Discovery</span
+            <span
+              class="font-bold uppercase text-[10px]"
+              :class="
+                event.details.tier === 'rare'
+                  ? 'text-yellow-700'
+                  : 'text-blue-900'
+              "
             >
+              {{
+                event.details.tier === "rare" ? "Quantum Reveal" : "Discovery"
+              }}
+            </span>
           </div>
           <div class="text-ink-black ml-3 leading-tight">
             New specimen
             <span class="font-bold underline">{{
-              event.details.item_id?.toUpperCase()
+              event.details.item_id?.replace(/_/g, " ").toUpperCase()
             }}</span>
             catalogued.
             <span class="text-[10px] text-gray-500 block mt-0.5"
@@ -113,6 +127,20 @@ const events = computed(() => store.feed);
             <span class="font-bold text-purple-700"
               >Stage {{ event.details.stage }}</span
             >!
+          </div>
+        </div>
+
+        <div
+          v-else-if="event.event_type === 'anomaly'"
+          class="pr-8 text-stamp-red"
+        >
+          <div class="flex items-center gap-1 mb-1">
+            <span class="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+            <span class="font-bold uppercase text-[10px]">Temporal Rift</span>
+          </div>
+          <div class="ml-3 leading-tight italic">
+            Dimensional anomaly recorded. Temporal instability detected in
+            sector SEC-07.
           </div>
         </div>
 

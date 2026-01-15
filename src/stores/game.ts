@@ -42,8 +42,14 @@ export const useGameStore = defineStore('game', () => {
   const excavationXP = ref(0);
   const restorationXP = ref(0);
   const activeToolId = ref('rusty_shovel');
-  const ownedToolIds = ref<string[]>(['rusty_shovel']);
+  const ownedTools = ref<Record<string, number>>({ 'rusty_shovel': 1 }); // tool_id -> level
   const completedSetIds = ref<string[]>([]);
+  const overclockBonus = ref(0);
+  const lastExtractAt = ref<Date | null>(null);
+
+  // Animation State
+  const surveyProgress = ref(0);
+  const passiveProgress = ref(0);
 
   // Getters
   // Backward compatibility for components expecting string[]
@@ -51,11 +57,49 @@ export const useGameStore = defineStore('game', () => {
   
   const discoveredCount = computed(() => inventory.value.length);
   const uniqueItemsFound = computed(() => new Set(inventory.value.map(i => i.item_id)).size);
-  const excavationLevel = computed(() => Math.floor(excavationXP.value / 100) + 1);
-  const restorationLevel = computed(() => Math.floor(restorationXP.value / 100) + 1);
+  
+  // Sync with SQL Public.get_level
+  function calculateLevel(xp: number) {
+    let threshold = 0;
+    for (let i = 1; i <= 98; i++) {
+      threshold += Math.floor(i + 300 * Math.pow(2, i / 7));
+      if (xp < threshold) return i;
+    }
+    return 99;
+  }
+
+  const excavationLevel = computed(() => calculateLevel(excavationXP.value));
+  const restorationLevel = computed(() => calculateLevel(restorationXP.value));
+
   const cooldownMs = computed(() => {
     return completedSetIds.value.includes('morning_ritual') ? 2500 : 3000;
   });
+
+  const isCooldown = computed(() => {
+    if (!lastExtractAt.value) return false;
+    const elapsed = Date.now() - lastExtractAt.value.getTime();
+    return elapsed < cooldownMs.value;
+  });
+
+  const surveyDurationMs = computed(() => {
+    // 0.5s to 2s depending on tool? 
+    // Simplified: Base 2s, reduced by 10% per tool tier?
+    const tiers: Record<string, number> = { 'rusty_shovel': 2000, 'pneumatic_pick': 1500, 'ground_radar': 1000, 'industrial_drill': 500 };
+    return tiers[activeToolId.value] || 2000;
+  });
+
+  function getToolLevel(toolId: string) {
+    return ownedTools.value[toolId] || 0;
+  }
+
+  function getToolCost(toolId: string) {
+    const tool = TOOL_CATALOG.find(t => t.id === toolId);
+    if (!tool) return 0;
+    const level = getToolLevel(toolId);
+    if (level === 0) return tool.cost; // Base cost for purchase
+    // Exponential: Cost = Base * 1.5^Level
+    return Math.floor(tool.cost * Math.pow(1.5, level));
+  }
 
   // Actions
   function addLog(message: string) {
@@ -75,18 +119,15 @@ export const useGameStore = defineStore('game', () => {
 
     // 10s Tick (aligns with mechanics)
     passiveInterval = setInterval(async () => {
-      // Optimistic or Real check? R19 says server authority.
-      // logic is in rpc_passive_tick
+      // Animation progress handled by component or store?
+      // For now, component will handle visual.
       try {
         const { data, error } = await supabase.rpc('rpc_passive_tick');
         if (error) throw error;
         if (data.success) {
-           // Silent update usually, or maybe small log?
-           // Only log crates?
            if (data.crate_dropped) {
              addLog(`PASSIVE: Automated unit found a Crate!`);
-             // State updated via subscription usually, but we can patch local given the payload return
-             scrapBalance.value = data.new_balance; // Ensure sync
+             scrapBalance.value = data.new_balance; 
            }
         }
       } catch (err) {
@@ -129,6 +170,8 @@ export const useGameStore = defineStore('game', () => {
       excavationXP.value = profile.excavation_xp || 0;
       restorationXP.value = profile.restoration_xp || 0;
       activeToolId.value = profile.active_tool_id || 'rusty_shovel';
+      overclockBonus.value = profile.overclock_bonus || 0;
+      lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
     }
 
     // 2. Fetch Lab State
@@ -156,10 +199,14 @@ export const useGameStore = defineStore('game', () => {
     }
     
     // 4. Fetch Owned Tools & Sets
-    const { data: tools } = await supabase.from('owned_tools').select('tool_id').eq('user_id', user.id);
-    if (tools) ownedToolIds.value = tools.map(t => t.tool_id);
+    const { data: tools } = await supabase.from('owned_tools').select('tool_id, level').eq('user_id', user.id);
+    if (tools) {
+        const toolMap: Record<string, number> = {};
+        tools.forEach(t => toolMap[t.tool_id] = t.level);
+        ownedTools.value = toolMap;
+    }
     // Ensure default is always there
-    if (!ownedToolIds.value.includes('rusty_shovel')) ownedToolIds.value.push('rusty_shovel');
+    if (!ownedTools.value['rusty_shovel']) ownedTools.value['rusty_shovel'] = 1;
 
     const { data: sets } = await supabase.from('completed_sets').select('set_id').eq('user_id', user.id);
     if (sets) completedSetIds.value = sets.map(s => s.set_id);
@@ -174,6 +221,8 @@ export const useGameStore = defineStore('game', () => {
         excavationXP.value = newProfile.excavation_xp;
         restorationXP.value = newProfile.restoration_xp;
         activeToolId.value = newProfile.active_tool_id;
+        overclockBonus.value = newProfile.overclock_bonus || 0;
+        lastExtractAt.value = newProfile.last_extract_at ? new Date(newProfile.last_extract_at) : lastExtractAt.value;
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'vault_items', filter: `user_id=eq.${user.id}` }, async (payload) => {
         // Refresh inventory on any change to be safe, or handle granularly
@@ -209,29 +258,27 @@ export const useGameStore = defineStore('game', () => {
   async function extract() {
     if (isExtracting.value) return;
     isExtracting.value = true;
-    // differentiate log based on context if possible, but for now we assume extract is the intent
-    addLog('Extracting...');
     
+    // 1. Survey Phase (Manual interaction)
+    addLog('Surveying the field...');
+    
+    // Wait for survey duration
+    await new Promise(resolve => setTimeout(resolve, surveyDurationMs.value));
+
     try {
       const { data, error } = await supabase.rpc('rpc_extract');
       if (error) throw error;
       if (data.success) {
-        if (data.outcome === 'SUCCESS') {
-           // This indicates a Sift success from the backend
-          addLog(`SUCCESS: +${data.xp_gain} XP. Lab stage advanced.`);
-          labState.value.currentStage = data.new_stage;
-        } else if (data.outcome === 'SHATTERED') {
-           // This indicates a Sift failure
-          addLog('FAILURE: Sample shattered during extraction.');
-          labState.value.isActive = false;
-          labState.value.currentStage = 0;
-        } else if (data.outcome === 'ANOMALY' || data.anomaly) {
-          addLog('⚠ ANOMALY DETECTED: Temporal instability recorded. No yield.');
+        if (data.result === 'ANOMALY') {
+          addLog('⚠ ANOMALY DETECTED: Temporal instability recorded. Rare energy surge synchronized.');
         } else if (data.crate_dropped) {
           addLog('CRATE FOUND! Return to lab to analyze.');
-        } else {
+        } else if (data.result === 'SCRAP_FOUND') {
           addLog(`Extraction complete. +${data.scrap_gain} Scrap.`);
+        } else {
+          addLog('Nothing found in this sector.');
         }
+        lastExtractAt.value = new Date(); // Local sync
       } else {
         addLog(`Error: ${data.error}`);
       }
@@ -243,9 +290,34 @@ export const useGameStore = defineStore('game', () => {
   }
 
   async function sift() {
-      // Sift is logically distinct but currently shares the RPC. 
-      // We wrap it to ensure UI consistency if we want to add specific 'sifting' loading state later.
-      return extract();
+    if (isExtracting.value || !labState.value.isActive) return;
+    isExtracting.value = true;
+    
+    try {
+      const { data, error } = await supabase.rpc('rpc_sift');
+      if (error) throw error;
+      
+      if (data.success) {
+        if (data.outcome === 'SUCCESS') {
+          addLog(`Sequence Success: Layer ${data.new_stage} stabilized.`);
+          labState.value.currentStage = data.new_stage;
+          restorationXP.value += 10; // Basic assumption if not in RPC
+        } else if (data.outcome === 'SHATTERED') {
+          addLog('⚠ CRITICAL FAILURE: Specimen shattered. Structural integrity lost.');
+          labState.value.isActive = false;
+          labState.value.currentStage = 0;
+          trayCount.value -= 1;
+        } else if (data.outcome === 'ANOMALY') {
+           addLog('⚠ TEMPORAL RIFT: Sifting process bypassed dimensional limits.');
+        }
+      } else {
+        addLog(`Sift Error: ${data.error}`);
+      }
+    } catch (err: any) {
+      addLog(`System Error: ${err.message}`);
+    } finally {
+      isExtracting.value = false;
+    }
   }
 
   function startSifting() {
@@ -365,11 +437,21 @@ export const useGameStore = defineStore('game', () => {
   async function upgradeTool(toolId: string, cost: number) {
      const { data, error } = await supabase.rpc('rpc_upgrade_tool', { p_tool_id: toolId, p_cost: cost });
      if (data?.success) {
-        addLog(`Tool upgraded to ${toolId}`);
-        ownedToolIds.value.push(toolId); // optimistic
-        activeToolId.value = toolId; // optimistic
-        startPassiveLoop(); // Restart loop with new tool speed (or capability)
-        // Subscriptions update state
+        addLog(`Tool ${toolId} reached Level ${data.new_level}`);
+        ownedTools.value[toolId] = data.new_level; 
+        activeToolId.value = toolId;
+        startPassiveLoop(); 
+      }
+  }
+
+  async function setActiveTool(toolId: string) {
+      const { error } = await supabase.from('profiles').update({ active_tool_id: toolId }).eq('id', userSessionId.value);
+      if (error) {
+          addLog(`Deployment Error: ${error.message}`);
+      } else {
+          activeToolId.value = toolId;
+          addLog(`EQUIPMENT DEPLOYED: ${toolId.toUpperCase()}`);
+          startPassiveLoop();
       }
   }
 
@@ -408,6 +490,16 @@ export const useGameStore = defineStore('game', () => {
       return true;
   }
 
+  async function overclockTool(toolId: string, cost: number) {
+     const { data, error } = await supabase.rpc('rpc_overclock_tool', { p_tool_id: toolId, p_cost: cost });
+     if (data?.success) {
+        addLog(`TECH PRESTIGE: Tool overclocked! Sift stability increased by 5%.`);
+        overclockBonus.value = data.new_bonus;
+     } else {
+        addLog(`Overclock Failed: ${error?.message || data?.error}`);
+     }
+  }
+
   // Initialize
   init();
 
@@ -424,13 +516,15 @@ export const useGameStore = defineStore('game', () => {
     excavationXP,
     restorationXP,
     activeToolId,
-    ownedToolIds,
+    ownedTools,
     completedSetIds,
     discoveredCount,
     uniqueItemsFound,
     excavationLevel,
     restorationLevel,
     cooldownMs,
+    getToolLevel,
+    getToolCost,
     extract,
     sift: extract, // Alias if needed
     claim,
@@ -441,7 +535,13 @@ export const useGameStore = defineStore('game', () => {
     listItem,
     placeBid,
     upgradeTool,
+    setActiveTool,
     claimSet,
-    purchaseInfluenceItem
+    purchaseInfluenceItem,
+    overclockTool,
+    overclockBonus,
+    surveyDurationMs,
+    isCooldown,
+    lastExtractAt
   };
 });
