@@ -35,6 +35,13 @@ const excavationBonus = computed(() =>
 const restorationBonus = computed(() =>
   (store.restorationLevel * 0.1 + store.overclockBonus * 100).toFixed(1)
 );
+
+const displayedScrap = computed(() =>
+  (store.scrapBalance ?? 0).toLocaleString()
+);
+const displayedInfluence = computed(() =>
+  (store.historicalInfluence ?? 0).toLocaleString()
+);
 </script>
 
 <template>
@@ -157,7 +164,7 @@ const restorationBonus = computed(() =>
             <span
               class="highlight-marker-bg absolute bottom-1 left-0 right-0 h-3 -z-10 opacity-50 transform -skew-x-12"
             ></span>
-            {{ store.scrapBalance.toLocaleString() }}
+            {{ displayedScrap }}
           </div>
           <div class="text-[10px] text-gray-400">SCRAP UNITS</div>
         </div>
@@ -171,7 +178,7 @@ const restorationBonus = computed(() =>
           <div
             class="text-2xl font-mono font-bold relative inline-block text-stamp-blue"
           >
-            {{ store.historicalInfluence.toLocaleString() }}
+            {{ displayedInfluence }}
           </div>
           <div class="text-[10px] text-gray-400">HI UNITS</div>
         </div>

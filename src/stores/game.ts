@@ -48,8 +48,12 @@ export const useGameStore = defineStore('game', () => {
   const lastExtractAt = ref<Date | null>(null);
 
   // Animation State
+  const now = ref(Date.now());
   const surveyProgress = ref(0);
   const passiveProgress = ref(0);
+  
+  // Timer for reactivity
+  setInterval(() => { now.value = Date.now() }, 100);
 
   // Getters
   // Backward compatibility for components expecting string[]
@@ -77,7 +81,7 @@ export const useGameStore = defineStore('game', () => {
 
   const isCooldown = computed(() => {
     if (!lastExtractAt.value) return false;
-    const elapsed = Date.now() - lastExtractAt.value.getTime();
+    const elapsed = now.value - lastExtractAt.value.getTime();
     return elapsed < cooldownMs.value;
   });
 
@@ -119,15 +123,14 @@ export const useGameStore = defineStore('game', () => {
 
     // 10s Tick (aligns with mechanics)
     passiveInterval = setInterval(async () => {
-      // Animation progress handled by component or store?
-      // For now, component will handle visual.
       try {
         const { data, error } = await supabase.rpc('rpc_passive_tick');
         if (error) throw error;
         if (data.success) {
            if (data.crate_dropped) {
              addLog(`PASSIVE: Automated unit found a Crate!`);
-             scrapBalance.value = data.new_balance; 
+             scrapBalance.value = Number(data.new_balance || scrapBalance.value); 
+             console.log('[Store] Passive Scrap Update:', scrapBalance.value);
            }
         }
       } catch (err) {
@@ -164,9 +167,9 @@ export const useGameStore = defineStore('game', () => {
       .single();
       
     if (profile) {
-      scrapBalance.value = profile.scrap_balance;
-      historicalInfluence.value = profile.historical_influence || 0; // [NEW]
-      trayCount.value = profile.tray_count;
+      scrapBalance.value = Number(profile.scrap_balance || 0);
+      historicalInfluence.value = Number(profile.historical_influence || 0);
+      trayCount.value = Number(profile.tray_count || 0);
       excavationXP.value = profile.excavation_xp || 0;
       restorationXP.value = profile.restoration_xp || 0;
       activeToolId.value = profile.active_tool_id || 'rusty_shovel';
@@ -200,13 +203,15 @@ export const useGameStore = defineStore('game', () => {
     
     // 4. Fetch Owned Tools & Sets
     const { data: tools } = await supabase.from('owned_tools').select('tool_id, level').eq('user_id', user.id);
-    if (tools) {
+    if (tools && tools.length > 0) {
         const toolMap: Record<string, number> = {};
         tools.forEach(t => toolMap[t.tool_id] = t.level);
         ownedTools.value = toolMap;
     }
     // Ensure default is always there
-    if (!ownedTools.value['rusty_shovel']) ownedTools.value['rusty_shovel'] = 1;
+    if (!ownedTools.value['rusty_shovel']) {
+        ownedTools.value['rusty_shovel'] = 1;
+    }
 
     const { data: sets } = await supabase.from('completed_sets').select('set_id').eq('user_id', user.id);
     if (sets) completedSetIds.value = sets.map(s => s.set_id);
@@ -215,13 +220,14 @@ export const useGameStore = defineStore('game', () => {
     supabase.channel('game-state')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, (payload) => {
         const newProfile = payload.new as any;
-        scrapBalance.value = newProfile.scrap_balance;
-        historicalInfluence.value = newProfile.historical_influence || 0; // [NEW]
-        trayCount.value = newProfile.tray_count;
-        excavationXP.value = newProfile.excavation_xp;
-        restorationXP.value = newProfile.restoration_xp;
+        console.log('[Store] Profile Update Received:', newProfile);
+        scrapBalance.value = Number(newProfile.scrap_balance ?? 0);
+        historicalInfluence.value = Number(newProfile.historical_influence ?? 0);
+        trayCount.value = Number(newProfile.tray_count ?? 0);
+        excavationXP.value = Number(newProfile.excavation_xp ?? 0);
+        restorationXP.value = Number(newProfile.restoration_xp ?? 0);
         activeToolId.value = newProfile.active_tool_id;
-        overclockBonus.value = newProfile.overclock_bonus || 0;
+        overclockBonus.value = Number(newProfile.overclock_bonus ?? 0);
         lastExtractAt.value = newProfile.last_extract_at ? new Date(newProfile.last_extract_at) : lastExtractAt.value;
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'vault_items', filter: `user_id=eq.${user.id}` }, async (payload) => {
@@ -283,6 +289,13 @@ export const useGameStore = defineStore('game', () => {
         } else {
           addLog('Nothing found in this sector.');
         }
+        
+        // Optimistic / Immediate Update
+        console.log('[Store] Extraction Data Received:', data);
+        scrapBalance.value = Number(data.new_balance ?? (scrapBalance.value + (data.scrap_gain || 0)));
+        excavationXP.value = Number(data.new_xp ?? (excavationXP.value + (data.xp_gain || 0)));
+        trayCount.value = Number(data.new_tray_count ?? (data.crate_dropped ? trayCount.value + 1 : trayCount.value));
+        
         // Use local time for immediate cooldown to avoid server drift issues
         lastExtractAt.value = new Date(); 
       } else {
@@ -307,15 +320,18 @@ export const useGameStore = defineStore('game', () => {
       if (data.success) {
         if (data.outcome === 'SUCCESS') {
           addLog(`Sequence Success: Layer ${data.new_stage} stabilized.`);
-          labState.value.currentStage = data.new_stage;
-          restorationXP.value += 10; // Basic assumption if not in RPC
+          labState.value.currentStage = data.new_stage ?? (labState.value.currentStage + 1);
         } else if (data.outcome === 'SHATTERED') {
           addLog('⚠ CRITICAL FAILURE: Specimen shattered. Structural integrity lost.');
           labState.value.isActive = false;
           labState.value.currentStage = 0;
-          trayCount.value -= 1;
+          trayCount.value = Number(trayCount.value || 0) - 1;
         } else if (data.outcome === 'ANOMALY') {
            addLog('⚠ TEMPORAL RIFT: Sifting process bypassed dimensional limits.');
+        }
+
+        if (data.xp_gain) {
+           restorationXP.value = Number(restorationXP.value) + Number(data.xp_gain);
         }
       } else {
         addLog(`Sift Error: ${data.error}`);
@@ -444,10 +460,17 @@ export const useGameStore = defineStore('game', () => {
   async function upgradeTool(toolId: string, cost: number) {
      const { data, error } = await supabase.rpc('rpc_upgrade_tool', { p_tool_id: toolId, p_cost: cost });
      if (data?.success) {
-        addLog(`Tool ${toolId} reached Level ${data.new_level}`);
-        ownedTools.value[toolId] = data.new_level; 
+        const newLevel = data.new_level || (getToolLevel(toolId) + 1);
+        addLog(`Tool ${toolId.toUpperCase()} reached Level ${newLevel}`);
+        ownedTools.value[toolId] = newLevel; 
         activeToolId.value = toolId;
+        
+        // Sync balance manually as rpc_upgrade_tool returns success but doesn't return new_balance yet
+        scrapBalance.value -= cost;
+        
         startPassiveLoop(); 
+      } else {
+        addLog(`Upgrade Interrupted: ${error?.message || data?.error || 'System error'}`);
       }
   }
 
@@ -533,7 +556,7 @@ export const useGameStore = defineStore('game', () => {
     getToolLevel,
     getToolCost,
     extract,
-    sift: extract, // Alias if needed
+    sift,
     claim,
     startSifting,
     addLog,

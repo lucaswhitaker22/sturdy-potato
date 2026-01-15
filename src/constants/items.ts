@@ -43,7 +43,7 @@ export interface Tool {
 }
 
 export const TOOL_CATALOG: Tool[] = [
-  { id: 'rusty_shovel', name: 'Rusty Shovel', cost: 0, automationRate: 0, findRateBonus: 0, flavorText: 'Better than using your hands (barely).' },
+  { id: 'rusty_shovel', name: 'Rusty Shovel', cost: 250, automationRate: 0, findRateBonus: 0, flavorText: 'Better than using your hands (barely).' },
   { id: 'pneumatic_pick', name: 'Pneumatic Pick', cost: 2500, automationRate: 5, findRateBonus: 0.05, flavorText: 'High-frequency vibration to shake loose the past.' },
   { id: 'ground_radar', name: 'Ground Radar', cost: 15000, automationRate: 25, findRateBonus: 0.12, flavorText: 'See through the silt with ultrasound.' },
   { id: 'industrial_drill', name: 'Industrial Drill', cost: 80000, automationRate: 100, findRateBonus: 0.18, flavorText: 'Pure mechanical force for deep extraction.' },
