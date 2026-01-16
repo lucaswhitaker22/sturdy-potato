@@ -15,9 +15,19 @@ Every item should be able to carry:
 * Historical Value (HV)
 * Condition
 * Mint number
+* Optional hidden sub-stats (revealed via Appraisal)
 * Optional set membership
 * Optional prismatic state
 * A short Archive research note
+
+#### 3.0.1 Preview fields (Appraisal-only)
+
+Some UI-only “preview” values can be shown before the reveal.
+
+* Mint Probability (estimate): A player-facing hint, not a guarantee.
+* Condition Range (estimate): E.g., “80% chance Preserved+.”
+
+These previews should never change server RNG. They only surface information.
 
 ### 3.1 Rarity Hierarchy
 
@@ -64,7 +74,7 @@ The combination of Mint and Condition defines an item’s total value in both th
 * Bazaar Valuation: The serial number system creates a "Buy Low, Sell High" meta-game where low-digit mints act as a hedge against inflation.
 * Museum Scoring: Weekly leaderboard scores are calculated by summing an item's Base HV, its Condition Multiplier, and any applicable Set Multipliers.
 * Skill Synergies:
-  * Appraisal: Higher levels of Appraisal allow players to see an item's condition before opening a crate or reveal hidden sub-stats that further influence value.
+  * Appraisal: Enables Pre-Sift Appraisal previews (Mint Probability / Condition Range) and can reveal hidden sub-stats that further influence value.
   * Restoration: Advanced restoration skills grant a passive +1% bonus to the Historical Value of any item successfully claimed from a sift.
 
 ***

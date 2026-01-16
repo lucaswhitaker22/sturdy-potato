@@ -10,12 +10,12 @@ The RPG Skilling system provides the "long-term grind" essential to any OSRS-ins
 
 Skills are leveled up through Action-Based Experience (XP). Every time a player interacts with the UI in a specific way, they gain a small amount of XP. This "Action-Based" progression ensures that player expertise is permanent, persisting even when tools are upgraded or replaced.
 
-| **Skill**   | **Primary XP Source**                | **Level 99 Mastery Benefit**                                                                                                       |
-| ----------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Excavation  | Clicking \[EXTRACT] / Auto-dig ticks | "The Endless Vein": 15% chance for "Double Loot" drops on every find. Also unlocks "Unidentified Blueprints" for selling.          |
-| Restoration | Successful Sifts (Lab)               | "Master Preserver": +10% Base Stability to all sifting tiers. Grants a passive +1% bonus to Historical Value on all claimed items. |
-| Appraisal   | Buying/Selling in Bazaar             | "The Oracle": Ability to see item "Condition" before opening a crate. "Master Trader": Fees reduced to 2.5%.                       |
-| Smelting    | Breaking down items into Scrap       | "Pure Yield": 2x Scrap output from all Junk-tier items.                                                                            |
+| **Skill**   | **Primary XP Source**                | **Level 99 Mastery Benefit**                                                                                                  |
+| ----------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Excavation  | Clicking \[EXTRACT] / Auto-dig ticks | "The Endless Vein": 15% chance for "Double Loot" drops. Expands Seismic Surge sweet spots. Unlocks advanced zone Survey.      |
+| Restoration | Successful Sifts (Lab)               | "Master Preserver": +10% Base Stability. Stability needle 10% slower. Grants +1% HV on all claimed items.                     |
+| Appraisal   | Buying/Selling in Bazaar             | "The Oracle": Unlocks deeper previews (Condition, Mint Probability) and zone “trending” intel. "Master Trader": Fees reduced. |
+| Smelting    | Breaking down items into Scrap       | "Pure Yield": 2x Scrap output from all Junk-tier items. Unlocks Fragment Alchemist bonuses for salvage materials.             |
 
 ***
 
@@ -25,25 +25,29 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 
 * XP Mechanics: Granted upon completion of a manual extraction or an automated tick.
 * Progression Perks: Every 5 levels increases the Crate Drop Rate by 0.5%.
+* Seismic Surge Synergy: Higher Excavation makes the extraction “Sweet Spot” larger.
+* Vault Heatmap Synergy: Higher Excavation unlocks **Survey**, temporarily reducing Static penalties on loot from a chosen zone.
 * Mastery: At Level 99, Excavators become the primary suppliers for the Bazaar by finding unique blueprints required for high-tier Workshop upgrades.
 
 2\. Restoration (The Gambler)
 
 * XP Mechanics: Completion of a Sift attempt awards XP. Success provides 100% XP, while a failure/shatter grants a 25% "Pity XP" award.
 * Progression Perks: Every level adds a +0.1% flat bonus to the Stability Gauge (Success Chance).
+* Active Stabilization Synergy: Restoration reduces the Fine Dust cost to “Tether” the Stability needle.
 * Mastery: Beyond the stability capstone, Masters receive a permanent boost to the Historical Value (HV) of every relic they recover, increasing their Museum and Bazaar potential.
 
 3\. Appraisal (The Merchant)
 
 * XP Mechanics: Gained through active participation in the Bazaar's player-driven economy.
-* Mid-Game Milestones: At Level 60, players reveal hidden "sub-stats" on relics and gain the ability to certify items for others for a fee.
-* Mastery: Unlocks the "Auctioneer" title in the Global Feed and represents the pinnacle of market efficiency with the lowest possible Archive Tax.
+* Mid-Game Milestones: At Level 60, players reveal hidden sub-stats and can perform Pre-Sift Appraisal to preview Mint Probability / Condition Range before gambling deeper.
+* Mastery: Unlocks “The Oracle” intel layer (zone trending IDs + best-in-slot previews) and the "Auctioneer" title. Also provides the lowest possible Archive Tax.
 
 4\. Smelting (The Refiner)
 
 * XP Mechanics: Earned by converting unwanted finds or junk into Scrap.
 * Mid-Game Milestones: Level 60 unlocks "Bulk Auto-Smelt," allowing players to process entire tiers of junk instantly.
-* Mastery: Provides the highest yield of raw materials, including a chance to recover "Cursed Fragments" from shattered high-level items, which are used to craft Stabilizer Charms.
+* Fragment Alchemist (specialization): Improves salvage value from Lab failures, increasing the chance to recover rare materials from Stage 3+ shatters.
+* Mastery: Provides the highest yield of raw materials, plus top-tier salvage potential for crafting Stabilizer Charms.
 
 ***
 

@@ -25,17 +25,23 @@ The core mechanics and gameplay features of Relic Vault are structured into thre
 #### Micro Loop Mechanics: The Field & The Lab
 
 * Manual Extraction: Players click the \[EXTRACT] button to trigger a survey progress bar (0.5s–2s) to find Scrap (80%), Crates (15%), or Anomalies (5%).
+  * Active extraction add-on (Seismic Surge): A timing “Sweet Spot” can appear on the bar. Hitting it grants a **Perfect Survey** (+5% flat Crate drop rate for that action) and bonus Excavation XP.
 * Passive Extraction: Automated tools (Auto-Diggers) generate Scrap and Crates every 10-second "Tick," even while the player is offline, up to a "Battery Capacity" limit.
 * The Refiner (Sifting): A multi-stage gambling process (Stages 0–5) where players choose between \[CLAIM] (safely taking the current item) or \[SIFT] (risking the item to reach higher rarity tiers).
 * Stability Gauge: Each sifting stage has a success percentage (from 100% at Stage 0 to 10% at Stage 5) that can be improved by the Restoration skill.
+  * Active lab add-on (Active Stabilization): Players can spend Fine Dust to “Tether” the needle, slowing it briefly.
 * Shatter State: If a stability check fails, the item is destroyed, awarding the player "Fine Dust" or "Pity XP" instead of a relic.
+  * Reactive fail add-on (Shatter Salvage): On Standard Fail, a 1-second reaction window can improve failure payout (extra Fine Dust, or recover a rolled Cursed Fragment).
+* Micro “Fever Mode” (Anomaly Overload): Anomalies fill a 3-segment meter. Triggering it grants a 60s buff (faster extraction, slightly better Stage 0 outcomes).
+* Pre-Sift Appraisal: Before Stage 0, players can pay Scrap to preview a crate (Mint Probability / Condition Range). Higher Appraisal can reveal one hidden sub-stat.
+* Zone Strategy (Vault Heatmaps): Zones show “Static Intensity.” Higher static grants up to +2% Crate drop rate, but applies up to -5% Sift Stability for items found there.
 
 #### Meso Loop Mechanics: Progression & Skilling
 
 * RPG Skilling System: Action-based XP is earned for four core skills:
   * Excavation: Improves crate drop rates and unlocks high-tier tool blueprints.
   * Restoration: Increases sifting stability and grants Historical Value (HV) bonuses to claimed items.
-  * Appraisal: Reveals hidden item stats, unlocks certifications, and reduces market fees.
+  * Appraisal: Enables Pre-Sift Appraisal previews, reveals hidden item stats, unlocks certifications, and reduces market fees.
   * Smelting: Increases Scrap yield from junk and facilitates bulk processing.
 * Workshop Tool Tiers: Progression through equipment tiers—from the Rusty Shovel to the Satellite Uplink—which exponentially increases Scrap/sec and crate find rates.
 * Collection Sets: Grouping specific items (e.g., "The Morning Ritual") to lock them into the Vault in exchange for permanent modifiers like reduced extraction cooldowns.

@@ -10,13 +10,13 @@ In a game without 3D environments, the User Interface IS the world. The UI must 
 
 The game is organized into five primary "Decks" (Tabs). Navigation is handled via a persistent Command Bar at the bottom of the screen.
 
-| **Deck**         | **Function**     | **Key UI Elements**                                   |
-| ---------------- | ---------------- | ----------------------------------------------------- |
-| \[01] THE FIELD  | Primary Gameplay | Large \[EXTRACT] button, Heatmap, Tool Status.        |
-| \[02] THE LAB    | RNG / Gambling   | Sifting tray, Stability gauge, Chemical Wash buttons. |
-| \[03] THE VAULT  | Inventory / RPG  | Grid view, Set completion trackers, Skill level bars. |
-| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots.   |
-| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Global quests, Influence shop.    |
+| **Deck**         | **Function**     | **Key UI Elements**                                                                             |
+| ---------------- | ---------------- | ----------------------------------------------------------------------------------------------- |
+| \[01] THE FIELD  | Primary Gameplay | Large \[EXTRACT] button, **Vault Heatmaps**, Tool Status, Overload Meter.                       |
+| \[02] THE LAB    | RNG / Gambling   | Sifting tray, Stability gauge, **Tether controls**, Pre-Sift Appraisal, Shatter Salvage prompt. |
+| \[03] THE VAULT  | Inventory / RPG  | Grid view, Set completion trackers, Skill level bars.                                           |
+| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots.                                             |
+| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Global quests, Influence shop.                                              |
 
 #### The Flow: "The Scavenger's Routine"
 
@@ -53,6 +53,19 @@ Because there are no combat animations, we use Micro-Animations to make actions 
 * The reveal:
   * Success: Bright border flash and a crisp mechanical _clink-clink_.
   * Shatter: Brief static glitch, glass-break, and a Dust icon.
+  * Shatter Salvage: A 1-second **\[SALVAGE]** prompt appears during the glitch. It should feel frantic.
+
+#### Seismic Surge (Active Extraction)
+
+* The Sweet Spot should be legible in <200ms.
+* A Perfect Survey should “snap” the bar with a sharp click.
+* Perfect Survey should fire a tiny feed line, not a global broadcast.
+
+#### Anomaly Overload (Fever Mode)
+
+* The meter lives in the header. It fills on Anomaly outcomes.
+* At full, it pulses and offers a manual trigger.
+* While active, the UI should show a timed banner and faster bar fill.
 
 #### The "OSRS" Level Up
 
