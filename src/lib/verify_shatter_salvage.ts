@@ -22,7 +22,7 @@ const supabaseKey = env.VITE_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function verify() {
-    console.log('--- Shatter Salvage Verification ---');
+    console.log('--- Shatter Salvage Verification (Fragment Alchemist) ---');
 
     // 1. Get a test user
     const { data: users } = await supabase.from('profiles').select('id').limit(1);
@@ -33,90 +33,86 @@ async function verify() {
     const userId = users[0].id;
     console.log(`User: ${userId}`);
 
-    // 2. Ensure user has a crate in lab or at least a tray count
-    const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
-    if (profile.tray_count === 0) {
-        console.log('Adding tray count for test...');
-        await supabase.from('profiles').update({ tray_count: 5 }).eq('id', userId);
-    }
+    // 2. Setup Profile & Lab State
+    console.log('Setting smelting_branch = fragment_alchemist and seeding crate...');
+    await supabase.from('profiles').update({
+        smelting_branch: 'fragment_alchemist',
+        crate_tray: [{ id: 'test-crate-' + Date.now(), tier: 'rare', appraised: true, appraisal_success: true }]
+    }).eq('id', userId);
 
-    // Attempt to start sifting if not active
-    const { data: labState } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userId });
-    if (!labState?.lab_state?.is_active) {
-        console.warn('Lab not active. Attempting to force a crate find...');
-        await supabase.rpc('rpc_extract_v6', { payload: { p_user_id: userId } });
-        // Start sifting if we have a tray
-        const { data: profile2 } = await supabase.from('profiles').select('crate_tray').eq('id', userId).single();
-        if (profile2 && profile2.crate_tray && profile2.crate_tray.length > 0) {
-            await supabase.rpc('rpc_start_sifting', { payload: { p_user_id: userId, p_crate_id: profile2.crate_tray[0].id } });
-        } else {
-            console.error('Could not setup lab state for test.');
-            return;
-        }
-    }
+    const { data: profile } = await supabase.from('profiles').select('crate_tray').eq('id', userId).single();
 
-    // 3. Test Sift -> Stabilized Fail (Salvage Trigger)
+    console.log('Forcing Lab State (Stage 3)...');
+    await supabase.from('lab_state').upsert({
+        user_id: userId,
+        is_active: true,
+        current_stage: 3,
+        active_crate: profile.crate_tray[0],
+        last_action_at: new Date().toISOString()
+    });
+
+    const { data: verifyState } = await supabase.from('lab_state').select('*').eq('user_id', userId).single();
+    console.log('Verified Lab State Stage:', verifyState?.current_stage);
+
+    // 3. Loop Sift until STABILIZED_FAIL
     let outcome = '';
     let siftData: any = null;
     let attempts = 0;
-    while (outcome !== 'STABILIZED_FAIL' && attempts < 10) {
+    while (outcome !== 'STABILIZED_FAIL' && attempts < 20) {
         attempts++;
         console.log(`Triggering Sift (Attempt ${attempts})...`);
         const { data, error } = await supabase.rpc('rpc_sift_v2', {
             p_user_id: userId,
             p_tethers_used: 0,
-            p_zone: 0 // Safe Zone for more stable rolls, higher chance of STABILIZED_FAIL vs SHATTERED
+            p_zone: 0
         });
 
-        if (error) {
-            console.error('Sift Error:', error);
-            return;
-        }
-        siftData = data;
-        outcome = data.outcome;
-        console.log('Outcome:', outcome);
-
-        if (outcome === 'SUCCESS') {
-            // Need to reload lab state or just loop if v2 allows it? 
-            // v2 checks if active. Success keeps it active (next stage).
+        if (error || !data?.success) {
+            console.warn('Sift Error:', error || data?.error);
+            // Re-setup if needed
+            await supabase.from('lab_state').upsert({
+                user_id: userId,
+                is_active: true,
+                current_stage: 3,
+                active_crate: profile.crate_tray[0],
+                last_action_at: new Date().toISOString()
+            });
             continue;
         }
 
+        siftData = data;
+        outcome = data.outcome;
+        console.log('Sift Outcome:', outcome, 'Pending Dust:', data.pending_dust, 'Pending Fragment:', data.pending_fragment);
+
+        if (outcome === 'SUCCESS') continue;
         if (outcome === 'SHATTERED') {
-            console.log('Shattered! Need to find another crate...');
-            await supabase.rpc('rpc_extract_v6', { payload: { p_user_id: userId } });
-            const { data: profile_retry } = await supabase.from('profiles').select('crate_tray').eq('id', userId).single();
-            if (profile_retry && profile_retry.crate_tray && profile_retry.crate_tray.length > 0) {
-                await supabase.rpc('rpc_start_sifting', { payload: { p_user_id: userId, p_crate_id: profile_retry.crate_tray[0].id } });
-            } else {
-                console.error('Could not find another crate.');
-                return;
-            }
+            // Reset to stage 3
+            await supabase.from('lab_state').upsert({
+                user_id: userId,
+                is_active: true,
+                current_stage: 3,
+                active_crate: profile.crate_tray[0],
+                last_action_at: new Date().toISOString()
+            });
         }
     }
 
     if (outcome === 'STABILIZED_FAIL' && siftData.salvage_token) {
         console.log('Salvage Token Received:', siftData.salvage_token);
-        console.log('Expires at:', siftData.salvage_expires_at);
-
-        // 4. Test In-Time Salvage
-        console.log('Testing in-time salvage...');
-        const { data: salvageData, error: salvageErr } = await supabase.rpc('rpc_shatter_salvage', {
+        console.log('Testing salvage...');
+        const { data: salvageData } = await supabase.rpc('rpc_shatter_salvage', {
             p_user_id: userId,
             p_token: siftData.salvage_token
         });
 
-        if (salvageErr) {
-            console.error('Salvage Error:', salvageErr);
+        console.log('Salvage Result:', salvageData.outcome);
+        console.log('Payout:', { dust: salvageData.dust_gain, fragments: salvageData.fragment_gain });
+
+        if (salvageData.fragment_gain > 0) {
+            console.log('SUCCESS: Cursed Fragment recovered!');
         } else {
-            console.log('Salvage Result:', salvageData.outcome);
-            if (salvageData.outcome === 'SALVAGED') {
-                console.log('Success! Payout:', { dust: salvageData.dust_gain, fragments: salvageData.fragment_gain });
-            }
+            console.log('No fragment this time (random chance).');
         }
-    } else {
-        console.warn('Did not get a salvage token. Outcome might have been SUCCESS or SHATTERED.');
-        console.log('Recommendation: Re-run test if outcome was SUCCESS/SHATTERED to hit the fail branch.');
     }
 
     console.log('--- Verification Done ---');
