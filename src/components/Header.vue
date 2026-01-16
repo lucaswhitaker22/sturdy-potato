@@ -242,6 +242,20 @@ const displayedInfluence = computed(() =>
           </div>
           <div class="text-[10px] text-gray-400">HI UNITS</div>
         </div>
+
+        <div v-if="store.cursedFragmentBalance > 0" class="text-right group cursor-help">
+          <div
+            class="text-[10px] uppercase font-bold text-red-600 tracking-wider"
+          >
+            Cursed Fragments
+          </div>
+          <div
+            class="text-2xl font-mono font-bold relative inline-block text-red-700"
+          >
+            {{ store.cursedFragmentBalance }}
+          </div>
+          <div class="text-[10px] text-gray-400">ANOMALY MINT</div>
+        </div>
       </div>
     </div>
   </header>

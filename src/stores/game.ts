@@ -65,6 +65,7 @@ export const useGameStore = defineStore('game', () => {
   const isFocusedSurveyActive = ref(false);
   const vaultHeatmaps = ref<Record<string, number>>({});
   const lastSurveyAt = ref<number | null>(null);
+  const smeltingBranch = ref<string | null>(null);
 
   let focusedSurveyTimer: any = null;
 
@@ -295,6 +296,7 @@ export const useGameStore = defineStore('game', () => {
       overclockBonus.value = Number(profile.overclock_bonus || 0);
       crateTray.value = profile.crate_tray || [];
       lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
+      smeltingBranch.value = profile.smelting_branch || null;
 
       // Sync Sub-Stores
       skillsStore.excavationXP = Number(profile.excavation_xp || 0);
@@ -365,6 +367,7 @@ export const useGameStore = defineStore('game', () => {
         activeZoneId.value = p.active_zone_id || 'industrial_zone';
         isFocusedSurveyActive.value = p.is_focused_survey_active ?? false;
         lastSurveyAt.value = p.last_survey_at ? new Date(p.last_survey_at).getTime() : null;
+        smeltingBranch.value = p.smelting_branch || null;
       })
       // Inventory updates omitted for brevity but should be here
       .subscribe();
@@ -531,6 +534,16 @@ export const useGameStore = defineStore('game', () => {
           labState.value.isActive = false;
           labState.value.currentStage = 0;
           trayCount.value = Math.max(0, trayCount.value - 1);
+
+          if (data.salvage_token) {
+            salvageOpportunity.value = {
+              token: data.salvage_token,
+              expiresAt: new Date(data.salvage_expires_at).getTime(),
+              pendingDust: 0,
+              pendingFragment: false
+            };
+            addLog('SYSTEM ERROR: Emergency Window Active (1.0s)');
+          }
         } else if (data.outcome === 'STABILIZED_FAIL') {
           addLog(`Sequence Failure. Triage payout: +${data.dust_payout}mg Dust.`);
           labState.value.isActive = false;
@@ -645,6 +658,32 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  async function useEmergencyGlue() {
+    if (!salvageOpportunity.value) return;
+    const token = salvageOpportunity.value.token;
+    clearSalvage();
+
+    try {
+      const { data, error } = await supabase.rpc('rpc_use_emergency_glue', {
+        p_user_id: userSessionId.value,
+        p_token: token
+      });
+
+      if (data?.success) {
+        addLog(`STABILIZED: ${data.item.name} secured.`);
+        labState.value.isActive = false;
+        labState.value.currentStage = 0;
+        cursedFragmentBalance.value = data.new_fragment_balance;
+        return data.item;
+      } else {
+        addLog(`Glue Error: ${data?.error || error?.message}`);
+      }
+    } catch (err: any) {
+      addLog(`System Error: ${err.message}`);
+    }
+    return null;
+  }
+
   function clearSalvage() {
     salvageOpportunity.value = null;
   }
@@ -737,10 +776,11 @@ export const useGameStore = defineStore('game', () => {
     excavationLevel, restorationLevel, appraisalLevel, smeltingLevel,
     seismicState,
     activeZoneId, isFocusedSurveyActive, vaultHeatmaps, lastSurveyAt,
+    smeltingBranch,
 
     // Actions
     init, extract, strike, sift, startSifting, appraiseCrate, claim,
-    salvage, clearSalvage,
+    salvage, useEmergencyGlue, clearSalvage,
     fetchMarket: inventoryStore.fetchMarket,
     listItem, placeBid,
     upgradeTool, setActiveTool, claimSet,

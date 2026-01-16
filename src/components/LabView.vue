@@ -26,9 +26,9 @@ const isStopped = ref(false);
 const swingDirection = ref(1);
 const isTetherFlashing = ref(false);
 
-// Shatter Salvage State
+// Shatter Salvage / Emergency Glue State
 const salvageProgress = ref(100);
-const salvageOutcome = ref<'SALVAGED' | 'MISSED' | null>(null);
+const salvageOutcome = ref<'SALVAGED' | 'MISSED' | 'STABILIZED' | null>(null);
 let salvageTimer: any = null;
 
 watch(() => store.salvageOpportunity, (newVal) => {
@@ -62,6 +62,29 @@ async function handleSalvage() {
       store.clearSalvage();
       salvageOutcome.value = null;
   }, 1000);
+}
+
+async function handleEmergencyGlue() {
+  if (!store.salvageOpportunity || salvageOutcome.value) return;
+  clearInterval(salvageTimer);
+  salvageOutcome.value = 'STABILIZED';
+  audio.playClick('heavy'); // Maybe a unique sound later?
+  const item = await store.useEmergencyGlue();
+  if (item) {
+    // Show claim result after stamp
+    setTimeout(() => {
+      revealedItem.value = item;
+      store.clearSalvage();
+      salvageOutcome.value = null;
+    }, 1000);
+  } else {
+    // Error case
+    salvageOutcome.value = 'MISSED';
+    setTimeout(() => {
+      store.clearSalvage();
+      salvageOutcome.value = null;
+    }, 1000);
+  }
 }
 
 function handleSalvageMiss() {
@@ -201,6 +224,11 @@ function handleKeyDown(e: KeyboardEvent) {
       handleSalvage();
       return;
     }
+    if (e.key.toLowerCase() === 'g' && store.restorationLevel >= 60 && store.cursedFragmentBalance >= 1) {
+      e.preventDefault();
+      handleEmergencyGlue();
+      return;
+    }
   }
 
   if (!isActiveStabilizing.value || isStopped.value) return;
@@ -290,20 +318,36 @@ function getCrateIntel(crate: any) {
              ></div>
         </div>
 
-        <button 
-          @click="handleSalvage"
-          class="w-full py-4 bg-red-500 text-white font-mono font-black text-xl hover:bg-red-600 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
-        >
-          [ SALVAGE NOW ]
-        </button>
+        <div class="grid grid-cols-1 gap-3">
+          <button 
+            @click="handleSalvage"
+            class="w-full py-4 bg-red-500 text-white font-mono font-black text-xl hover:bg-red-600 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
+          >
+            [ SALVAGE NOW ]
+          </button>
+
+          <button 
+            v-if="store.restorationLevel >= 60"
+            @click="handleEmergencyGlue"
+            :disabled="store.cursedFragmentBalance < 1"
+            class="w-full py-4 bg-blue-600 text-white font-mono font-black text-xl hover:bg-blue-700 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed group relative"
+          >
+            <span class="flex items-center justify-center gap-2">
+              [ EMERGENCY GLUE ]
+              <span class="text-xs bg-black/20 px-1 rounded">-1 Fragment</span>
+            </span>
+            <div v-if="store.cursedFragmentBalance < 1" class="absolute inset-0 flex items-center justify-center bg-black/40 text-xs text-white uppercase font-mono">Insufficient Fragments</div>
+          </button>
+        </div>
         
-        <div class="mt-4 text-[10px] font-mono text-gray-400 uppercase">
-          Press [SPACE] or [S]
+        <div class="mt-4 text-[10px] font-mono text-gray-400 uppercase flex flex-col gap-1">
+          <div>SALVAGE: [SPACE] or [S]</div>
+          <div v-if="store.restorationLevel >= 60">EMERGENCY GLUE: [G]</div>
         </div>
 
         <!-- Success/Miss Stamp Overlay -->
         <div v-if="salvageOutcome" class="absolute inset-0 flex items-center justify-center bg-white/90 z-10 animate-bounce-in">
-             <span :class="['text-5xl font-black font-serif italic uppercase -rotate-12', salvageOutcome === 'SALVAGED' ? 'text-green-600' : 'text-red-600']">
+             <span :class="['text-5xl font-black font-serif italic uppercase -rotate-12', salvageOutcome === 'SALVAGED' || salvageOutcome === 'STABILIZED' ? 'text-green-600' : 'text-red-600']">
                 {{ salvageOutcome }}
              </span>
         </div>
@@ -340,8 +384,9 @@ function getCrateIntel(crate: any) {
         <h2 class="text-2xl font-serif font-black text-ink-black uppercase tracking-tight">
           Analysis Lab
         </h2>
-         <div class="text-xs font-mono text-gray-600 flex gap-2">
+         <div class="text-xs font-mono text-gray-600 flex gap-4">
             <span>FINE DUST: {{ store.fineDustBalance }}mg</span>
+            <span v-if="store.cursedFragmentBalance > 0" class="text-red-600 font-bold">CURSED FRAGMENTS: {{ store.cursedFragmentBalance }}</span>
          </div>
       </div>
      
