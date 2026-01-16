@@ -175,7 +175,7 @@ const smeltItem = async () => {
 
     <!-- Grid Layout -->
     <div class="flex-1 overflow-y-auto pr-1">
-      <div class="grid grid-cols-4 gap-3 p-1">
+      <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-1">
         <div
           v-for="item in vaultGrid"
           :key="item.id"

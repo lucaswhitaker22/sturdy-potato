@@ -15,6 +15,7 @@ import MuseumView from "@/components/museum/MuseumView.vue";
 import InfluenceShop from "@/components/shop/InfluenceShop.vue";
 import { useMMOStore } from "@/stores/mmo";
 import NotificationManager from "@/components/mmo/NotificationManager.vue";
+import StatsView from "@/components/StatsView.vue";
 
 import { audio } from "@/services/audio";
 import { onMounted } from "vue";
@@ -45,7 +46,9 @@ type Deck =
   | "COLLECTIONS"
   | "BAZAAR"
   | "MUSEUM"
-  | "SHOP";
+  | "SHOP"
+  | "VAULT"
+  | "STATS";
 const currentDeck = ref<Deck>("FIELD");
 
 const setDeck = (deck: Deck) => {
@@ -71,7 +74,7 @@ const setDeck = (deck: Deck) => {
         class="flex px-4 border-b-2 border-ink-black gap-1 translate-y-[2px] z-10 flex-wrap"
       >
         <button
-          v-for="deck in ['FIELD', 'LAB', 'WORKSHOP', 'COLLECTIONS', 'BAZAAR', 'MUSEUM', 'SHOP'] as Deck[]"
+          v-for="deck in ['FIELD', 'LAB', 'WORKSHOP', 'COLLECTIONS', 'BAZAAR', 'MUSEUM', 'SHOP', 'VAULT', 'STATS'] as Deck[]"
           :key="deck"
           @click="setDeck(deck)"
           :class="[
@@ -93,6 +96,8 @@ const setDeck = (deck: Deck) => {
                   "BAZAAR",
                   "MUSEUM",
                   "SHOP",
+                  "VAULT",
+                  "STATS",
                 ].indexOf(deck) + 1
               ).padStart(2, "0")
             }}</span
@@ -122,6 +127,8 @@ const setDeck = (deck: Deck) => {
             <BazaarView v-if="currentDeck === 'BAZAAR'" />
             <MuseumView v-if="currentDeck === 'MUSEUM'" />
             <InfluenceShop v-if="currentDeck === 'SHOP'" />
+            <VaultView v-if="currentDeck === 'VAULT'" />
+            <StatsView v-if="currentDeck === 'STATS'" />
           </div>
         </section>
 
@@ -148,11 +155,11 @@ const setDeck = (deck: Deck) => {
           </div>
 
           <!-- Vault View: Mini Reference Card -->
-          <div
+          <!-- <div
             class="h-80 paper-card p-2 bg-[#F5F5F0] border-2 border-dashed border-gray-400"
           >
             <VaultView />
-          </div>
+          </div> -->
         </aside>
       </main>
 
