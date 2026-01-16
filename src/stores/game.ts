@@ -676,6 +676,7 @@ export const useGameStore = defineStore('game', () => {
     surveyProgress,
     isCooldown,
     lastExtractAt,
-    batteryCapacity
+    batteryCapacity,
+    userSessionId
   };
 });
