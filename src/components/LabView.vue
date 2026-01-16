@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { computed, ref, onMounted, onUnmounted, watch } from "vue";
 import { audio } from "@/services/audio";
 const store = useGameStore();
 
@@ -24,6 +24,54 @@ const needlePos = ref(50); // 0-100
 const tetherCount = ref(0);
 const isStopped = ref(false);
 const swingDirection = ref(1);
+
+// Shatter Salvage State
+const salvageProgress = ref(100);
+const salvageOutcome = ref<'SALVAGED' | 'MISSED' | null>(null);
+let salvageTimer: any = null;
+
+watch(() => store.salvageOpportunity, (newVal) => {
+  if (newVal && newVal.expiresAt) {
+    salvageProgress.value = 100;
+    salvageOutcome.value = null;
+    const duration = newVal.expiresAt - Date.now();
+    const startTime = Date.now();
+    
+    if (salvageTimer) clearInterval(salvageTimer);
+    salvageTimer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        salvageProgress.value = Math.max(0, 100 - (elapsed / (duration || 1000) * 100));
+        if (elapsed >= (duration || 1000)) {
+            clearInterval(salvageTimer);
+            handleSalvageMiss();
+        }
+    }, 16);
+  } else {
+    clearInterval(salvageTimer);
+  }
+});
+
+async function handleSalvage() {
+  if (!store.salvageOpportunity || salvageOutcome.value) return;
+  clearInterval(salvageTimer);
+  salvageOutcome.value = 'SALVAGED';
+  audio.playClick('heavy');
+  await store.salvage();
+  setTimeout(() => {
+      store.clearSalvage();
+      salvageOutcome.value = null;
+  }, 1000);
+}
+
+function handleSalvageMiss() {
+    if (!store.salvageOpportunity || salvageOutcome.value) return;
+    salvageOutcome.value = 'MISSED';
+    audio.playClick('light');
+    setTimeout(() => {
+        store.clearSalvage();
+        salvageOutcome.value = null;
+    }, 1000);
+}
 
 // Animation
 let animationFrame = 0;
@@ -145,6 +193,11 @@ function handleKeyDown(e: KeyboardEvent) {
   } else if (key === 'enter' || key === 's') {
     e.preventDefault();
     handleForceStop();
+  } else if (key === ' ' || key === 's') {
+    if (store.salvageOpportunity) {
+      e.preventDefault();
+      handleSalvage();
+    }
   }
 }
 
@@ -204,6 +257,45 @@ function getCrateIntel(crate: any) {
 
 <template>
   <div class="flex-1 flex flex-col min-h-[400px] gap-6 p-4">
+    <!-- Salvage Overlay -->
+    <div 
+      v-if="store.salvageOpportunity"
+      class="absolute inset-0 z-[60] flex items-center justify-center p-8 bg-black/60 backdrop-blur-sm overflow-hidden"
+    >
+      <div 
+        class="bg-white border-4 border-red-500 p-8 shadow-[8px_8px_0_0_rgba(239,68,68,1)] max-w-sm w-full text-center relative overflow-hidden"
+        :class="{ 'animate-glitch-fast': !store.reducedMotion }"
+      >
+        <div class="text-xs font-mono text-red-500 mb-2 uppercase tracking-widest font-black animate-pulse">Critical System Error</div>
+        <h3 class="text-4xl font-serif font-black mb-4 uppercase text-black italic">SHATTERED!</h3>
+        
+        <div class="mb-6 relative h-2 bg-gray-200 border border-black overflow-hidden">
+             <div 
+               class="h-full bg-red-500 transition-all duration-100 linear"
+               :style="{ width: `${salvageProgress}%` }"
+             ></div>
+        </div>
+
+        <button 
+          @click="handleSalvage"
+          class="w-full py-4 bg-red-500 text-white font-mono font-black text-xl hover:bg-red-600 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
+        >
+          [ SALVAGE NOW ]
+        </button>
+        
+        <div class="mt-4 text-[10px] font-mono text-gray-400 uppercase">
+          Press [SPACE] or [S]
+        </div>
+
+        <!-- Success/Miss Stamp Overlay -->
+        <div v-if="salvageOutcome" class="absolute inset-0 flex items-center justify-center bg-white/90 z-10 animate-bounce-in">
+             <span :class="['text-5xl font-black font-serif italic uppercase -rotate-12', salvageOutcome === 'SALVAGED' ? 'text-green-600' : 'text-red-600']">
+                {{ salvageOutcome }}
+             </span>
+        </div>
+      </div>
+    </div>
+
     <!-- Results Overlay -->
     <div 
       v-if="revealedItem"
@@ -430,8 +522,32 @@ function getCrateIntel(crate: any) {
   100% { transform: translateY(0); }
 }
 
+@keyframes glitch-fast {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .animate-scan {
   animation: scan 2s infinite linear;
+}
+
+.animate-glitch-fast {
+  animation: glitch-fast 0.1s infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.3s ease-out forwards;
 }
 
 .form-line {

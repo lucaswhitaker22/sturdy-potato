@@ -23,6 +23,14 @@ export const useGameStore = defineStore('game', () => {
   const scrapBalance = ref(0);
   const historicalInfluence = ref(0);
   const fineDustBalance = ref(0);
+  const cursedFragmentBalance = ref(0);
+
+  const salvageOpportunity = ref<{
+    token: string | null;
+    expiresAt: number | null;
+    pendingDust: number;
+    pendingFragment: boolean;
+  } | null>(null);
 
   // Lab State
   const labState = ref({
@@ -274,6 +282,7 @@ export const useGameStore = defineStore('game', () => {
       const profile = profileResp.profile;
       scrapBalance.value = Number(profile.scrap_balance || 0);
       fineDustBalance.value = Number(profile.fine_dust_balance || 0);
+      cursedFragmentBalance.value = Number(profile.cursed_fragment_balance || 0);
       historicalInfluence.value = Number(profile.historical_influence || 0);
       trayCount.value = Number(profile.tray_count || 0);
       overclockBonus.value = Number(profile.overclock_bonus || 0);
@@ -336,6 +345,7 @@ export const useGameStore = defineStore('game', () => {
         const p = payload.new as any;
         scrapBalance.value = Number(p.scrap_balance ?? 0);
         fineDustBalance.value = Number(p.fine_dust_balance ?? 0);
+        cursedFragmentBalance.value = Number(p.cursed_fragment_balance ?? 0);
         trayCount.value = Number(p.tray_count ?? 0);
         crateTray.value = p.crate_tray || [];
         skillsStore.excavationXP = Number(p.excavation_xp ?? 0);
@@ -462,6 +472,16 @@ export const useGameStore = defineStore('game', () => {
           labState.value.currentStage = 0;
           trayCount.value = Math.max(0, trayCount.value - 1);
           fineDustBalance.value = data.new_dust_balance || fineDustBalance.value;
+
+          if (data.salvage_token) {
+            salvageOpportunity.value = {
+              token: data.salvage_token,
+              expiresAt: new Date(data.salvage_expires_at).getTime(),
+              pendingDust: data.pending_dust,
+              pendingFragment: data.pending_fragment
+            };
+            addLog('SYSTEM ERROR: Emergency Salvage Window Active (1.0s)');
+          }
         }
 
         if (data.xp_gain) skillsStore.restorationXP += data.xp_gain;
@@ -535,6 +555,33 @@ export const useGameStore = defineStore('game', () => {
     }
     addLog(`Claim Error: ${error?.message}`);
     return null;
+  }
+
+  async function salvage() {
+    if (!salvageOpportunity.value) return;
+    const token = salvageOpportunity.value.token;
+    clearSalvage();
+
+    try {
+      const { data, error } = await supabase.rpc('rpc_shatter_salvage', {
+        p_user_id: userSessionId.value,
+        p_token: token
+      });
+
+      if (data?.success) {
+        addLog('SALVAGED: Wreckage recovered.');
+        if (data.dust_gain) fineDustBalance.value += data.dust_gain;
+        if (data.fragment_gain) cursedFragmentBalance.value += data.fragment_gain;
+      } else {
+        addLog(data?.outcome === 'SALVAGE_MISSED' ? 'MISSED: Salvage window closed.' : `Salvage Error: ${data?.error || error?.message}`);
+      }
+    } catch (err: any) {
+      addLog(`System Error: ${err.message}`);
+    }
+  }
+
+  function clearSalvage() {
+    salvageOpportunity.value = null;
   }
 
   async function listItem(vaultItemId: string, price: number) {
@@ -613,10 +660,11 @@ export const useGameStore = defineStore('game', () => {
 
   return {
     // State
-    scrapBalance, fineDustBalance, historicalInfluence, trayCount, crateTray,
+    scrapBalance, fineDustBalance, cursedFragmentBalance, historicalInfluence, trayCount, crateTray,
     labState, log, isExtracting, lastExtractAt,
     batteryCapacity, overclockBonus, overclockCost,
     seismicEnabled, reducedMotion,
+    salvageOpportunity,
 
     // Facades
     inventory, catalog, activeListings, ownedTools, activeToolId, completedSetIds,
@@ -626,6 +674,7 @@ export const useGameStore = defineStore('game', () => {
 
     // Actions
     init, extract, strike, sift, startSifting, appraiseCrate, claim,
+    salvage, clearSalvage,
     fetchMarket: inventoryStore.fetchMarket,
     listItem, placeBid,
     upgradeTool, setActiveTool, claimSet,
