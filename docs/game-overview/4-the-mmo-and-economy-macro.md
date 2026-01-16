@@ -38,8 +38,14 @@ The Bazaar is integrated into the game's "heartbeat" via real-time social proof.
 The Appraisal skill is essential for players looking to specialize as merchants.
 
 * Level 60 (Certified Listings + Previews): Advanced Appraisers can certify items for a Scrap fee, adding a permanent "Certified" badge to the item. Certification reveals hidden sub-stats and can surface Appraisal previews like "Mint Probability."
+  * Appraisal active ability (60+): **Hype Train**.\n Pay Scrap to promote your own active listing for `5m` (visibility only).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
 * Level 99 (Master Trader): Reaching mastery in Appraisal unlocks the "Auctioneer" title and provides the ultimate economic benefit: reducing the Archive Tax from 5% down to 2.5%.
   * Oracle edge: Appraisal mastery can also expose which item catalog IDs are currently “trending” per zone (pairs with Vault Heatmaps).
+
+Advanced build layer (60+):
+
+* Appraisal sub-specializations (pick one at level `60`):\n **Certified Valuator** (cheaper certs + explicit HV bonus) vs **Economic Insider** (early intel).\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Cross-skill masteries (80/80):\n Example Bazaar-relevant masteries include **Chain of Custody** (cheaper cert for self-excavated items) and **Certified Restorer** (HV bonus when restored+certified by you).\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
 
 **The Archive Tax & Economic Stability**
 
@@ -167,6 +173,10 @@ Historical Influence is a non-tradable, social currency that measures a player�
 * Earning HI: HI is earned exclusively through participation in the Weekly Museum exhibitions and contributing to 48–72 hour World Events.
 * The Influence Shop: HI is spent on "The Unbuyables," including permits for high-level dig sites (e.g., _The Sunken Data Center_), elite skill training to push from level 90 to 99, and unique username titles for the Global Feed.
 * Prestige: Accumulating HI is the only way to unlock "Master's Badges" and unique UI frames that signal a player's veteran status to the community.
+
+Late-game identity hook:
+
+* Total mastery (all skills `90+`) unlocks **Senior Researcher**.\n It adds an Archive “Research Notes” panel with early theme preview and a cosmetic badge.\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
 
 **Economic Balance and Interplay**
 

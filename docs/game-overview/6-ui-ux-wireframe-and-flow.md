@@ -10,13 +10,13 @@ In a game without 3D environments, the User Interface IS the world. The UI must 
 
 The game is organized into five primary "Decks" (Tabs). Navigation is handled via a persistent Command Bar at the bottom of the screen.
 
-| **Deck**         | **Function**     | **Key UI Elements**                                                                             |
-| ---------------- | ---------------- | ----------------------------------------------------------------------------------------------- |
-| \[01] THE FIELD  | Primary Gameplay | Large \[EXTRACT] button, **Vault Heatmaps**, Tool Status, Overload Meter.                       |
-| \[02] THE LAB    | RNG / Gambling   | Sifting tray, Stability gauge, **Tether controls**, Pre-Sift Appraisal, Shatter Salvage prompt. |
-| \[03] THE VAULT  | Inventory / RPG  | Grid view, Set completion trackers, Skill level bars.                                           |
-| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots, Bazaar/Counter-Bazaar toggle, Lease Offers. |
-| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Contracts/Expeditions, Status Tiers, Hall of Fame (Endowments).             |
+| **Deck**         | **Function**     | **Key UI Elements**                                                                                                         |
+| ---------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| \[01] THE FIELD  | Primary Gameplay | Large \[EXTRACT] button, **Vault Heatmaps**, Tool Status, Overload Meter, **\[FOCUSED SURVEY]**.                            |
+| \[02] THE LAB    | RNG / Gambling   | Sifting tray, Stability gauge, **Tether controls**, Pre-Sift Appraisal, Shatter Salvage, **\[EMERGENCY GLUE]**.             |
+| \[03] THE VAULT  | Inventory / RPG  | Grid view, Set completion trackers, Skill dashboard, **Specializations**, **Masteries**, **\[OVERCLOCK FURNACE]**.          |
+| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots, Bazaar/Counter-Bazaar toggle, Lease Offers, **\[HYPE TRAIN]**.          |
+| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Contracts/Expeditions, Status Tiers, Hall of Fame (Endowments), **Research Notes** (Senior Researcher). |
 
 #### The Flow: "The Scavenger's Routine"
 
@@ -61,11 +61,31 @@ Because there are no combat animations, we use Micro-Animations to make actions 
 * A Perfect Survey should “snap” the bar with a sharp click.
 * Perfect Survey should fire a tiny feed line, not a global broadcast.
 
+#### Focused Survey (Excavation 60+ ability)
+
+* While active, show a scanner overlay + a clear countdown.\n The Scrap drain must be visible.
+* When the buff ends, the overlay drops hard.\n Cooldown must be obvious.
+
+#### Emergency Glue (Restoration 60+ reaction)
+
+* It must read as a “save” button.\n Same 1-second panic window as salvage.
+* On success: `STABILIZED` stamp + loud glitch resolve.\n The forced claim must feel final.
+
 #### Anomaly Overload (Fever Mode)
 
 * The meter lives in the header. It fills on Anomaly outcomes.
 * At full, it pulses and offers a manual trigger.
 * While active, the UI should show a timed banner and faster bar fill.
+
+#### Hype Train (Appraisal 60+ ability)
+
+* The promoted badge must be obvious.
+* The global feed ping must be rate-limited and unmistakable.
+
+#### Overclock Furnace (Smelting 60+ ability)
+
+* During the 60s buff: orange tint + furnace roar.
+* During the 10m debuff: Lab shows `SYSTEMS HOT: OVERHEAT RISK UP`.
 
 #### The "OSRS" Level Up
 
@@ -81,6 +101,9 @@ The \[THE VAULT] screen contains the "Skill Dashboard."
 * Left Pane: List of skills (Excavation, Restoration, Appraisal, Smelting).
   * Each has a circular progress bar showing % to next level.
   * Clicking a skill expands a "Milestones" list (e.g., _Level 50: Unlock Deep-Sea Crates_).
+  * Skill detail also includes:
+    * **Specialization** (Level 60 branch cards + respec action).
+    * **Masteries** (pair masteries at 80/80, total mastery at all skills 90+).
 * Right Pane: The "Relic Set" list.
   * Greyed-out silhouettes of missing items.
   * Hovering over a silhouette shows where it's found (e.g., _"Found in: Rusty Suburbs"_).

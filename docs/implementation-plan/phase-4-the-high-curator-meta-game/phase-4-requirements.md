@@ -36,6 +36,10 @@ Phase 4 ships the meta-game loops:
 * Historical Influence (HI) currency + Influence Shop.
 * World Events (48-72h global modifiers + community goal).
 * Advanced skilling (Appraisal + Smelting at level 60+).
+* Advanced skilling layer (system features, not just XP):
+  * Active skill abilities (unlock at `60`).
+  * Skill sub-specializations (branch pick at `60`).
+  * Cross-skill masteries (`80/80`) + total mastery (all skills `90+`).
 
 Assumes Phase 3 exists (auth, minting, Bazaar, server authority, realtime feed).
 
@@ -454,6 +458,72 @@ At Appraisal level 60+:
 
 Hidden sub-stats must be generated at most once per item.
 
+**R15a — Active skill abilities framework (level 60+)**
+
+Phase 4 must ship active abilities as a consistent system (not one-off hacks).
+
+Rules:
+
+* Unlock gate: each ability unlocks at skill level `60`.
+* Ability activation is server-authoritative:
+  * costs
+  * cooldowns
+  * buff timestamps
+  * any RNG used by the ability
+* Abilities must not rewrite canonical odds.\ If an ability touches chance, it must be flat and clamped.
+
+Source of truth: [Active Skill Abilities (Tactile Commands)](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+
+**R15b — Excavation ability: Focused Survey**
+
+At Excavation level `60+`, the Field deck must support **Focused Survey**.
+
+Minimum behavior:
+
+* Activation creates a `60s` buff window.
+* Applies to **manual** `[EXTRACT]` only.
+* Effect: add `+10%` flat Crate chance per manual extract.\n Then clamp final crate chance to `≤ 95%`.
+* Cost model: Scrap drain over time (tunable), server-owned.\n If Scrap hits 0, the buff ends immediately.
+* It must not modify the 5% Anomaly roll.
+
+**R15c — Restoration reaction: Emergency Glue**
+
+At Restoration level `60+`, the Lab deck must support **Emergency Glue**.
+
+Minimum behavior:
+
+* Trigger: **Standard Fail** only, during the same 1s failure beat as Shatter Salvage.
+* Never triggers on Critical Fail / overheat.\n Never on Stage 0.
+* Cost: consumes `1` Cursed Fragment.
+* Effect: convert the failure into a forced `[CLAIM]` at the **current stage**.\n It never converts a fail into a success.
+* Reaction arbitration: one failure beat = one reaction choice.\n First pressed wins.
+
+**R15d — Appraisal ability: Hype Train**
+
+At Appraisal level `60+`, Bazaar must support **Hype Train** on the player’s own listings.
+
+Minimum behavior:
+
+* Duration: `5m` promoted window (tunable).
+* Effect: visibility only (featured placement + one rate-limited feed ping).
+* No changes to bid rules, tax, or fees.
+* Cost + cooldown are server-owned constants.
+
+**R15e — Smelting ability: Overclock Furnace**
+
+At Smelting level `60+`, Vault smelting UI must support **Overclock Furnace**.
+
+Minimum behavior:
+
+* Buff window: `60s`.
+  * Smelting XP `×2.0`
+  * Smelt Scrap output `×2.0`
+  * Guardrail: cap final smelt yield multiplier at `×3.0` (to prevent extreme stacking with Smelting 99).
+* Debuff window after buff ends: `10m`.
+  * Increases the chance of **Critical Fail** on Lab failures.
+  * Must not modify the Success/Fail roll.
+* Cooldown is server-owned (tunable).
+
 **R16 - Appraisal: verification and certification**
 
 Appraisers can verify items for others:
@@ -471,6 +541,36 @@ Certification must be allowed only on:
 * Items explicitly shared into a “certification request” flow.
 
 If Phase 4 does not ship sharing, restrict certification to self-owned items.
+
+**R16c — Skill sub-specializations (branch pick at level 60)**
+
+Phase 4 must ship specialization picks for all four skills.
+
+Rules:
+
+* Unlock gate: skill level `60`.
+* One active branch per skill.
+* Effects must be explicit and visible in UI.
+* Storage and effect application must be server-owned.
+
+Minimum branch catalog (as defined in Skills Expansion):
+
+* Excavation:\n **Urban Scavenger** vs **Tech Hunter** (identity weighting only, applied after rarity is decided).
+* Restoration:\n **Stable Hand** vs **Quantum Gambler** (flat stability bonuses, clamped).
+* Appraisal:\n **Certified Valuator** vs **Economic Insider**.
+* Smelting:\n **Fragment Alchemist** vs **Scrap Tycoon**.
+
+Source of truth: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+
+**R16d — Respec**
+
+If respec is supported in Phase 4 (recommended), it must be:
+
+* Per-skill.
+* Paid (Scrap cost constant).
+* Rate-limited (cooldown constant).
+
+Respec must be blocked mid-action (no swapping during a Lab run).
 
 **R16b — Appraisal mastery: Archive tax reduction**
 
@@ -545,6 +645,45 @@ When a player reaches level 99, the corresponding perk must activate permanently
   * Master Trader: fee/tax reduction is covered in R16b.
 * Smelting: “Pure Yield”
   * Covered in R17b.
+
+**R26 — Cross-skill masteries (80/80)**
+
+Phase 4 must ship cross-skill masteries as a system:
+
+* Unlock is deterministic based on levels.
+* Unlocks are account-level and persistent.
+* Effects are passive (no equip slots required).
+* UI shows locked vs unlocked masteries with exact requirements and exact effect text.
+
+Default unlock threshold:
+
+* Pair masteries unlock at `80/80`.
+
+Source of truth: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
+
+**R26a — Minimum mastery effects to implement**
+
+Phase 4 must implement at least:
+
+* Restoration + Appraisal (80/80): **Certified Restorer** (`+5%` HV when restored by you + certified by you, once per item).
+* Excavation + Smelting (80/80): **Efficiency Engine** (`+5%` Auto-Digger Scrap, plus online-only Fine Dust trickle).
+
+All “once per item” bonuses must be enforced server-side.
+
+**R27 — Total mastery (all skills 90+): Senior Researcher**
+
+Phase 4 must implement the total mastery unlock:
+
+* Requirement: all four skills `>= 90`.
+* Unlock: **Senior Researcher**.
+* Effect:
+  * Unlock a **Research Notes** panel in the Archive deck.
+  * Research Notes includes an early preview of the next Museum Theme (`60m` early).
+  * A cosmetic badge on Museum leaderboard rows (identity only).
+
+Hard rule:
+
+* This must not change Museum scoring, rewards, or drop odds.
 
 ### Security and authority
 

@@ -10,12 +10,12 @@ The RPG Skilling system provides the "long-term grind" essential to any OSRS-ins
 
 Skills are leveled up through Action-Based Experience (XP). Every time a player interacts with the UI in a specific way, they gain a small amount of XP. This "Action-Based" progression ensures that player expertise is permanent, persisting even when tools are upgraded or replaced.
 
-| **Skill**   | **Primary XP Source**                | **Level 99 Mastery Benefit**                                                                                                  |
-| ----------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| Excavation  | Clicking \[EXTRACT] / Auto-dig ticks | "The Endless Vein": 15% chance for "Double Loot" drops. Expands Seismic Surge sweet spots. Unlocks advanced zone Survey.      |
-| Restoration | Successful Sifts (Lab)               | "Master Preserver": +10% Base Stability. Stability needle 10% slower. Grants +1% HV on all claimed items.                     |
-| Appraisal   | Buying/Selling in Bazaar             | "The Oracle": Unlocks deeper previews (Condition, Mint Probability) and zone “trending” intel. "Master Trader": Fees reduced. |
-| Smelting    | Breaking down items into Scrap       | "Pure Yield": 2x Scrap output from all Junk-tier items. Unlocks Fragment Alchemist bonuses for salvage materials.             |
+| **Skill**   | **Primary XP Source**                | **Level 60 unlocks (advanced layer)**                                                | **Level 99 Mastery Benefit**                                                                                                  |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Excavation  | Clicking \[EXTRACT] / Auto-dig ticks | Active: **Focused Survey**.\n Branch: **Urban Scavenger** or **Tech Hunter**.        | "The Endless Vein": 15% chance for "Double Loot" drops. Expands Seismic Surge sweet spots. Unlocks advanced zone Survey.      |
+| Restoration | Successful Sifts (Lab)               | Reaction: **Emergency Glue**.\n Branch: **Stable Hand** or **Quantum Gambler**.      | "Master Preserver": +10% Base Stability. Stability needle 10% slower. Grants +1% HV on all claimed items.                     |
+| Appraisal   | Buying/Selling in Bazaar             | Active: **Hype Train**.\n Branch: **Certified Valuator** or **Economic Insider**.    | "The Oracle": Unlocks deeper previews (Condition, Mint Probability) and zone “trending” intel. "Master Trader": Fees reduced. |
+| Smelting    | Breaking down items into Scrap       | Active: **Overclock Furnace**.\n Branch: **Fragment Alchemist** or **Scrap Tycoon**. | "Pure Yield": 2x Scrap output from all Junk-tier items. Unlocks Fragment Alchemist bonuses for salvage materials.             |
 
 ***
 
@@ -27,6 +27,8 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 * Progression Perks: Every 5 levels increases the Crate Drop Rate by 0.5%.
 * Seismic Surge Synergy: Higher Excavation makes the extraction “Sweet Spot” larger.
 * Vault Heatmap Synergy: Higher Excavation unlocks **Survey**, temporarily reducing Static penalties on loot from a chosen zone.
+* Active ability (60+): **Focused Survey**.\n Paid 60s window that adds `+10%` flat Crate chance on manual extracts (clamped).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Urban Scavenger** vs **Tech Hunter**.\n These bias identity weighting after rarity is decided.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: At Level 99, Excavators become the primary suppliers for the Bazaar by finding unique blueprints required for high-tier Workshop upgrades.
 
 2\. Restoration (The Gambler)
@@ -34,12 +36,16 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 * XP Mechanics: Completion of a Sift attempt awards XP. Success provides 100% XP, while a failure/shatter grants a 25% "Pity XP" award.
 * Progression Perks: Every level adds a +0.1% flat bonus to the Stability Gauge (Success Chance).
 * Active Stabilization Synergy: Restoration reduces the Fine Dust cost to “Tether” the Stability needle.
+* Active reaction (60+): **Emergency Glue**.\n On Standard Fail only, spend `1` Cursed Fragment to convert the fail into a forced claim at the current stage.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Stable Hand** (Stage 1–3 stability) vs **Quantum Gambler** (Stage 4–5 stability).\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Beyond the stability capstone, Masters receive a permanent boost to the Historical Value (HV) of every relic they recover, increasing their Museum and Bazaar potential.
 
 3\. Appraisal (The Merchant)
 
 * XP Mechanics: Gained through active participation in the Bazaar's player-driven economy.
 * Mid-Game Milestones: At Level 60, players reveal hidden sub-stats and can perform Pre-Sift Appraisal to preview Mint Probability / Condition Range before gambling deeper.
+* Active ability (60+): **Hype Train**.\n Pay Scrap to promote one of your own listings for `5m` (visibility only).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Certified Valuator** vs **Economic Insider**.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Unlocks “The Oracle” intel layer (zone trending IDs + best-in-slot previews) and the "Auctioneer" title. Also provides the lowest possible Archive Tax.
 * Macro expansions:\n
   * Reduces Counter-Bazaar confiscation risk.\n
@@ -49,7 +55,8 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 
 * XP Mechanics: Earned by converting unwanted finds or junk into Scrap.
 * Mid-Game Milestones: Level 60 unlocks "Bulk Auto-Smelt," allowing players to process entire tiers of junk instantly.
-* Fragment Alchemist (specialization): Improves salvage value from Lab failures, increasing the chance to recover rare materials from Stage 3+ shatters.
+* Active ability (60+): **Overclock Furnace**.\n 60s burst for smelting XP/yield, followed by a Lab overheat-risk debuff for 10m.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Fragment Alchemist** vs **Scrap Tycoon**.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Provides the highest yield of raw materials, plus top-tier salvage potential for crafting Stabilizer Charms.
 
 ***
@@ -98,6 +105,8 @@ The "Total Level" (the sum of all four primary skills) serves as a secondary pro
 
 In _Relic Vault_, skills are not isolated silos; they are designed to feed into one another, encouraging a balanced playstyle and rewarding players who diversify their expertise. This cross-training creates specialized "gameplay loops" that maximize efficiency and economic power.
 
+This section describes “how skills feed each other”.\n The explicit late-game reward layer is **Cross-Skill Masteries**.\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
+
 **1. The Archaeologist Loop (Gatherer + Gambler)**
 
 This is the primary engine for high-value relic discovery.
@@ -119,7 +128,7 @@ This loop focuses on maximizing wealth and market influence through the Bazaar.
 This represents the ultimate endgame pursuit for veteran players.
 
 * Total Level Synergy: Many of the most dangerous and rewarding "Zones," such as the Sovereign Vault, are gated by a player's Total Level (the sum of all four skills).
-* The Reward: Reaching Level 99 in all four skills—Excavation, Restoration, Appraisal, and Smelting—unlocks the "Founder’s Seal".
+* The Reward: Late-game “all-skill” unlocks should be explicit and social.\n Example: **Senior Researcher** (all skills `90+`) unlocks Archive “Research Notes” intel + identity.
 * Visual Prestige: The Founder's Seal is a unique, animated UI frame that glows with an "Obsidian Dust" effect, signaling absolute mastery of the wasteland to all other players in the Global Feed and Museum.
 
 **Summary of Synergetic Principles**
@@ -202,3 +211,27 @@ In addition to raw skill levels, advanced zones often require a physical "Zone P
 * No "Dead" Actions: Even a failed sift provides a small "Pity XP" amount to Restoration.
 * Visual Growth: As skills increase, UI elements (like progress bars) become more ornate.
 * Economic Impact: High-level Smelters and Appraisers control the Scrap-to-Credit flow in the Bazaar.
+
+***
+
+### 5.6 Advanced skilling systems (60+)
+
+These systems extend the four-skill model without rewriting core RNG.\n They are defined in the Skills Expansion set:
+
+* Active skill abilities: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
+* Sub-specializations: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
+* Cross-skill masteries: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
+* Skill-gated blueprints: [Skill-Gated "Ancient Blueprints"](../expansion-plan/skills-expansion/4.-skill-gated-ancient-blueprints.md)
+
+### 5.7 Prestige (optional): Archive Rebirth
+
+Archive Rebirth is the “true endgame” loop.\n It is a voluntary reset for identity and tiny permanent perks.
+
+High-level intent:
+
+* Reset a maxed skill to level 1.
+* Earn a permanent Archive Ribbon (profile identity).
+* Gain a small, global modifier per ribbon (tunable).
+* Masteries that depend on the reset skill deactivate until re-earned.
+
+Canon reference: [Skills Expansion](../expansion-plan/skills-expansion.md).

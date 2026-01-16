@@ -43,8 +43,16 @@ The core mechanics and gameplay features of Relic Vault are structured into thre
   * Restoration: Increases sifting stability and grants Historical Value (HV) bonuses to claimed items.
   * Appraisal: Enables Pre-Sift Appraisal previews, reveals hidden item stats, unlocks certifications, and reduces market fees.
   * Smelting: Increases Scrap yield from junk and facilitates bulk processing.
+* Advanced skilling (60+): Each skill gains a “press moment” and a build choice.
+  * Active abilities (unlocked at level `60`): Focused Survey, Emergency Glue, Hype Train, Overclock Furnace.
+  * Sub-specializations (chosen at level `60`): one branch per skill (respec later).
+  * Details: [Skills Expansion](expansion-plan/skills-expansion.md).
+* Cross-skill masteries (late-game): Always-on synergy perks.
+  * Pair masteries unlock at `80/80` (e.g., **Certified Restorer**, **Efficiency Engine**).
+  * Total mastery unlocks at all skills `90+` (e.g., **Senior Researcher**).
 * Workshop Tool Tiers: Progression through equipment tiers—from the Rusty Shovel to the Satellite Uplink—which exponentially increases Scrap/sec and crate find rates.
 * Collection Sets: Grouping specific items (e.g., "The Morning Ritual") to lock them into the Vault in exchange for permanent modifiers like reduced extraction cooldowns.
+* Prestige (endgame): Optional “Archive Rebirth” loop for players who hit 99s.\n It trades levels for permanent identity perks (ribbons) and small global modifiers.\n See [Skills Expansion](expansion-plan/skills-expansion.md).
 
 #### Macro Loop Mechanics: The MMO Economy
 

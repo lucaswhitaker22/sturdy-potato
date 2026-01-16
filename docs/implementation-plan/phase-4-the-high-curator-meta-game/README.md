@@ -27,12 +27,12 @@ This phase introduces Historical Influence (HI), a non-tradable currency earned 
 
 ***
 
-### 3. World Events: "The Great Thaw"
+### 3. World Events: "The Great Static"
 
 To keep the UI dynamic, World Events trigger global changes that affect every player's "Dig" and "Sift" screens for a limited time (48–72 hours).
 
 * The Event Logic: A massive notification appears in the Global Feed: _"SENSORS DETECT: A collapse in the Old Suburbs has revealed the \[Department Store] layer!"_
-* Temporary Tiers:
+* Temporary tiers:
   * Event-Only Loot: New items that _only_ drop during the 48-hour window.
   * Stat Shifts: e.g., "Radioactive Dust Storm" (Extraction speed +50%, but Sift Success -10%).
 * Global Progress Bars: A shared bar at the top of the UI. _"Players must collectively mine 10,000,000 Scrap to clear the rubble."_ Once cleared, everyone who participated gets a reward.
@@ -47,11 +47,26 @@ With the influx of high-value items, the specialized RPG skills become critical 
 
 * Hidden Attributes: High-level Appraisers can see "Sub-stats" on relics that others can't (e.g., _"Historical Value +12% based on previous owner's fame"_).
 * Verification: Appraisers can "Verify" items for others (for a fee), adding a permanent "Certified" badge to the item’s UI, increasing its resale value.
+* Active ability (60+): **Hype Train** promotes one of your own listings (visibility only).
+* Sub-specialization (pick at 60): **Certified Valuator** vs **Economic Insider**.
 
 #### 4.2 Smelting (Level 60+)
 
 * Bulk Processing: The ability to "Auto-Smelt" junk by tier.
 * Component Extraction: A small chance to recover "Cursed Fragments" from shattering high-level items, which can later be crafted into Stabilizer Charms.
+* Active ability (60+): **Overclock Furnace** boosts smelting throughput briefly, then increases Lab overheat risk for a while.
+* Sub-specialization (pick at 60): **Fragment Alchemist** vs **Scrap Tycoon**.
+
+#### 4.3 Advanced skilling systems (shared, late-game)
+
+Phase 4 is also where the “advanced skilling” layer becomes real:
+
+* Active skill abilities (unlock at skill level `60`).
+* Skill sub-specializations (choose one branch per skill at `60`).
+* Cross-skill masteries (unlock at `80/80` for skill pairs).
+* Total mastery (all skills `90+`): **Senior Researcher** (Archive intel + identity).
+
+Source of truth: [Skills Expansion](../../expansion-plan/skills-expansion.md).
 
 ***
 

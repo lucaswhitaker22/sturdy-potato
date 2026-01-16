@@ -61,6 +61,11 @@ Explicit non-goals for Phase 2:
   * Appraisal XP, Appraisal perks, and any market-fee reductions.
   * Smelting XP, Smelting perks, and item-to-scrap conversion tuning.
   * Total Level gates, zone unlocks, and blueprint drops at high levels.
+  * Advanced skilling (all defined as 60+ systems):
+    * Active abilities (Focused Survey, Emergency Glue, Hype Train, Overclock Furnace).
+    * Skill sub-specializations (branch picks + respec).
+    * Cross-skill masteries (80/80) and total mastery (all skills 90+).
+    * Archive “Research Notes” (Senior Researcher) intel panel.
 * **Lab and Field extensions**
   * Anomaly system beyond Phase 1’s log-only anomaly outcome (mini-events, global modifiers, etc).
   * Extra shatter/failure states (Fine Dust payouts, cooldowns, cursed fragments).
