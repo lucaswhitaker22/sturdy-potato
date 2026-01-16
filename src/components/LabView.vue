@@ -167,6 +167,39 @@ async function handleClaim() {
     revealedItem.value = result;
   }
 }
+// Appraisal Config
+const appraisalCost = computed(() => (store.appraisalLevel * 50) + 100);
+const successChance = computed(() => Math.min(90, 30 + (store.appraisalLevel * 0.6)));
+const isOracle = computed(() => store.appraisalLevel >= 99);
+
+const appraisingCrateId = ref<string | null>(null);
+
+async function handleAppraise(crateId: string) {
+  if (appraisingCrateId.value) return;
+  appraisingCrateId.value = crateId;
+  audio.playClick('light');
+  
+  // Artificial delay for "scanning" feel
+  await new Promise(r => setTimeout(r, 1000));
+  
+  await store.appraiseCrate(crateId);
+  appraisingCrateId.value = null;
+}
+
+function getCrateIntel(crate: any) {
+  const intel = [...(crate.intel || [])];
+  
+  // Oracle auto-reveal
+  if (isOracle.value && !intel.find((i: any) => i.type === 'condition')) {
+    intel.push({
+      type: 'condition',
+      label: 'ORACLE: INTEGRITY',
+      value: crate.contents?.condition || 'UNKNOWN'
+    });
+  }
+  
+  return intel;
+}
 </script>
 
 <template>
@@ -214,24 +247,87 @@ async function handleClaim() {
       </div>
     </div>
 
-    <!-- Empty State -->
+    <!-- Tray View (Crate Selection) -->
     <div
       v-if="!store.labState.isActive"
-      class="flex-1 flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50"
+      class="flex-1 flex flex-col gap-6"
     >
-      <div class="text-4xl mb-4 opacity-20">🔬</div>
-      <p class="text-gray-500 font-serif italic mb-4">No active specimen.</p>
-      
-      <div v-if="store.trayCount > 0">
-         <button
-          @click="store.startSifting()"
-          class="px-6 py-2 bg-black text-white font-mono hover:bg-gray-800 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none"
-        >
-          [INITIATE_SCAN]
-        </button>
+      <div v-if="store.crateTray.length > 0" class="flex flex-col gap-4">
+         <h3 class="text-xs font-mono text-gray-400 uppercase tracking-widest px-1">Storage Tray [{{ store.crateTray.length }}/5]</h3>
+         
+         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+           <div 
+             v-for="crate in store.crateTray" 
+             :key="crate.id"
+             class="group relative border-2 border-black bg-white p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:bg-gray-50 transition-all flex flex-col gap-3"
+           >
+             <div class="flex justify-between items-start">
+               <div class="flex flex-col">
+                 <span class="text-[10px] font-mono text-gray-500 uppercase">Crate ID</span>
+                 <span class="text-xs font-mono font-bold">{{ crate.id.substring(0, 8) }}</span>
+               </div>
+               <div v-if="crate.appraised" :class="['px-2 py-0.5 text-[9px] font-bold font-mono border', crate.appraisal_success ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700']">
+                 {{ crate.appraisal_success ? 'APPRAISED' : 'CORRUPTED' }}
+               </div>
+             </div>
+
+             <!-- Intel Panel -->
+             <div class="flex-1 min-h-[40px] border border-dashed border-gray-200 bg-gray-50/50 p-2 flex flex-col gap-1">
+               <template v-if="getCrateIntel(crate).length > 0">
+                 <div v-for="info in getCrateIntel(crate)" :key="info.type" class="flex justify-between items-center">
+                   <span class="text-[9px] font-mono text-gray-400 uppercase">{{ info.label }}</span>
+                   <span class="text-[10px] font-mono font-black uppercase text-blue-600">{{ info.value }}</span>
+                 </div>
+               </template>
+               <div v-else class="flex items-center justify-center py-2 opacity-30 grayscale">
+                 <span class="text-[10px] font-mono italic">No sensor data.</span>
+               </div>
+             </div>
+
+             <!-- Actions -->
+             <div class="grid grid-cols-2 gap-2 mt-2">
+               <button
+                 @click="handleAppraise(crate.id)"
+                 :disabled="crate.appraised || appraisingCrateId === crate.id || store.scrapBalance < appraisalCost"
+                 class="py-2 border border-black text-[10px] font-mono font-bold bg-white hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden"
+               >
+                 <span v-if="appraisingCrateId === crate.id" class="animate-pulse">SCANNING...</span>
+                 <template v-else>
+                   [APPRAISE]
+                   <div class="absolute bottom-0 right-1 text-[8px] opacity-40">{{ successChance }}%</div>
+                 </template>
+               </button>
+               
+               <button
+                 @click="store.startSifting(crate.id)"
+                 class="py-2 bg-black text-white text-[10px] font-mono font-bold hover:bg-gray-800 transition-all"
+               >
+                 [INITIATE_SCAN]
+               </button>
+             </div>
+
+             <!-- Scanning Overlay -->
+             <div v-if="appraisingCrateId === crate.id" class="absolute inset-0 bg-blue-500/10 pointer-events-none overflow-hidden">
+                <div class="absolute top-0 w-full h-0.5 bg-blue-400 shadow-[0_0_10px_2px_rgba(59,130,246,0.5)] animate-scan"></div>
+             </div>
+           </div>
+         </div>
+
+         <div class="mt-2 text-[9px] font-mono text-gray-400 text-center">
+           Appraisal Cost: {{ appraisalCost }} Scrap | Base Sync: {{ successChance }}%
+         </div>
       </div>
-       <div v-else class="text-sm font-mono text-red-500">
-          [CRATE_REQUIRED]
+
+      <!-- Empty State -->
+      <div
+        v-else
+        class="flex-1 flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg bg-white/50"
+      >
+        <div class="text-4xl mb-4 opacity-20">🔬</div>
+        <p class="text-gray-500 font-serif italic mb-4">No active specimen detected.</p>
+        <div class="text-[10px] font-mono text-red-400 flex items-center gap-1">
+           <span class="animate-pulse">●</span> STORAGE STATUS: EMPTY
+        </div>
       </div>
     </div>
 
@@ -325,3 +421,19 @@ async function handleClaim() {
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes scan {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(160px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-scan {
+  animation: scan 2s infinite linear;
+}
+
+.form-line {
+  position: relative;
+}
+</style>

@@ -28,7 +28,11 @@ export const useGameStore = defineStore('game', () => {
   const labState = ref({
     isActive: false,
     currentStage: 0,
+    activeCrate: null as any,
   });
+
+  // Crate Tray
+  const crateTray = ref<any[]>([]);
 
   // Logging & Loop State
   const log = ref<string[]>(['> Connection established.', '> Initializing bio-scanner...']);
@@ -268,6 +272,7 @@ export const useGameStore = defineStore('game', () => {
       historicalInfluence.value = Number(profile.historical_influence || 0);
       trayCount.value = Number(profile.tray_count || 0);
       overclockBonus.value = Number(profile.overclock_bonus || 0);
+      crateTray.value = profile.crate_tray || [];
       lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
 
       // Sync Sub-Stores
@@ -289,7 +294,11 @@ export const useGameStore = defineStore('game', () => {
     const { data: labResp } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userSessionId.value });
     if (labResp?.success && labResp.lab_state) {
       const lab = labResp.lab_state;
-      labState.value = { isActive: lab.is_active, currentStage: lab.current_stage };
+      labState.value = {
+        isActive: lab.is_active,
+        currentStage: lab.current_stage,
+        activeCrate: lab.active_crate
+      };
     }
 
     // 3. Inventory & Tools (Delegated logic but we fetch here for strict procedural init if preferred)
@@ -323,6 +332,7 @@ export const useGameStore = defineStore('game', () => {
         scrapBalance.value = Number(p.scrap_balance ?? 0);
         fineDustBalance.value = Number(p.fine_dust_balance ?? 0);
         trayCount.value = Number(p.tray_count ?? 0);
+        crateTray.value = p.crate_tray || [];
         skillsStore.excavationXP = Number(p.excavation_xp ?? 0);
         skillsStore.restorationXP = Number(p.restoration_xp ?? 0);
         skillsStore.appraisalXP = Number(p.appraisal_xp ?? 0);
@@ -399,6 +409,7 @@ export const useGameStore = defineStore('game', () => {
         scrapBalance.value = Number(data.new_balance ?? scrapBalance.value);
         skillsStore.excavationXP = Number(data.new_xp ?? skillsStore.excavationXP);
         trayCount.value = Number(data.new_tray_count ?? trayCount.value);
+        crateTray.value = data.crate_tray || crateTray.value;
         lastExtractAt.value = new Date();
 
         // Trigger level up notification if needed
@@ -457,17 +468,54 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  function startSifting() {
-    if (trayCount.value > 0 && !labState.value.isActive) {
-      supabase.rpc('rpc_start_sifting', { p_user_id: userSessionId.value })
-        .then(({ data }) => {
-          if (data?.success) {
-            labState.value.isActive = true;
-            labState.value.currentStage = 0;
-            addLog('Crate moved to Lab.');
+  async function startSifting(crateId: string) {
+    if (crateTray.value.length > 0 && !labState.value.isActive) {
+      try {
+        const { data, error } = await supabase.rpc('rpc_start_sifting', {
+          payload: {
+            p_user_id: userSessionId.value,
+            p_crate_id: crateId
           }
         });
+        if (data?.success) {
+          labState.value.isActive = true;
+          labState.value.currentStage = 0;
+          // Optimistically remove or wait for sync?
+          // Let's rely on the RPC result or realtime.
+          addLog('Crate moved to Lab.');
+          await init(); // Refresh state for now to be safe
+        } else {
+          addLog(`Start Sift Error: ${data?.error || error?.message}`);
+        }
+      } catch (err: any) {
+        addLog(`System Error: ${err.message}`);
+      }
     }
+  }
+
+  async function appraiseCrate(crateId: string) {
+    try {
+      const { data, error } = await supabase.rpc('rpc_appraise_crate', {
+        p_crate_id: crateId,
+        p_user_id: userSessionId.value
+      });
+
+      if (data?.success) {
+        if (data.appraisal_success) {
+          addLog('Appraisal Success: Crate intel secured.');
+        } else {
+          addLog('Appraisal Failed: Data corrupted.');
+        }
+        scrapBalance.value = data.new_balance;
+        crateTray.value = data.crate_tray;
+        return data;
+      } else {
+        addLog(`Appraisal Error: ${data?.error || error?.message}`);
+      }
+    } catch (err: any) {
+      addLog(`System Error: ${err.message}`);
+    }
+    return null;
   }
 
   async function claim() {
@@ -544,7 +592,7 @@ export const useGameStore = defineStore('game', () => {
 
   return {
     // State
-    scrapBalance, fineDustBalance, historicalInfluence, trayCount,
+    scrapBalance, fineDustBalance, historicalInfluence, trayCount, crateTray,
     labState, log, isExtracting, lastExtractAt,
     batteryCapacity, overclockBonus,
     seismicEnabled, reducedMotion,
@@ -556,7 +604,7 @@ export const useGameStore = defineStore('game', () => {
     seismicState,
 
     // Actions
-    init, extract, strike, sift, startSifting, claim,
+    init, extract, strike, sift, startSifting, appraiseCrate, claim,
     fetchMarket: inventoryStore.fetchMarket,
     listItem, placeBid,
     upgradeTool, setActiveTool, claimSet,
