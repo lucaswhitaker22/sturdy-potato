@@ -15,7 +15,7 @@ It’s a mix of loop deepening (micro), MMO systems (macro), and skill growth.
 These should stay consistent with the canon in:
 
 * [2: The Mechanics](../game-overview/2-the-mechanics.md)
-* [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro.md)
+* [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro/)
 
 #### 1. Advanced Assembly & Engineering (Blueprints)
 

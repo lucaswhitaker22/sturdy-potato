@@ -22,7 +22,7 @@ It’s an economy + efficiency tool.
 
 Canon anchors:
 
-* Core economy surfaces: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
+* Core economy surfaces: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/)
 * Smelt ability framework: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Smelting branches: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
 * Smelting masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
@@ -308,4 +308,4 @@ Track:
 * Smelting branches: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
 * Smelting-related masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
 * Canon Lab fail materials: [2: The Mechanics](../2-the-mechanics.md)
-* Lock state rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema/)
+* Lock state rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)

@@ -11,8 +11,8 @@ Build contract: [Phase 5 requirements](phase-5-requirements.md).
 Canon references:
 
 * UI feel + deck map: [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
-* Premium currency + sinks: [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md)
-* Prismatics + dissolve: [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema/)
+* Premium currency + sinks: [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro/)
+* Prismatics + dissolve: [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
 
 ***
 

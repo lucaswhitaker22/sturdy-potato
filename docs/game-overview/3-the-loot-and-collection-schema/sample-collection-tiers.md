@@ -14,7 +14,7 @@ This page is the working reference for set tiers, rewards, and integration point
 * Bazaar (escrow, fees)
 * Archive (Museum themes, prestige)
 
-Core schema rules still live in [3 - The Loot & Collection Schema](./).
+Core schema rules still live in [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
 
 ### What a “set” is (definition)
 
@@ -76,7 +76,7 @@ They **can** still be used for **Museum submissions** (recommended), since that�
 
 Museum locking is a separate temporary lock.
 
-See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
+See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
 {% endstep %}
 {% endstepper %}
 
@@ -94,9 +94,9 @@ Phase alignment:
 Collections add a new lock state (`SET_LOCKED`) that must coexist with the other canonical states:
 
 * **Escrow** (Bazaar listing): locked, cannot be smelted/leased/endowed/Museum.
-  * See [3 - The Loot & Collection Schema](./).
+  * See [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
 * **Museum lock** (weekly submission): locked until week ends.
-  * See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
+  * See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
 * **Leased**: temporary, untradeable, cannot be smelted/dissolved/endowed/Museum.
   * Leased items can enable **temporary** set buffs only.
   * See [Artifact Leasing (The Rental Economy)](../../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md).
@@ -162,7 +162,7 @@ Recommended: keep collection rewards mostly **progression/QoL**, not raw Museum 
 
 Museum scoring already has set multipliers when you submit full themed sets.
 
-See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
+See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
 
 ### Tiering framework (T0 → T5)
 
