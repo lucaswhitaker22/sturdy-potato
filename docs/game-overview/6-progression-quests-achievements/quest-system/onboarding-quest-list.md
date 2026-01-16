@@ -8,7 +8,7 @@ They teach the 5-deck loop without forcing luck.
 
 They should feel like the Archive booting you into duty.
 
-Related system rules: [Quest System](./).
+Related system rules: [Quest System](../quest-system.md).
 
 ### Global rules (keep these consistent)
 

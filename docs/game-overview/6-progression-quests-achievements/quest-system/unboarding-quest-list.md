@@ -8,7 +8,7 @@ They turn a player from guided to self-directed.
 
 They introduce long-run systems without forcing luck.
 
-Related system rules: [Quest System](./).
+Related system rules: [Quest System](../quest-system.md).
 
 ### What “unboarding” means here
 

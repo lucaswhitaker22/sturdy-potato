@@ -30,7 +30,7 @@
     * [Power progression (Scrap → Workshop)](game-overview/6-progression-quests-achievements/progression-pillars/power-progression-scrap-workshop.md)
     * [Mastery progression (skills 1–99)](game-overview/6-progression-quests-achievements/progression-pillars/mastery-progression-skills-1-99.md)
     * [Prestige progression (Museum + HI)](game-overview/6-progression-quests-achievements/progression-pillars/prestige-progression-museum-+-hi.md)
-  * [Quest System](game-overview/6-progression-quests-achievements/quest-system/README.md)
+  * [Quest System](game-overview/6-progression-quests-achievements/quest-system.md)
     * [Onboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/onboarding-quest-list.md)
     * [Unboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/unboarding-quest-list.md)
   * [Achievement System](game-overview/6-progression-quests-achievements/achievement-system.md)
@@ -39,6 +39,7 @@
 ## Implementation Plan
 
 * [Summary](implementation-plan/summary.md)
+* [Status](implementation-plan/status.md)
 * [Technical Framework (Vue + Supabase)](implementation-plan/technical-framework-vue-+-supabase.md)
 * [Phase 1: The "Clicker" Foundation (MVP)](implementation-plan/phase-1-the-clicker-foundation-mvp/README.md)
   * [Phase 1 (MVP) requirements](implementation-plan/phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
