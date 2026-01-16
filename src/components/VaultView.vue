@@ -1,28 +1,36 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
-import { ITEM_CATALOG, type Item } from "@/constants/items";
+import type { VaultItem, ItemDefinition } from "@/types";
 import { computed, ref } from "vue";
 
 const store = useGameStore();
 
 const vaultGrid = computed(() => {
-  return ITEM_CATALOG.map((item) => {
-    const ownedInstances = store.inventory.filter((i) => i.item_id === item.id);
-    const bestMint =
-      ownedInstances.length > 0
-        ? Math.min(...ownedInstances.map((i) => i.mint_number || 999999))
-        : null;
+  // If catalog is empty (loading), might want to fallback or show nothing
+  return store.catalog.map((def) => {
+    const ownedInstances = store.inventory.filter((i) => i.item_id === def.id);
+
+    // Find the "Best" instance to display
+    // Priority: Prismatic > Mint Condition > Low Mint Number
+    const bestInstance = ownedInstances.sort((a, b) => {
+      if (a.is_prismatic && !b.is_prismatic) return -1;
+      if (!a.is_prismatic && b.is_prismatic) return 1;
+      // Then by condition value? (Mint=4, Wrecked=1) - simplified text compare for now
+      if (a.condition === "mint" && b.condition !== "mint") return -1;
+      if (b.condition === "mint" && a.condition !== "mint") return 1;
+      return (a.mint_number || 999999) - (b.mint_number || 999999);
+    })[0];
 
     return {
-      ...item,
+      ...def,
       found: ownedInstances.length > 0,
       count: ownedInstances.length,
-      bestMint,
+      bestInstance: bestInstance || null, // Contains the specific vault attributes
     };
   });
 });
 
-const selectedItem = ref<Item | null>(null);
+const selectedItem = ref<(typeof vaultGrid.value)[0] | null>(null);
 
 const selectItem = (item: (typeof vaultGrid.value)[0]) => {
   if (item.found) {
@@ -79,39 +87,64 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
       <div class="flex items-center gap-2 mb-4">
         <span
           class="stamp-box text-[10px] scale-75 border-2 border-ink-black text-ink-black rotate-0 opacity-100"
+          :class="{
+            'border-purple-600 text-purple-600': selectedItem.tier === 'epic',
+            'border-orange-600 text-orange-600': selectedItem.tier === 'mythic',
+          }"
         >
           CLASS: {{ selectedItem.tier }}
         </span>
         <span class="font-mono text-[10px] text-gray-600"
           >REF_ID: {{ selectedItem.id }}</span
         >
-        <div
-          v-if="(selectedItem as any).bestMint"
-          class="flex items-center gap-1"
-        >
+
+        <!-- Mint & Condition -->
+        <div v-if="selectedItem.bestInstance" class="flex items-center gap-1">
           <span
             class="font-mono text-[10px] font-bold bg-black text-white px-1"
           >
-            #{{ (selectedItem as any).bestMint }}
+            #{{ selectedItem.bestInstance.mint_number }}
           </span>
           <span
-            v-if="(selectedItem as any).bestMint <= 10"
-            class="text-[9px] font-bold text-yellow-600 uppercase tracking-widest border border-yellow-600 px-1"
+            v-if="selectedItem.bestInstance.condition === 'mint'"
+            class="text-[9px] font-bold text-green-600 uppercase tracking-widest border border-green-600 px-1"
+            >MINT</span
           >
-            PRESTIGE
-          </span>
+          <span
+            v-else-if="selectedItem.bestInstance.condition === 'wrecked'"
+            class="text-[9px] font-bold text-red-800 uppercase tracking-widest border border-red-800 px-1 decoration-line-through"
+            >WRECKED</span
+          >
+          <span
+            v-if="selectedItem.bestInstance.is_prismatic"
+            class="text-[9px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 uppercase tracking-widest border border-blue-400 px-1 animate-pulse"
+            >PRISMATIC</span
+          >
         </div>
       </div>
 
-      <p class="font-serif italic text-gray-800 leading-[24px mt-2 flex-1">
-        "{{ selectedItem.flavorText }}"
+      <p class="font-serif italic text-gray-800 leading-[24px] mt-2 flex-1">
+        "{{ selectedItem.flavor_text }}"
       </p>
 
       <div
         class="mt-auto pt-4 border-t border-gray-300 text-[10px] font-mono text-gray-500 uppercase flex justify-between"
       >
         <span>Verified by: AGENT_A</span>
-        <span>Date: {{ new Date().toLocaleDateString() }}</span>
+        <span
+          >Value:
+          {{ selectedItem.bestInstance?.historical_value || "??" }} HV</span
+        >
+        <span
+          >Date:
+          {{
+            selectedItem.bestInstance
+              ? new Date(
+                  selectedItem.bestInstance.discovered_at
+                ).toLocaleDateString()
+              : "UNKNOWN"
+          }}</span
+        >
       </div>
     </div>
 
@@ -127,43 +160,58 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
         >
           <!-- The Polaroid/Stamp Frame -->
           <div
-            class="absolute inset-0 bg-white border shadow-sm p-1 flex flex-col items-center"
+            class="absolute inset-0 bg-white border shadow-sm p-1 flex flex-col items-center overflow-hidden"
             :class="[
               item.found
                 ? 'border-gray-400'
                 : 'border-gray-200 border-dashed bg-transparent',
-              item.found && item.tier === 'rare' ? 'rare-pulse' : '',
-              item.found && item.tier === 'mythic' ? 'mythic-border' : '',
+              item.bestInstance?.is_prismatic
+                ? 'ring-2 ring-offset-1 ring-purple-500 prismatic-border'
+                : '',
+              item.tier === 'mythic' ? 'border-orange-400 border-2' : '',
             ]"
           >
+            <!-- Prismatic Background Effect -->
             <div
-              class="flex-1 w-full flex items-center justify-center bg-gray-100 overflow-hidden relative"
+              v-if="item.bestInstance?.is_prismatic"
+              class="absolute inset-0 bg-gradient-to-tr from-pink-200 via-purple-200 to-blue-200 opacity-50 z-0"
+            ></div>
+
+            <div
+              class="flex-1 w-full flex items-center justify-center bg-gray-100 overflow-hidden relative z-10"
               :class="
                 item.found ? 'grayscale contrast-125 sepia-[.3]' : 'opacity-40'
               "
             >
-              <span class="text-2xl">{{
+              <span class="text-2xl drop-shadow-sm">{{
                 item.found
                   ? item.tier === "mythic"
                     ? "👑"
                     : item.tier === "unique"
                     ? "🏺"
+                    : item.tier === "epic"
+                    ? "🏛️"
                     : item.tier === "rare"
                     ? "💎"
                     : "📦"
                   : ""
               }}</span>
-              <!-- Grain Overlay -->
+
+              <!-- Condition Scratch Overlay -->
               <div
-                v-if="item.found"
-                class="absolute inset-0 bg-black/10 mix-blend-overlay pointer-events-none"
+                v-if="item.bestInstance?.condition === 'wrecked'"
+                class="absolute inset-0 bg-black/20"
+                style="
+                  background-image: url('data:image/svg+xml;base64,...');
+                  opacity: 0.5;
+                "
               ></div>
             </div>
 
             <!-- Label Area -->
             <div
               v-if="item.found"
-              class="h-4 w-full mt-1 border-t border-gray-100 flex items-center justify-center"
+              class="h-4 w-full mt-1 border-t border-gray-100 flex items-center justify-center relative z-10"
             >
               <span
                 class="font-mono text-[8px] uppercase tracking-tighter truncate w-full text-center text-gray-600 block"
@@ -177,12 +225,21 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
               <span class="text-[8px] text-gray-600 font-bold">MISSING</span>
             </div>
 
-            <!-- Mint Badge on Thumbnail -->
+            <!-- Badges -->
             <div
-              v-if="item.found && item.bestMint && item.bestMint <= 10"
-              class="absolute top-[2px] right-[2px] w-2 h-2 bg-yellow-500 rounded-full border border-black z-10"
-              title="Prestige Mint"
-            ></div>
+              class="absolute top-0 right-0 p-[2px] z-20 flex flex-col items-end gap-[1px]"
+            >
+              <div
+                v-if="item.bestInstance?.mint_number <= 10"
+                class="w-2 h-2 bg-yellow-400 rounded-full border border-black"
+                title="Low Mint"
+              ></div>
+              <div
+                v-if="item.bestInstance?.condition === 'mint'"
+                class="w-2 h-2 bg-green-500 rounded-full border border-black"
+                title="Mint Condition"
+              ></div>
+            </div>
           </div>
 
           <!-- Rare Sticker -->

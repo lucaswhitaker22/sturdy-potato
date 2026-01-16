@@ -2,13 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 import { TOOL_CATALOG } from '@/constants/items';
-
-export interface VaultItem {
-  id: string; // UUID
-  item_id: string; // Catalog ID
-  mint_number: number | null;
-  created_at: string;
-}
+import type { VaultItem, ItemDefinition } from '@/types';
 
 export interface MarketListing {
   id: string;
@@ -28,6 +22,7 @@ export const useGameStore = defineStore('game', () => {
   const historicalInfluence = ref(0); // [NEW]
   const trayCount = ref(0);
   const inventory = ref<VaultItem[]>([]);
+  const catalog = ref<ItemDefinition[]>([]);
   const activeListings = ref<MarketListing[]>([]);
   
   const labState = ref({
@@ -220,14 +215,23 @@ export const useGameStore = defineStore('game', () => {
       };
     }
 
-    // 3. Fetch Inventory
+    // 3. Fetch Catalog (Definitions)
+    const { data: defs } = await supabase.from('item_definitions').select('*');
+    if (defs) {
+        catalog.value = defs as ItemDefinition[];
+    }
+
+    // 4. Fetch Inventory
     const { data: items } = await supabase
       .from('vault_items')
       .select('*')
       .eq('user_id', user.id);
       
     if (items) {
-      inventory.value = items as VaultItem[];
+      inventory.value = items.map((i: any) => {
+         const def = catalog.value.find(d => d.id === i.item_id);
+         return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
+      }) as VaultItem[];
     }
     
     // 4. Fetch Owned Tools & Sets
@@ -262,7 +266,11 @@ export const useGameStore = defineStore('game', () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'vault_items', filter: `user_id=eq.${user.id}` }, async (payload) => {
         // Refresh inventory on any change to be safe, or handle granularly
         if (payload.eventType === 'INSERT') {
-          inventory.value.push(payload.new as VaultItem);
+          const newItem = payload.new as any;
+          const def = catalog.value.find(d => d.id === newItem.item_id);
+          // Manually join properties for UI
+          const fullItem = { ...newItem, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
+          inventory.value.push(fullItem);
           addLog(`Server synced: Item received.`);
         } else if (payload.eventType === 'DELETE') {
            inventory.value = inventory.value.filter(i => i.id !== payload.old.id);
@@ -399,10 +407,11 @@ export const useGameStore = defineStore('game', () => {
       const { data, error } = await supabase.rpc('rpc_claim', { p_user_id: userSessionId.value });
       if (error) throw error;
       if (data.success) {
-        addLog(`ANALYSIS COMPLETE: Identified ${data.tier} item: ${data.item_id.toUpperCase()} #${data.mint_number}`);
+        const item = data.item;
+        addLog(`ANALYSIS COMPLETE: Identified ${item.tier} item: ${item.name.toUpperCase()} #${item.mint_number}`);
         labState.value.isActive = false;
         labState.value.currentStage = 0;
-        return data; // Return data for UI
+        return item; // Return full item object
       } else {
         addLog(`Claim Error: ${data.error}`);
         return null;
