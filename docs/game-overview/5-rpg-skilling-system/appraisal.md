@@ -20,7 +20,7 @@ It reveals and prices what already exists.
 
 Canon anchors:
 
-* Core loop + what Appraisal is allowed to surface: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)
+* Core loop + what Appraisal is allowed to surface: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema/)
 * Pre-open crate intel system: [Pre-Sift Appraisal (Crate Prep)](../../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md)
 * Bazaar + certification + Appraisal 99 tax lane: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * 60+ active ability: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
@@ -210,7 +210,7 @@ Relevant Appraisal-linked bonuses:
 * Branch: **Certified Valuator** `+2%` HV on certification (once per item)
 * Mastery synergy: **Certified Restorer** `+5%` HV when restored by you + certified by you (once per item)
 
-Stacking rules reference: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
+Stacking rules reference: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema/).
 
 ### Pillar 3 — Oracle intel (late-game)
 
@@ -330,7 +330,7 @@ Track:
 
 ### Links
 
-* Loot identity + HV breakdown rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)
+* Loot identity + HV breakdown rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema/)
 * Bazaar + Appraisal macro effects: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * Pre-open crate intel: [Pre-Sift Appraisal (Crate Prep)](../../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md)
 * Active ability (Hype Train): [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)

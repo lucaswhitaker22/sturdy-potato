@@ -74,9 +74,9 @@ The combination of Mint and Condition defines an item’s total value in both th
 * Bazaar Valuation: The serial number system creates a "Buy Low, Sell High" meta-game where low-digit mints act as a hedge against inflation.
 * Museum Scoring: Weekly leaderboard scores are calculated by summing an item's Base HV, its Condition Multiplier, and any applicable Set Multipliers.
 * Skill Synergies:
-  * Appraisal: Enables Pre-Sift Appraisal previews (Mint Probability / Condition Range) and can reveal hidden sub-stats that further influence value.\n Full spec: [Appraisal](5-rpg-skilling-system/appraisal.md).
-  * Restoration: Advanced restoration skills grant a passive +1% bonus to the Historical Value of any item successfully claimed from a sift.\n Full spec: [Restoration](5-rpg-skilling-system/restoration.md).
-  * Advanced skilling (60+ and beyond): Certification and cross-skill masteries can add explicit HV bonuses.\n See [Skills Expansion](../expansion-plan/skills-expansion.md).
+  * Appraisal: Enables Pre-Sift Appraisal previews (Mint Probability / Condition Range) and can reveal hidden sub-stats that further influence value.\n Full spec: [Appraisal](../5-rpg-skilling-system/appraisal.md).
+  * Restoration: Advanced restoration skills grant a passive +1% bonus to the Historical Value of any item successfully claimed from a sift.\n Full spec: [Restoration](../5-rpg-skilling-system/restoration.md).
+  * Advanced skilling (60+ and beyond): Certification and cross-skill masteries can add explicit HV bonuses.\n See [Skills Expansion](../../expansion-plan/skills-expansion.md).
 
 #### 3.2.1 HV modifiers (stacking rules)
 
@@ -114,32 +114,18 @@ When a player successfully refines an item and adds it to their Vault, the game 
 * The Reward: Completion results in a permanent passive buff, accompanied by a toast notification for the player.
 * UI Representation: Within the \[COLLECTIONS] tab of the Vault, missing items are displayed as silhouettes to encourage further scavenging.
 
-**Sample Collection Tiers**
+**Sample tiers + cross-system integration**
 
-Sets are categorized by their themes and the specialized benefits they provide to various gameplay loops.
+The expanded tiering model (T0–T5), lock-state rules, and more examples live in:
 
-Set A: "The 20th Century Kitchen" (Beginner Tier)
+* [Sample Collection Tiers](sample-collection-tiers.md)
 
-* Focus: Early-game resource generation.
-* Required Items: Rusty Toaster, Ceramic Mug, Silicone Spatula, and Manual Can Opener.
-* Completion Bonus: +10% Scrap gain from all manual digging actions.
+Baseline examples that should stay consistent everywhere:
 
-Set B: "The Morning Ritual" (Core Progression)
-
-* Required Items: Ceramic Mug, Rusty Toaster, and Spoon.
-* Reward (Caffeine Rush): Permanently reduces the \[EXTRACT] cooldown by 0.5 seconds.
-
-Set C: "The Digital Dark Age" (Mid-Game Pursuit)
-
-* Focus: High-stakes refining stability.
-* Required Items: CRT Monitor, Mechanical Keyboard, Floppy Disk (3.5"), and Wired Mouse.
-* Completion Bonus: +5% Sift Stability, reducing the chance of an item shattering during refinement.
-
-Set D: "The High Delivery Gala" (Late-Game Luxury)
-
-* Focus: Economic efficiency in the player-driven market.
-* Required Items: Diamond Tennis Bracelet, Silk Necktie, Gold-Plated Lighter, and Designer Perfume Bottle.
-* Completion Bonus: -15% Auction House listing fees in the Bazaar.
+* “The Morning Ritual” → **Caffeine Rush** (`-0.5s` `[EXTRACT]` cooldown)
+* “The 20th Century Kitchen” → `+10%` manual Scrap gain
+* “The Digital Dark Age” → `+5%` Sift Stability (flat)
+* “The High Delivery Gala” → `-15%` Bazaar listing fees
 
 **Macro Integration: The Global Museum**
 
@@ -244,7 +230,7 @@ Items can be “real” objects in multiple systems.\n These states must be expl
 * It cannot be smelted, dissolved, endowed, or donated.\n
 * Leased items may enable **temporary** set buffs only.\n
 
-Details: [Artifact Leasing (The Rental Economy)](../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
+Details: [Artifact Leasing (The Rental Economy)](../../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
 
 #### Endowed (permanent sink)
 
@@ -252,4 +238,4 @@ Details: [Artifact Leasing (The Rental Economy)](../expansion-plan/macro-loop-ex
 * A Hall of Fame entry is created.\n
 * The item must never re-enter trade.\n
 
-Details: [Museum Endowments (Permanent Prestige)](../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)
+Details: [Museum Endowments (Permanent Prestige)](../../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)
