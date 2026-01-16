@@ -67,5 +67,13 @@
 
 ## Assets
 
-* [Sprite](assets/sprite.md)
+* [Sprite](assets/sprite/README.md)
+  * [UI sprites](assets/sprite/ui-sprites.md)
+  * [Badges, frames, and overlays](assets/sprite/badges-frames-and-overlays.md)
+  * [Currencies and materials](assets/sprite/currencies-and-materials.md)
+  * [Crates, Lab actions, and failure states](assets/sprite/crates-lab-actions-and-failure-states.md)
+  * [Skills and progression UI](assets/sprite/skills-and-progression-ui.md)
+  * [Tools (Workshop equipment icons)](assets/sprite/tools-workshop-equipment-icons.md)
+  * [Zones and dig sites](assets/sprite/zones-and-dig-sites.md)
+  * [Relic item icons (catalog)](assets/sprite/relic-item-icons-catalog.md)
 * [Prompts](assets/prompts.md)

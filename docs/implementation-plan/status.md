@@ -322,7 +322,7 @@ These are pages that exist in TOC but are missing usable spec content.
 
 #### Asset gaps (art checklist → tickets)
 
-Source: [Sprite](../assets/sprite.md)
+Source: [Sprite](../assets/sprite/)
 
 * [ ] Create sprites marked as `none` (missing art) in the checklist.
 * [ ] Create icons for new currencies/materials before Phase 4/5:
@@ -342,17 +342,17 @@ Spec anchors:
 
 Backlog:
 
-* [ ] **Seismic Surge** ([1. The "Seismic Surge" (Active Extraction)](../expansion-plan/micro-loop-expansion/1.-the-seismic-surge-active-extraction.md))
-  * [ ] Level 99 “Endless Vein”: second Sweet Spot + 15% double-loot logic.
-* [ ] **Focused Survey (Lv 60+)** (defined in [Active Skill Abilities (Tactile Commands)](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md))
-  * [ ] UI scanner overlay.
-  * [ ] 60s countdown timer.
-  * [ ] Scrap-per-second drain.
-* [ ] **Vault Heatmaps** ([6. "Vault Heatmaps" (Zone Strategy)](../expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md))
-  * [ ] “Static Intensity” UI per zone.
-  * [ ] Example tuning: `+2%` Crate bonus vs `-5%` Lab stability penalty.
-* [ ] **Survey Action (Lv 70+)** (paired with [6. "Vault Heatmaps" (Zone Strategy)](../expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md))
-  * [ ] Temporary personal mitigation for Static penalty.
+* [x] **Seismic Surge** ([1. The "Seismic Surge" (Active Extraction)](../expansion-plan/micro-loop-expansion/1.-the-seismic-surge-active-extraction.md))
+  * [x] Level 99 “Endless Vein”: second Sweet Spot + 15% double-loot logic.
+* [x] **Focused Survey (Lv 60+)** (defined in [Active Skill Abilities (Tactile Commands)](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md))
+  * [x] UI scanner overlay.
+  * [x] 60s countdown timer.
+  * [x] Scrap-per-second drain.
+* [x] **Vault Heatmaps** ([6. "Vault Heatmaps" (Zone Strategy)](../expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md))
+  * [x] “Static Intensity” UI per zone.
+  * [x] Example tuning: `+2%` Crate bonus vs `-5%` Lab stability penalty.
+* [x] **Survey Action (Lv 70+)** (paired with [6. "Vault Heatmaps" (Zone Strategy)](../expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md))
+  * [x] Temporary personal mitigation for Static penalty.
 
 #### Lab sifting (Restoration)
 
@@ -363,12 +363,12 @@ Spec anchors:
 
 Backlog:
 
-* [ ] **Active Stabilization** ([2. "Active Stabilization" (Lab Triage)](../expansion-plan/micro-loop-expansion/2.-active-stabilization-lab-triage.md))
-  * [ ] Level 99 “Master Preserver”: 10% base reduction in needle movement speed.
-* [ ] **Shatter Salvage** ([5. "Shatter Salvage" (The Reaction Beat)](../expansion-plan/micro-loop-expansion/5.-shatter-salvage-the-reaction-beat.md))
-  * [ ] 1-second “panic window” UI.
-  * [ ] “Cursed Fragment” currency: recovery logic (Stage 3+).
-  * [ ] Fragment Alchemist bonus: higher recovery chance at high-level failures.
+* [x] **Active Stabilization** ([2. "Active Stabilization" (Lab Triage)](../expansion-plan/micro-loop-expansion/2.-active-stabilization-lab-triage.md))
+  * [x] Level 99 “Master Preserver”: 10% base reduction in needle movement speed.
+* [x] **Shatter Salvage** ([5. "Shatter Salvage" (The Reaction Beat)](../expansion-plan/micro-loop-expansion/5.-shatter-salvage-the-reaction-beat.md))
+  * [x] 1-second “panic window” UI.
+  * [x] “Cursed Fragment” currency: recovery logic (Stage 3+).
+  * [x] Fragment Alchemist bonus: higher recovery chance at high-level failures.
 * [ ] **Emergency Glue (Lv 60+)** (defined in [Active Skill Abilities (Tactile Commands)](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md))
   * [ ] 1-second “save” window on critical fails.
   * [ ] `STABILIZED` stamp result.
@@ -589,5 +589,5 @@ This mirrors the roadmap pages:
 
 #### Assets
 
-* [Sprite](../assets/sprite.md)
+* [Sprite](../assets/sprite/)
 * [Prompts](../assets/prompts.md)
