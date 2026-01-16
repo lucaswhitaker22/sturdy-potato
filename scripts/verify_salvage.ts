@@ -28,10 +28,10 @@ async function runVerification() {
 
     const testCrate = { id: crypto.randomUUID(), appraised: false, contents: {} };
 
-    while (attempts < 20) {
+    while (attempts < 100) {
         attempts++;
         console.log(`\nAttempt ${attempts}: Activating lab...`);
-        await supabase.from('lab_state').upsert({
+        const { error: upsertErr } = await supabase.from('lab_state').upsert({
             user_id: userId,
             is_active: true,
             current_stage: 0,
@@ -39,11 +39,16 @@ async function runVerification() {
             active_crate: testCrate
         });
 
+        if (upsertErr) {
+            console.error('Lab Upsert Error:', upsertErr);
+            break;
+        }
+
         let stage = 0;
         let active = true;
         while (active && stage < 5) {
             console.log(`- Stage ${stage}: Sifting...`);
-            const { data, error } = await supabase.rpc('rpc_sift', {
+            const { data, error } = await supabase.rpc('rpc_sift_v2', {
                 p_user_id: userId,
                 p_tethers_used: 0,
                 p_zone: 0
@@ -54,10 +59,8 @@ async function runVerification() {
                 active = false;
                 break;
             }
-
-            console.log(`  Data:`, JSON.stringify(data));
-
             if (data.outcome === 'SUCCESS') {
+                console.log(`  SUCCESS -> Stage ${data.new_stage}`);
                 stage = data.new_stage;
             } else if (data.outcome === 'STABILIZED_FAIL') {
                 active = false;
@@ -66,7 +69,7 @@ async function runVerification() {
                     console.log(`  FAIL (Stabilized) -> Token: ${data.salvage_token}`);
                     break;
                 } else {
-                    console.log(`  FAIL (Stabilized) -> No Token in data`);
+                    console.log(`  FAIL (Stabilized) -> No Token`);
                     break;
                 }
             } else if (data.outcome === 'SHATTERED') {
@@ -79,7 +82,7 @@ async function runVerification() {
     }
 
     if (!salvageData) {
-        console.error('ERROR: Could not trigger salvage window after limited attempts.');
+        console.error('ERROR: Could not trigger salvage window after 100 attempts.');
         return;
     }
 
@@ -93,6 +96,7 @@ async function runVerification() {
         console.error('ERROR: Salvage RPC failed', scavengeError);
     } else if (scavengeResult.success) {
         console.log('Salvage Result:', scavengeResult);
+        console.log('SUCCESS: Salvage worked!');
     } else {
         console.error('ERROR: Salvage success false', scavengeResult);
     }

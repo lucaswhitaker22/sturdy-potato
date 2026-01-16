@@ -454,7 +454,7 @@ export const useGameStore = defineStore('game', () => {
     if (isExtracting.value || !labState.value.isActive) return;
     isExtracting.value = true;
     try {
-      const { data, error } = await supabase.rpc('rpc_sift', {
+      const { data, error } = await supabase.rpc('rpc_sift_v2', {
         p_user_id: userSessionId.value, p_tethers_used: tethersUsed, p_zone: finalZone
       });
       if (data?.success) {
