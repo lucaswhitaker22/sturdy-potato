@@ -31,7 +31,7 @@ This is the moment the Archive stops holding your hand.
 {% hint style="info" %}
 RNG-flavored moments (first Anomaly, first Shatter, first Prismatic) belong in Achievements.
 
-See: [Achievement System](../achievement-system.md).
+See: [Achievement System](../achievement-system/).
 {% endhint %}
 
 ***
