@@ -111,9 +111,44 @@ const sellableItems = computed(() => [...store.inventory].reverse());
         >
           Public Auction House
         </h2>
-        <p class="text-xs font-mono text-gray-500 mt-1 uppercase">
-          Official Trading Post // Network Latency: 12ms
-        </p>
+        <!-- TICKER START -->
+        <div
+          class="mt-1 bg-black text-white px-2 py-0.5 text-[10px] font-mono uppercase overflow-hidden whitespace-nowrap w-full max-w-md relative"
+        >
+          <div
+            class="inline-block animate-marquee"
+            :style="{ animationDuration: '20s' }"
+          >
+            <span v-if="mmoStore.feed.length === 0"
+              >WAITING FOR NETWORK SIGNAL...</span
+            >
+            <span
+              v-else
+              v-for="(event, idx) in mmoStore.feed"
+              :key="event.id"
+              class="mr-8"
+            >
+              <span class="text-yellow-400 font-bold"
+                >[{{ event.event_type }}]</span
+              >
+              {{ event.user_id.substring(0, 6) }}
+              <span v-if="event.event_type === 'listing'"
+                >LISTED {{ event.details.item_id }} FOR
+                {{ event.details.price }} SCRAP</span
+              >
+              <span v-else-if="event.event_type === 'sale'"
+                >SOLD {{ event.details.item_id }} FOR
+                {{ event.details.price }} SCRAP</span
+              >
+              <span v-else-if="event.event_type === 'find'"
+                >FOUND {{ event.details.item_id }} (HV:
+                {{ event.details.hv }})</span
+              >
+              <span v-else>updated the ledger</span>
+            </span>
+          </div>
+        </div>
+        <!-- TICKER END -->
       </div>
       <div class="border border-black p-2 bg-white">
         <div

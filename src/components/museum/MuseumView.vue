@@ -58,16 +58,38 @@
             </p>
           </div>
 
-          <div
-            class="text-right font-mono text-xs border border-black p-2 bg-gray-50 transform rotate-1 shadow-sm"
-          >
-            <p class="font-bold border-b border-gray-200 pb-1 mb-1">
-              EXHIBIT DETAILS
-            </p>
-            <p>
-              Closes: {{ new Date(activeWeek.ends_at).toLocaleDateString() }}
-            </p>
-            <p>Capacity: {{ userSubmissions.length }} / 10 Spots</p>
+          <div class="flex flex-col gap-2">
+            <div
+              class="text-right font-mono text-xs border border-black p-2 bg-gray-50 transform rotate-1 shadow-sm"
+            >
+              <p class="font-bold border-b border-gray-200 pb-1 mb-1">
+                EXHIBIT DETAILS
+              </p>
+              <p>
+                Closes: {{ new Date(activeWeek.ends_at).toLocaleDateString() }}
+              </p>
+              <p>Capacity: {{ userSubmissions.length }} / 10 Spots</p>
+            </div>
+
+            <!-- Score Badge -->
+            <div
+              class="bg-ink-black text-white p-2 text-right transform -rotate-1 shadow-md"
+            >
+              <div
+                class="text-[10px] uppercase font-mono tracking-widest text-gray-400"
+              >
+                Total Score
+              </div>
+              <div class="text-2xl font-black">
+                {{ totalScore.toLocaleString() }}
+              </div>
+              <div
+                v-if="setBonusActive"
+                class="text-[9px] bg-yellow-400 text-black px-1 font-bold inline-block mt-1"
+              >
+                SET BONUS ACTIVE (1.5x)
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -171,7 +193,8 @@ import { storeToRefs } from "pinia";
 const museumStore = useMuseumStore();
 const gameStore = useGameStore();
 
-const { activeWeek, userSubmissions, isLoading } = storeToRefs(museumStore);
+const { activeWeek, userSubmissions, isLoading, totalScore, setBonusActive } =
+  storeToRefs(museumStore);
 const { inventory } = storeToRefs(gameStore);
 
 onMounted(() => {

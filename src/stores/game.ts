@@ -36,6 +36,8 @@ export const useGameStore = defineStore('game', () => {
   // Progression
   const excavationXP = ref(0);
   const restorationXP = ref(0);
+  const appraisalXP = ref(0);
+  const smeltingXP = ref(0);
   const activeToolId = ref('rusty_shovel');
   const ownedTools = ref<Record<string, number>>({ 'rusty_shovel': 1 }); // tool_id -> level
   const completedSetIds = ref<string[]>([]);
@@ -70,6 +72,8 @@ export const useGameStore = defineStore('game', () => {
 
   const excavationLevel = computed(() => calculateLevel(excavationXP.value));
   const restorationLevel = computed(() => calculateLevel(restorationXP.value));
+  const appraisalLevel = computed(() => calculateLevel(appraisalXP.value));
+  const smeltingLevel = computed(() => calculateLevel(smeltingXP.value));
 
   const cooldownMs = computed(() => {
     return completedSetIds.value.includes('morning_ritual') ? 2500 : 3000;
@@ -202,6 +206,8 @@ export const useGameStore = defineStore('game', () => {
       trayCount.value = Number(profile.tray_count || 0);
       excavationXP.value = Number(profile.excavation_xp || 0);
       restorationXP.value = Number(profile.restoration_xp || 0);
+      appraisalXP.value = Number(profile.appraisal_xp || 0);
+      smeltingXP.value = Number(profile.smelting_xp || 0);
       activeToolId.value = profile.active_tool_id || 'rusty_shovel';
       overclockBonus.value = Number(profile.overclock_bonus || 0);
       lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
@@ -267,6 +273,8 @@ export const useGameStore = defineStore('game', () => {
         trayCount.value = Number(newProfile.tray_count ?? 0);
         excavationXP.value = Number(newProfile.excavation_xp ?? 0);
         restorationXP.value = Number(newProfile.restoration_xp ?? 0);
+        appraisalXP.value = Number(newProfile.appraisal_xp ?? 0);
+        smeltingXP.value = Number(newProfile.smelting_xp ?? 0);
         activeToolId.value = newProfile.active_tool_id;
         overclockBonus.value = Number(newProfile.overclock_bonus ?? 0);
         lastExtractAt.value = newProfile.last_extract_at ? new Date(newProfile.last_extract_at) : lastExtractAt.value;
@@ -505,6 +513,27 @@ export const useGameStore = defineStore('game', () => {
     return true;
   }
   
+  // Smelting Action
+  async function smeltItem(vaultItemId: string) {
+      const { data, error } = await supabase.rpc('rpc_smelt', {
+          p_item_id: vaultItemId,
+          p_user_id: userSessionId.value
+      });
+
+      if (error) {
+          addLog(`Smelt Error: ${error.message}`);
+          return;
+      }
+
+      if (data.success) {
+          addLog(`SMELTING COMPLETE: Recycled item for ${data.scrap_gained} Scrap.`);
+          scrapBalance.value = Number(data.new_balance || (scrapBalance.value + data.scrap_gained));
+          inventory.value = inventory.value.filter(i => i.id !== vaultItemId);
+      } else {
+          addLog(`Smelt Failed: ${data.error}`);
+      }
+  }
+  
   // Other Actions
   async function upgradeTool(toolId: string, cost: number) {
       const { data, error } = await supabase.rpc('rpc_upgrade_tool', {
@@ -606,6 +635,8 @@ export const useGameStore = defineStore('game', () => {
     isExtracting,
     excavationXP,
     restorationXP,
+    appraisalXP,
+    smeltingXP,
     activeToolId,
     ownedTools,
     completedSetIds,
@@ -613,6 +644,8 @@ export const useGameStore = defineStore('game', () => {
     uniqueItemsFound,
     excavationLevel,
     restorationLevel,
+    appraisalLevel,
+    smeltingLevel,
     cooldownMs,
     getToolLevel,
     getToolCost,
@@ -630,6 +663,7 @@ export const useGameStore = defineStore('game', () => {
     claimSet,
     purchaseInfluenceItem,
     overclockTool,
+    smeltItem,
     overclockBonus,
     surveyDurationMs,
     surveyProgress,

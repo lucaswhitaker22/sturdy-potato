@@ -25,6 +25,9 @@ export const useMuseumStore = defineStore('museum', () => {
     const userSubmissions = ref<MuseumSubmission[]>([]);
     const isLoading = ref(false);
 
+    const totalScore = ref(0);
+    const setBonusActive = ref(false);
+
     async function fetchActiveWeek() {
         isLoading.value = true;
         const { data, error } = await supabase.rpc('rpc_museum_get_current_week');
@@ -38,6 +41,8 @@ export const useMuseumStore = defineStore('museum', () => {
         if (data.success) {
             activeWeek.value = data.active_week;
             userSubmissions.value = data.user_submissions || [];
+            totalScore.value = data.total_score || 0;
+            setBonusActive.value = data.set_bonus_active || false;
         }
     }
 
@@ -65,6 +70,8 @@ export const useMuseumStore = defineStore('museum', () => {
     return {
         activeWeek,
         userSubmissions,
+        totalScore,
+        setBonusActive,
         isLoading,
         fetchActiveWeek,
         submitItem
