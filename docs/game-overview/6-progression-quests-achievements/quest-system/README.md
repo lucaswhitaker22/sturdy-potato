@@ -8,7 +8,7 @@ They exist to answer: **“What should I do next?”**
 
 They must plug into the existing 5-deck loop.
 
-Core loop anchor: [0 - Game Loop](../0-game-loop.md).
+Core loop anchor: [0 - Game Loop](../../0-game-loop.md).
 
 ***
 
@@ -40,7 +40,7 @@ They do not replace skills, sets, HI, or the Workshop.
 
 Primary location: **\[05] ARCHIVE**.
 
-This matches the navigation model in [6 - UI/UX Wireframe & Flow](../6-ui-ux-wireframe-and-flow.md).
+This matches the navigation model in [6 - UI/UX Wireframe & Flow](../../6-ui-ux-wireframe-and-flow.md).
 
 Recommended surfaces:
 
@@ -57,11 +57,12 @@ Use one in-world umbrella term: **Archive Directives**.
 Within that:
 
 * **Onboarding Directives**: the first-session questline.
+* **Unboarding Directives**: the post-onboarding “exit ramp” into self-directed play.
 * **Daily Directives**: low-friction repeatables.
 * **Weekly Contracts**: longer repeatables aligned to the Museum week.
 * **Event Contracts**: time-boxed directives tied to world events.
 * **Expeditions / Requisitions**: “quest board” contracts that often consume items.
-  * Full spec: [Lore Keeper Requisitions (Archive Expeditions)](../../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
+  * Full spec: [Lore Keeper Requisitions (Archive Expeditions)](../../../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
 
 {% hint style="warning" %}
 Don’t invent a second quest system.
@@ -150,8 +151,11 @@ Field / Lab:
 
 * `extract_manual`: complete `N` manual **\[EXTRACT]** actions.
 * `crate_obtained`: obtain `N` Encapsulated Crates.
-* `sift_attempted`: attempt `N` **\[SIFT]** actions.
+* `crate_opened`: start refining `N` crates in the Lab (enter the Refiner flow for a crate).
+* `sift_attempted`: attempt `N` **\[SIFT]** actions (any stage).
+* `sift_stage_at_least`: attempt `N` **\[SIFT]** actions at Stage `X+`.
 * `claim_stage_at_least`: successfully **\[CLAIM]** at Stage `X+`.
+* `appraisal_attempted`: attempt `N` Pre-Sift Appraisals (counts attempts, not success).
 
 Vault / Smelting:
 
@@ -159,21 +163,41 @@ Vault / Smelting:
 * `set_entries_added`: add `N` items to set tracking.
 * `set_completed`: complete `N` sets.
 
+Workshop:
+
+* `workshop_purchase`: complete `N` paid Workshop actions (tool purchase or upgrade).
+* `tool_tier_at_least`: reach Tool Tier `X+` (if tool tiers exist as discrete steps).
+
+Bazaar + macro economy (still never required for dailies):
+
+* `certification_completed`: certify `N` items (Appraisal-driven trust action).
+* `counter_listings_created`: create `N` Counter-Bazaar listings (if shipped).
+* `lease_completed`: complete `N` leases (borrow or lend, if shipped).
+
 Bazaar (never required for dailies):
 
 * `listings_created`: create `N` listings.
+* `bids_placed`: place `N` bids.
 * `auctions_won`: win `N` auctions (cap per week).
 
 Archive / Museum:
 
 * `museum_submissions`: submit `N` theme-matching items.
 * `museum_score_earned`: earn `N` Museum Score this week.
+* `expedition_accepted`: accept `N` Expeditions / contracts.
+* `expedition_completed`: complete `N` Expeditions / contracts.
+* `endowment_created`: create `N` Museum endowments (permanent burn, if shipped).
+
+Skills (milestones, not luck):
+
+* `specialization_chosen`: choose a level-60 branch (if shipped).
+* `active_ability_used`: use any active skill ability `N` times (if shipped).
 
 Canon anchors:
 
-* Field actions: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md)
-* Lab actions: [The Refiner (The Gambling Hub)](../2-the-mechanics/the-refiner-the-gambling-hub.md)
-* Museum rules: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
+* Field actions: [The Dig Site (Main Screen)](../../2-the-mechanics/the-dig-site-main-screen.md)
+* Lab actions: [The Refiner (The Gambling Hub)](../../2-the-mechanics/the-refiner-the-gambling-hub.md)
+* Museum rules: [The Global Museum (Social Leaderboard)](../../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
 
 #### Avoid objective types
 
@@ -183,7 +207,7 @@ Canon anchors:
 
 If you want “chase” content, use Achievements.
 
-See: [Achievement System](achievement-system.md).
+See: [Achievement System](../achievement-system.md).
 
 ***
 
@@ -200,7 +224,7 @@ Allowed prestige rewards:
 * small HI grants on rare contracts,
 * but only if it fits the economy.
 
-HI rules: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md).
+HI rules: [Currency Systems](../../4-the-mmo-and-economy-macro/currency-systems.md).
 
 {% hint style="warning" %}
 Do not reward:
@@ -223,6 +247,8 @@ Goal: teach the loop in order.
 
 Target completion time: `15–30m`.
 
+Full list: [Onboarding Quest List](onboarding-quest-list.md).
+
 Recommended baseline sequence:
 
 1. **Boot Sequence**: `10` manual extracts → `250` Scrap.
@@ -238,9 +264,17 @@ Recommended baseline sequence:
 
 The “profit vs prestige” lesson must be explicit.
 
-Museum rules: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
+Museum rules: [The Global Museum (Social Leaderboard)](../../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
 
-#### 2) Daily Directives (repeatable)
+#### 2) Unboarding chain (one-time)
+
+Goal: transition players from guided play to self-directed play.
+
+This chain introduces throughput, risk habit, collections, and macro decks (when shipped).
+
+Full list: [Unboarding Quest List](unboarding-quest-list.md).
+
+#### 3) Daily Directives (repeatable)
 
 Goal: a “small win” that nudges the loop.
 
@@ -257,7 +291,7 @@ Examples:
 * “Push Your Luck”: attempt `5` sifts (any stage).
 * “Clean House”: smelt `10` items.
 
-#### 3) Weekly Contracts (repeatable)
+#### 4) Weekly Contracts (repeatable)
 
 Goal: align to the weekly Museum cycle.
 
@@ -269,24 +303,24 @@ Examples:
 * “Risk Week”: claim `3` times at Stage `3+`.
 * “Market Week”: create `5` listings (no sales required).
 
-#### 4) Event Contracts (time-boxed)
+#### 5) Event Contracts (time-boxed)
 
 Goal: attach a goal to a world event without changing odds.
 
-Event system: ["The Great Static" Events (incl. Static Pulses)](../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
+Event system: ["The Great Static" Events (incl. Static Pulses)](../../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 
 Examples:
 
 * “Magnetic Interference”: trigger `3` anomalies (still `5%` per extract).
 * “Archive Audit”: submit `10` items across the event window.
 
-#### 5) Expeditions / Requisitions (contract board)
+#### 6) Expeditions / Requisitions (contract board)
 
 These are directive templates that often involve **turn-ins**.
 
 They create item sinks and long-term targets.
 
-Full mechanics and anti-abuse: [Lore Keeper Requisitions (Archive Expeditions)](../../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
+Full mechanics and anti-abuse: [Lore Keeper Requisitions (Archive Expeditions)](../../../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
 
 ***
 
@@ -298,8 +332,8 @@ They must not bypass them.
 
 Canon gate model:
 
-* Total Level gates: [5 - RPG Skilling System](../5-rpg-skilling-system/)
-* HI permit gates: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md)
+* Total Level gates: [5 - RPG Skilling System](../../5-rpg-skilling-system/)
+* HI permit gates: [Currency Systems](../../4-the-mmo-and-economy-macro/currency-systems.md)
 
 Rule:
 
@@ -318,9 +352,9 @@ Rule:
 Canonical odds to protect:
 
 * Field anomaly chance is always `5%`.\
-  Spec: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md)
+  Spec: [The Dig Site (Main Screen)](../../2-the-mechanics/the-dig-site-main-screen.md)
 * Lab stage table is canonical.\
-  Spec: [The Refiner (The Gambling Hub)](../2-the-mechanics/the-refiner-the-gambling-hub.md)
+  Spec: [The Refiner (The Gambling Hub)](../../2-the-mechanics/the-refiner-the-gambling-hub.md)
 
 ***
 
