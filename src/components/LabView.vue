@@ -175,7 +175,7 @@ const isOracle = computed(() => store.appraisalLevel >= 99);
 const appraisingCrateId = ref<string | null>(null);
 
 async function handleAppraise(crateId: string) {
-  if (appraisingCrateId.value) return;
+  if (appraisingCrateId.value || isOracle.value) return;
   appraisingCrateId.value = crateId;
   audio.playClick('light');
   
@@ -287,16 +287,17 @@ function getCrateIntel(crate: any) {
              <!-- Actions -->
              <div class="grid grid-cols-2 gap-2 mt-2">
                <button
-                 @click="handleAppraise(crate.id)"
-                 :disabled="crate.appraised || appraisingCrateId === crate.id || store.scrapBalance < appraisalCost"
-                 class="py-2 border border-black text-[10px] font-mono font-bold bg-white hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden"
-               >
-                 <span v-if="appraisingCrateId === crate.id" class="animate-pulse">SCANNING...</span>
-                 <template v-else>
-                   [APPRAISE]
-                   <div class="absolute bottom-0 right-1 text-[8px] opacity-40">{{ successChance }}%</div>
-                 </template>
-               </button>
+                  @click="handleAppraise(crate.id)"
+                  :disabled="crate.appraised || appraisingCrateId === crate.id || store.scrapBalance < appraisalCost || isOracle"
+                  class="py-2 border border-black text-[10px] font-mono font-bold bg-white hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden"
+                >
+                  <span v-if="appraisingCrateId === crate.id" class="animate-pulse">SCANNING...</span>
+                  <template v-else>
+                    <span v-if="isOracle">[FULL SCAN COMPLETE]</span>
+                    <span v-else>[APPRAISE]</span>
+                    <div v-if="!isOracle" class="absolute bottom-0 right-1 text-[8px] opacity-40">{{ successChance }}%</div>
+                  </template>
+                </button>
                
                <button
                  @click="store.startSifting(crate.id)"
@@ -359,7 +360,7 @@ function getCrateIntel(crate: any) {
                  <div class="absolute bottom-1 text-[10px] font-mono text-green-600 font-bold">SAFE</div>
             </div>
             <div class="h-full w-[20%] bg-red-100 border-l border-red-200 opacity-50 relative">
-                  <div class="absolute bottom-1 right-1 text-[10px] font-mono text-red-500 font-bold">DANGER</div>
+                   <div class="absolute bottom-1 right-1 text-[10px] font-mono text-red-500 font-bold">DANGER</div>
             </div>
          </div>
 
