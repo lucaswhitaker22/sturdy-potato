@@ -7,7 +7,7 @@ import { useInventoryStore, type MarketListing } from './inventory';
 import { useSkillsStore } from './skills';
 import { useSeismicStore } from './seismic';
 import { useMMOStore } from './mmo';
-import { calculateSweetSpotWidth, generateSweetSpotStart } from '@/lib/seismic';
+import { calculateSweetSpotWidth, generateSweetSpots } from '@/lib/seismic';
 
 export type { MarketListing };
 
@@ -56,10 +56,17 @@ export const useGameStore = defineStore('game', () => {
   const seismicEnabled = ref(true);
   const reducedMotion = ref(false);
 
-  // Animation State
   const now = ref(Date.now());
   const surveyProgress = ref(0);
   setInterval(() => { now.value = Date.now() }, 100);
+
+  // Expansion State
+  const activeZoneId = ref('industrial_zone');
+  const isFocusedSurveyActive = ref(false);
+  const vaultHeatmaps = ref<Record<string, number>>({});
+  const lastSurveyAt = ref<number | null>(null);
+
+  let focusedSurveyTimer: any = null;
 
   // --- GETTERS & COMPUTED ---
 
@@ -353,12 +360,17 @@ export const useGameStore = defineStore('game', () => {
         skillsStore.appraisalXP = Number(p.appraisal_xp ?? 0);
         skillsStore.smeltingXP = Number(p.smelting_xp ?? 0);
         inventoryStore.activeToolId = p.active_tool_id;
-        // ... updates continue
+
+        // Expansion Sync
+        activeZoneId.value = p.active_zone_id || 'industrial_zone';
+        isFocusedSurveyActive.value = p.is_focused_survey_active ?? false;
+        lastSurveyAt.value = p.last_survey_at ? new Date(p.last_survey_at).getTime() : null;
       })
       // Inventory updates omitted for brevity but should be here
       .subscribe();
 
     await checkOfflineGains();
+    await fetchHeatmaps();
     startPassiveLoop();
   }
 
@@ -368,18 +380,16 @@ export const useGameStore = defineStore('game', () => {
     surveyProgress.value = 0;
 
     const level = excavationLevel.value;
-    const width = calculateSweetSpotWidth(level);
-    const start = generateSweetSpotStart(width);
     const isMaster = level >= 99;
+    const spots = generateSweetSpots(level);
 
     // Reset Seismic Store
     if (seismicEnabled.value) {
       seismicStore.seismicState = {
         isActive: true, // Type requires this
         config: {
-          sweetSpotWidth: width,
-          perfectZoneWidth: 30,
-          sweetSpotStart: start
+          sweetSpots: spots,
+          perfectZoneWidth: 30
         },
         impactPos: 0,
         grades: [],
@@ -405,8 +415,8 @@ export const useGameStore = defineStore('game', () => {
       const gradesStr = seismicStore.seismicState.grades.length > 0
         ? seismicStore.seismicState.grades.join(',') : null;
 
-      // Use the canonical extractor
-      const { data, error } = await supabase.rpc('rpc_extract_v5', {
+      // Use the new v6 extractor
+      const { data, error } = await supabase.rpc('rpc_extract_v6', {
         payload: {
           p_user_id: userSessionId.value,
           p_seismic_grade: gradesStr
@@ -437,6 +447,61 @@ export const useGameStore = defineStore('game', () => {
       isExtracting.value = false;
       surveyProgress.value = 0;
       seismicStore.seismicState.isActive = false;
+    }
+  }
+
+  async function toggleFocusedSurvey() {
+    const nextState = !isFocusedSurveyActive.value;
+    const { data } = await supabase.rpc('rpc_toggle_focused_survey', { p_active: nextState });
+    if (data?.success) {
+      isFocusedSurveyActive.value = nextState;
+      if (nextState) {
+        addLog('Focused Survey ACTIVE: Filter intensity increased.');
+        startFocusedSurveyLoop();
+      } else {
+        addLog('Focused Survey standby.');
+        stopFocusedSurveyLoop();
+      }
+    }
+  }
+
+  function startFocusedSurveyLoop() {
+    if (focusedSurveyTimer) clearInterval(focusedSurveyTimer);
+    focusedSurveyTimer = setInterval(async () => {
+      if (!isFocusedSurveyActive.value) return;
+      if (scrapBalance.value < 10) {
+        toggleFocusedSurvey();
+        return;
+      }
+      scrapBalance.value -= 10;
+    }, 1000);
+  }
+
+  function stopFocusedSurveyLoop() {
+    if (focusedSurveyTimer) clearInterval(focusedSurveyTimer);
+    focusedSurveyTimer = null;
+  }
+
+  async function performSurvey() {
+    const { data } = await supabase.rpc('rpc_perform_zone_survey', {});
+    if (data?.success) {
+      lastSurveyAt.value = Date.now();
+      addLog('Area surveyed. Lab interference minimized.');
+    }
+  }
+
+  async function setZone(zoneId: string) {
+    const { error } = await supabase.from('profiles').update({ active_zone_id: zoneId }).eq('id', userSessionId.value);
+    if (!error) {
+      activeZoneId.value = zoneId;
+      addLog(`Zone Selected: ${zoneId}`);
+    }
+  }
+
+  async function fetchHeatmaps() {
+    const { data } = await supabase.rpc('rpc_get_vault_heatmaps');
+    if (data) {
+      vaultHeatmaps.value = data;
     }
   }
 
@@ -671,6 +736,7 @@ export const useGameStore = defineStore('game', () => {
     excavationXP, restorationXP, appraisalXP, smeltingXP,
     excavationLevel, restorationLevel, appraisalLevel, smeltingLevel,
     seismicState,
+    activeZoneId, isFocusedSurveyActive, vaultHeatmaps, lastSurveyAt,
 
     // Actions
     init, extract, strike, sift, startSifting, appraiseCrate, claim,
@@ -678,6 +744,7 @@ export const useGameStore = defineStore('game', () => {
     fetchMarket: inventoryStore.fetchMarket,
     listItem, placeBid,
     upgradeTool, setActiveTool, claimSet,
+    toggleFocusedSurvey, performSurvey, setZone, fetchHeatmaps,
     purchaseInfluenceItem, overclockTool, smeltItem,
 
     // Helpers

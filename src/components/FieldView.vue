@@ -104,23 +104,39 @@ const isShaking = ref(false);
       ></div>
 
       <!-- Surface Status Tag -->
-      <div class="absolute top-6 left-6 z-20">
-        <div
-          class="bg-ink-black text-white px-3 py-1 font-mono text-[10px] tracking-tighter uppercase"
-        >
-          Sector Status: {{ store.isExtracting ? "SCANNING" : "IDLE" }}
-        </div>
-        <div class="mt-1 flex gap-1">
+      <div class="absolute top-6 left-6 z-20 flex gap-4 items-start">
+        <div>
           <div
-            v-for="i in 3"
-            :key="i"
-            class="w-1.5 h-1.5 rounded-full border border-black"
-            :class="
-              store.isExtracting && Date.now() % 1000 > i * 200
-                ? 'bg-stamp-blue'
-                : 'bg-transparent'
-            "
-          ></div>
+            class="bg-ink-black text-white px-3 py-1 font-mono text-[10px] tracking-tighter uppercase"
+          >
+            Sector Status: {{ store.isExtracting ? "SCANNING" : "IDLE" }}
+          </div>
+          <div class="mt-1 flex gap-1">
+            <div
+              v-for="i in 3"
+              :key="i"
+              class="w-1.5 h-1.5 rounded-full border border-black"
+              :class="
+                store.isExtracting && Date.now() % 1000 > i * 200
+                  ? 'bg-stamp-blue'
+                  : 'bg-transparent'
+              "
+            ></div>
+          </div>
+        </div>
+
+        <!-- ZONE SELECTOR -->
+        <div class="flex flex-col gap-1">
+           <select 
+             v-model="store.activeZoneId" 
+             @change="store.setZone(store.activeZoneId)"
+             class="bg-white border-2 border-black text-[9px] font-mono px-2 py-1 uppercase outline-none focus:ring-2 focus:ring-stamp-blue"
+           >
+             <option value="industrial_zone">Industrial Zone</option>
+             <option value="suburbs">Residential Suburbs</option>
+             <option value="mall">Sunken Mall</option>
+             <option value="sovereign_vault">Sovereign Vault</option>
+           </select>
         </div>
       </div>
 
@@ -128,7 +144,8 @@ const isShaking = ref(false);
       <div
         class="absolute top-6 right-6 text-right font-mono text-[10px] text-gray-400"
       >
-        EST. DEPTH: 14.{{ Math.floor(store.excavationXP / 100) }}m<br />
+        ACTIVE ZONE: {{ store.activeZoneId.replace('_', ' ').toUpperCase() }}<br />
+        STATIC INTENSITY: {{ (store.vaultHeatmaps[store.activeZoneId] * 100 || 0).toFixed(1) }}%<br />
         DENSITY: 87.2%
       </div>
 
@@ -205,6 +222,12 @@ const isShaking = ref(false);
               :class="{ 'transition-none': store.reducedMotion }"
               :style="{ top: `${store.surveyProgress}%` }"
             ></div>
+
+            <!-- Focused Survey Overlay -->
+            <div v-if="!!store.isFocusedSurveyActive" class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                <div class="absolute inset-0 bg-blue-400/5 animate-pulse"></div>
+                <div class="scanner-sweep"></div>
+            </div>
           </div>
         </button>
       </div>
@@ -230,21 +253,15 @@ const isShaking = ref(false);
           >
             <!-- Seismic Overlay -->
             <template v-if="store.seismicState.isActive">
-               <!-- Sweet Spot -->
-               <div class="absolute top-0 bottom-0 bg-yellow-200/50 border-x border-yellow-400"
-                    :style="{ left: `${store.seismicState.config.sweetSpotStart}%`, width: `${store.seismicState.config.sweetSpotWidth}%` }">
+               <!-- Sweet Spots -->
+               <div v-for="(spot, index) in store.seismicState.config.sweetSpots" :key="index"
+                    class="absolute top-0 bottom-0 bg-yellow-200/50 border-x border-yellow-400"
+                    :style="{ left: `${spot.start}%`, width: `${spot.width}%` }">
                    
                    <!-- Perfect Core (Center 30%) -->
                    <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-green-200/60 border-x border-green-400">
                        <div class="absolute inset-0 flex items-center justify-center opacity-30 text-[6px] font-bold text-green-800">CORE</div>
                    </div>
-               </div>
-               
-               <!-- Mastery Second Spot (Level 99) -->
-               <div v-if="store.excavationLevel >= 99" 
-                    class="absolute top-0 bottom-0 bg-purple-200/30 border-x border-purple-400"
-                    :style="{ left: `${(store.seismicState.config.sweetSpotStart + 40) % 80 + 10}%`, width: `${store.seismicState.config.sweetSpotWidth}%` }">
-                    <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-purple-400/40 border-x border-purple-600"></div>
                </div>
                
                <!-- Impact Line -->
@@ -369,7 +386,28 @@ const isShaking = ref(false);
           </div>
         </div>
 
-        <div class="mt-auto border-t border-gray-100 pt-4">
+        <div class="mt-auto border-t border-gray-100 pt-4 flex flex-col gap-2">
+          <!-- TACTILE COMMANDS -->
+          <div v-if="store.excavationLevel >= 60" class="flex flex-col gap-2">
+            <button 
+              @click="store.toggleFocusedSurvey()"
+              class="w-full text-left px-3 py-2 border-2 border-black font-mono text-[9px] flex justify-between items-center transition-all"
+              :class="store.isFocusedSurveyActive ? 'bg-blue-600 text-white shadow-none translate-x-1 translate-y-1' : 'bg-white text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1'"
+            >
+              <span>[ FOCUSED SURVEY ]</span>
+              <span>10S/s</span>
+            </button>
+            <button 
+              v-if="store.excavationLevel >= 70"
+              @click="store.performSurvey()"
+              :disabled="!!(store.lastSurveyAt && (Date.now() - store.lastSurveyAt < 300000))"
+              class="w-full text-left px-3 py-2 border-2 border-black font-mono text-[9px] flex justify-between items-center transition-all bg-white text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 disabled:opacity-50"
+            >
+              <span>[ PERFORM SURVEY ]</span>
+              <span>100S</span>
+            </button>
+          </div>
+
           <p class="text-[10px] font-serif italic text-gray-500 leading-tight">
             "{{ activeTool?.flavorText }}"
           </p>
@@ -458,5 +496,20 @@ const isShaking = ref(false);
 .fade-leave-to {
   opacity: 0;
   transform: translateY(10px) rotate(2deg);
+}
+
+.scanner-sweep {
+  width: 100%;
+  height: 2px;
+  background: rgba(43, 76, 126, 0.4);
+  position: absolute;
+  top: 0;
+  animation: sweep 2s linear infinite;
+  box-shadow: 0 0 15px rgba(43, 76, 126, 0.6);
+}
+
+@keyframes sweep {
+  0% { top: 0% }
+  100% { top: 100% }
 }
 </style>

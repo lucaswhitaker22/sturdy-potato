@@ -12,7 +12,7 @@ import {
 export const useSeismicStore = defineStore('seismic', () => {
     const seismicState = ref<SeismicState>({
         isActive: false,
-        config: { sweetSpotWidth: 10, perfectZoneWidth: 30, sweetSpotStart: 50 },
+        config: { sweetSpots: [{ start: 50, width: 10 }], perfectZoneWidth: 30 },
         impactPos: 0,
         grades: [],
         maxStrikes: 3

@@ -1,9 +1,13 @@
 export type SeismicGrade = 'MISS' | 'HIT' | 'PERFECT';
 
+export interface SweetSpot {
+    start: number;
+    width: number;
+}
+
 export interface SeismicConfig {
-    sweetSpotWidth: number; // Percentage 0-100
-    perfectZoneWidth: number; // Percentage 0-100 relative to sweet spot? Or absolute? Docs say "30% of Sweet Spot width"
-    sweetSpotStart: number; // Percentage 0-100
+    sweetSpots: SweetSpot[];
+    perfectZoneWidth: number; // 30% of Sweet Spot width (relative)
 }
 
 export interface SeismicState {
@@ -19,42 +23,60 @@ export interface SeismicState {
  * Rule: 6% + (Level * 0.14%)
  */
 export function calculateSweetSpotWidth(level: number): number {
-    // Level 1: ~6.1%
-    // Level 50: ~13.0%
-    // Level 99: ~19.9%
     return 6 + (level * 0.14);
 }
 
 /**
- * Generates a random start position for the sweet spot.
- * Ensures it doesn't clip off the edges too much.
- * Margin of 5% on each side.
+ * Generates random non-overlapping sweet spots.
  */
-export function generateSweetSpotStart(width: number): number {
-    const min = 10;
-    const max = 90 - width;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+export function generateSweetSpots(level: number): SweetSpot[] {
+    const width = calculateSweetSpotWidth(level);
+    const count = level >= 99 ? 2 : 1;
+    const spots: SweetSpot[] = [];
+
+    for (let i = 0; i < count; i++) {
+        let start: number;
+        let overlap = false;
+        let attempts = 0;
+
+        do {
+            start = 10 + Math.random() * (75 - width);
+            overlap = spots.some(s =>
+                (start >= s.start && start <= s.start + s.width) ||
+                (start + width >= s.start && start + width <= s.start + s.width)
+            );
+            attempts++;
+        } while (overlap && attempts < 10);
+
+        spots.push({ start, width });
+    }
+
+    return spots;
 }
 
 /**
- * Grades a strike based on the impact position and configuration.
+ * Grades a strike based on the impact position and all configured sweet spots.
  */
 export function gradeStrike(impactPos: number, config: SeismicConfig): SeismicGrade {
-    const { sweetSpotStart, sweetSpotWidth } = config;
-    const sweetSpotEnd = sweetSpotStart + sweetSpotWidth;
+    let bestGrade: SeismicGrade = 'MISS';
 
-    // Perfect Zone: Middle 30% of the sweet spot
-    const perfectWidth = sweetSpotWidth * 0.3;
-    const perfectStart = sweetSpotStart + (sweetSpotWidth - perfectWidth) / 2;
-    const perfectEnd = perfectStart + perfectWidth;
+    for (const spot of config.sweetSpots) {
+        const { start: sweetSpotStart, width: sweetSpotWidth } = spot;
+        const sweetSpotEnd = sweetSpotStart + sweetSpotWidth;
 
-    if (impactPos >= perfectStart && impactPos <= perfectEnd) {
-        return 'PERFECT';
+        // Perfect Zone: Middle 30% of the sweet spot
+        const perfectWidth = sweetSpotWidth * 0.3;
+        const perfectStart = sweetSpotStart + (sweetSpotWidth - perfectWidth) / 2;
+        const perfectEnd = perfectStart + perfectWidth;
+
+        if (impactPos >= perfectStart && impactPos <= perfectEnd) {
+            return 'PERFECT'; // Return immediately on perfect
+        }
+
+        if (impactPos >= sweetSpotStart && impactPos <= sweetSpotEnd) {
+            bestGrade = 'HIT';
+        }
     }
 
-    if (impactPos >= sweetSpotStart && impactPos <= sweetSpotEnd) {
-        return 'HIT';
-    }
-
-    return 'MISS';
+    return bestGrade;
 }

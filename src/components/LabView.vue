@@ -433,6 +433,16 @@ function getCrateIntel(crate: any) {
             <span class="text-xs font-mono text-gray-500 uppercase">Structural Integrity</span>
             <span class="text-3xl font-black font-mono tracking-tighter">{{ currentStability }}</span>
          </div>
+         <!-- STATIC PENALTY DISPLAY -->
+         <div class="flex flex-col items-center">
+            <span class="text-xs font-mono text-gray-500 uppercase">Static Penalty</span>
+             <span class="text-sm font-black font-mono text-purple-600">
+                -{{ (store.labState.activeCrate?.contents?.found_in_static_intensity * 0.05 * 100 || 0).toFixed(1) }}%
+             </span>
+             <div v-if="store.lastSurveyAt && Date.now() - store.lastSurveyAt < 600000" class="text-[8px] text-green-600 font-bold uppercase mt-1">
+                 Survey Active: -50% Penalty
+             </div>
+         </div>
          <div class="flex flex-col items-end">
              <span class="text-xs font-mono text-gray-500 uppercase">Risk Assessment</span>
              <span :class="['text-sm font-black font-mono', zoneStatus.color]">
