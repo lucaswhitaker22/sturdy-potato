@@ -24,6 +24,7 @@ const needlePos = ref(50); // 0-100
 const tetherCount = ref(0);
 const isStopped = ref(false);
 const swingDirection = ref(1);
+const isTetherFlashing = ref(false);
 
 // Shatter Salvage State
 const salvageProgress = ref(100);
@@ -140,6 +141,11 @@ function animate() {
     speed *= 0.9;
   }
 
+  // Reduced Motion Support
+  if (store.reducedMotion) {
+    speed *= 0.5;
+  }
+
   // Update Pos
   needlePos.value += speed * delta * swingDirection.value;
 
@@ -160,7 +166,11 @@ function handleTether() {
   // Optimistic update
   store.fineDustBalance -= tetherCost.value; 
   tetherCount.value++;
-  // Visual effect
+  
+  // Visual effect: Field Clamp Flash
+  isTetherFlashing.value = true;
+  setTimeout(() => isTetherFlashing.value = false, 150);
+  
   audio.playClick('light');
 }
 
@@ -184,6 +194,15 @@ async function handleForceStop() {
 
 // Keyboard Support
 function handleKeyDown(e: KeyboardEvent) {
+  // If salvage opportunity is active, Space primarily salvages
+  if (store.salvageOpportunity) {
+    if (e.key === ' ' || e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      handleSalvage();
+      return;
+    }
+  }
+
   if (!isActiveStabilizing.value || isStopped.value) return;
   
   const key = e.key.toLowerCase();
@@ -193,11 +212,6 @@ function handleKeyDown(e: KeyboardEvent) {
   } else if (key === 'enter' || key === 's') {
     e.preventDefault();
     handleForceStop();
-  } else if (key === ' ' || key === 's') {
-    if (store.salvageOpportunity) {
-      e.preventDefault();
-      handleSalvage();
-    }
   }
 }
 
@@ -468,10 +482,11 @@ function getCrateIntel(crate: any) {
 
          <!-- Needle -->
          <div 
-            class="absolute top-0 bottom-0 w-1 bg-black z-10 transition-transform duration-75"
+            class="absolute top-0 bottom-0 w-1 bg-black z-20 transition-transform duration-75"
+            :class="{ 'scale-x-[4] bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]': isTetherFlashing }"
             :style="{ left: `${needlePos}%` }"
          >
-            <div class="absolute -top-1 -left-1.5 w-4 h-4 bg-black rounded-full"></div>
+            <div class="absolute -top-1 -left-1.5 w-4 h-4 bg-black rounded-full" :class="{ 'bg-blue-600': isTetherFlashing }"></div>
          </div>
       </div>
 
