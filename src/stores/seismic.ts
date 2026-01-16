@@ -22,10 +22,22 @@ export const useSeismicStore = defineStore('seismic', () => {
         if (!seismicState.value.isActive) return null;
 
         const grade = gradeStrike(impactPos, seismicState.value.config);
-        // Ensure we don't exceed maxStrikes if that logic is needed, or just push.
-        // The type definition says grades is generic array, so this is fine.
-        seismicState.value.grades.push(grade);
+
+        // Push grade
+        if (seismicState.value.grades.length < seismicState.value.maxStrikes) {
+            seismicState.value.grades.push(grade);
+        }
+
         seismicState.value.impactPos = impactPos;
+
+        // Audio Hooks (Conceptual - assuming an audio manager or window events)
+        if (grade === 'PERFECT') {
+            window.dispatchEvent(new CustomEvent('game-sfx', { detail: 'clink' }));
+        } else if (grade === 'HIT') {
+            window.dispatchEvent(new CustomEvent('game-sfx', { detail: 'click' }));
+        } else {
+            window.dispatchEvent(new CustomEvent('game-sfx', { detail: 'thud' }));
+        }
 
         return grade;
     }

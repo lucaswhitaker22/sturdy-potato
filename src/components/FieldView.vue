@@ -60,18 +60,26 @@ const isShaking = ref(false);
   async function handleExtract() {
     // If extracting and seismic active, this is a strike
     if (store.isExtracting && store.seismicState.isActive) {
-      if (store.seismicState.grades.length < store.seismicState.maxStrikes) {
-        isShaking.value = true;
-        setTimeout(() => (isShaking.value = false), 100);
-        store.strike();
-      }
+      handleStrike();
       return;
     }
 
     isShaking.value = true;
     setTimeout(() => (isShaking.value = false), 200);
     if (store.isExtracting || store.isCooldown) return;
+    
+    console.log('[FieldView] Starting extraction...');
     store.extract();
+  }
+
+  function handleStrike() {
+    console.log('[FieldView] Strike attempt via UI');
+    const grade = store.strike();
+    if (grade) {
+      console.log('[FieldView] Strike success:', grade);
+      isShaking.value = true;
+      setTimeout(() => (isShaking.value = false), 100);
+    }
   }
 
   const lastGrade = computed(() => {
@@ -129,7 +137,8 @@ const isShaking = ref(false);
         <button
           @click="handleExtract"
           :disabled="
-            store.isExtracting || store.isCooldown || store.trayCount >= 5
+            store.trayCount >= 5 || 
+            (store.isExtracting ? !store.seismicState.isActive : store.isCooldown)
           "
           class="group relative inline-flex items-center justify-center focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
         >
@@ -140,7 +149,7 @@ const isShaking = ref(false);
               store.isExtracting || store.isCooldown
                 ? 'bg-gray-50'
                 : 'bg-[#FFFFF0]',
-              isShaking ? 'animate-shake-mild' : '',
+              isShaking && !store.reducedMotion ? 'animate-shake-mild' : '',
             ]"
           >
             <!-- Texture Layers -->
@@ -193,6 +202,7 @@ const isShaking = ref(false);
             <div
               v-if="store.isExtracting"
               class="absolute top-0 left-0 w-full h-1 bg-stamp-blue/50 shadow-[0_0_10px_2px_rgba(43,76,126,0.3)] z-20"
+              :class="{ 'transition-none': store.reducedMotion }"
               :style="{ top: `${store.surveyProgress}%` }"
             ></div>
           </div>
@@ -225,13 +235,21 @@ const isShaking = ref(false);
                     :style="{ left: `${store.seismicState.config.sweetSpotStart}%`, width: `${store.seismicState.config.sweetSpotWidth}%` }">
                    
                    <!-- Perfect Core (Center 30%) -->
-                   <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-green-200/60 border-x border-green-400"></div>
+                   <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-green-200/60 border-x border-green-400">
+                       <div class="absolute inset-0 flex items-center justify-center opacity-30 text-[6px] font-bold text-green-800">CORE</div>
+                   </div>
                </div>
                
-               <!-- Level 99 Second Spot (Not implemented in visualization yet, logic supports it) -->
+               <!-- Mastery Second Spot (Level 99) -->
+               <div v-if="store.excavationLevel >= 99" 
+                    class="absolute top-0 bottom-0 bg-purple-200/30 border-x border-purple-400"
+                    :style="{ left: `${(store.seismicState.config.sweetSpotStart + 40) % 80 + 10}%`, width: `${store.seismicState.config.sweetSpotWidth}%` }">
+                    <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-purple-400/40 border-x border-purple-600"></div>
+               </div>
                
                <!-- Impact Line -->
                <div class="absolute top-0 bottom-0 w-0.5 bg-red-600 z-10"
+                    :class="{ 'transition-none': store.reducedMotion }"
                     :style="{ left: `${store.seismicState.impactPos}%` }">
                </div>
             </template>
@@ -365,6 +383,26 @@ const isShaking = ref(false);
         <span class="font-bold block mb-1">PRO-TIP:</span>
         Leveling your Excavation skill increases the probability of finding
         crates. Every 5 levels grants a static +0.5% boost.
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="mt-4 p-3 bg-gray-50 border border-gray-200 font-mono text-[9px] flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <span>SEISMIC SURGE</span>
+          <button @click="store.seismicEnabled = !store.seismicEnabled" 
+                  class="px-2 py-0.5 border border-black"
+                  :class="store.seismicEnabled ? 'bg-green-100' : 'bg-red-100'">
+            {{ store.seismicEnabled ? 'ENABLED' : 'DISABLED' }}
+          </button>
+        </div>
+        <div class="flex justify-between items-center">
+          <span>REDUCED MOTION</span>
+          <button @click="store.reducedMotion = !store.reducedMotion" 
+                  class="px-2 py-0.5 border border-black"
+                  :class="store.reducedMotion ? 'bg-blue-100' : 'bg-gray-100'">
+            {{ store.reducedMotion ? 'ON' : 'OFF' }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

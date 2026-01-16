@@ -40,6 +40,10 @@ export const useGameStore = defineStore('game', () => {
   const batteryCapacity = ref(8.0);
   const overclockBonus = ref(0);
 
+  // Settings
+  const seismicEnabled = ref(true);
+  const reducedMotion = ref(false);
+
   // Animation State
   const now = ref(Date.now());
   const surveyProgress = ref(0);
@@ -344,17 +348,19 @@ export const useGameStore = defineStore('game', () => {
     const isMaster = level >= 99;
 
     // Reset Seismic Store
-    seismicStore.seismicState = {
-      isActive: true, // Type requires this
-      config: {
-        sweetSpotWidth: width,
-        perfectZoneWidth: 30,
-        sweetSpotStart: start
-      },
-      impactPos: 0,
-      grades: [],
-      maxStrikes: isMaster ? 2 : 1
-    };
+    if (seismicEnabled.value) {
+      seismicStore.seismicState = {
+        isActive: true, // Type requires this
+        config: {
+          sweetSpotWidth: width,
+          perfectZoneWidth: 30,
+          sweetSpotStart: start
+        },
+        impactPos: 0,
+        grades: [],
+        maxStrikes: isMaster ? 2 : 1
+      };
+    }
 
     addLog('Bio-Scanners initializing...');
     const steps = 50;
@@ -375,9 +381,11 @@ export const useGameStore = defineStore('game', () => {
         ? seismicStore.seismicState.grades.join(',') : null;
 
       // Use the canonical extractor
-      const { data, error } = await supabase.rpc('rpc_extract', {
-        p_user_id: userSessionId.value,
-        p_seismic_grade: gradesStr
+      const { data, error } = await supabase.rpc('rpc_extract_v5', {
+        payload: {
+          p_user_id: userSessionId.value,
+          p_seismic_grade: gradesStr
+        }
       });
 
 
@@ -407,7 +415,13 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function strike() {
-    return seismicStore.strike(seismicStore.seismicState.impactPos);
+    const pos = seismicStore.seismicState.impactPos;
+    console.log(`[Store] Strike at pos: ${pos.toFixed(2)}`);
+    const grade = seismicStore.strike(pos);
+    if (grade) {
+      addLog(`Seismic Strike: ${grade}`);
+    }
+    return grade;
   }
 
   async function sift(tethersUsed: number = 0, finalZone: number = 0) {
@@ -527,6 +541,7 @@ export const useGameStore = defineStore('game', () => {
     scrapBalance, fineDustBalance, historicalInfluence, trayCount,
     labState, log, isExtracting, lastExtractAt,
     batteryCapacity, overclockBonus,
+    seismicEnabled, reducedMotion,
 
     // Facades
     inventory, catalog, activeListings, ownedTools, activeToolId, completedSetIds,
