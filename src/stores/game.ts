@@ -439,9 +439,15 @@ export const useGameStore = defineStore('game', () => {
           addLog('⚠ CRITICAL FAILURE: Specimen shattered.');
           labState.value.isActive = false;
           labState.value.currentStage = 0;
-          trayCount.value--;
+          trayCount.value = Math.max(0, trayCount.value - 1);
+        } else if (data.outcome === 'STABILIZED_FAIL') {
+          addLog(`Sequence Failure. Triage payout: +${data.dust_payout}mg Dust.`);
+          labState.value.isActive = false;
+          labState.value.currentStage = 0;
+          trayCount.value = Math.max(0, trayCount.value - 1);
+          fineDustBalance.value = data.new_dust_balance || fineDustBalance.value;
         }
-        // ... handle other outcomes
+
         if (data.xp_gain) skillsStore.restorationXP += data.xp_gain;
       } else {
         addLog(`Sift Error: ${data?.error || error?.message}`);

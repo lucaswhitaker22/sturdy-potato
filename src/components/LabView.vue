@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
-import { computed, ref, onUnmounted } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import { audio } from "@/services/audio";
 const store = useGameStore();
 
@@ -87,6 +87,11 @@ function animate() {
     speed *= Math.pow(0.8, tetherCount.value); 
   }
 
+  // Master Preserver Synergy (Level 99): 10% base reduction
+  if (store.restorationLevel >= 99) {
+    speed *= 0.9;
+  }
+
   // Update Pos
   needlePos.value += speed * delta * swingDirection.value;
 
@@ -108,7 +113,7 @@ function handleTether() {
   store.fineDustBalance -= tetherCost.value; 
   tetherCount.value++;
   // Visual effect
-  audio.playClick(); // or specific sound
+  audio.playClick('light');
 }
 
 async function handleForceStop() {
@@ -119,6 +124,7 @@ async function handleForceStop() {
   // Determine Zone
   const zone = getZone(needlePos.value);
   
+  audio.playClick('heavy');
   await store.sift(tetherCount.value, zone);
   
   // Reset after short delay
@@ -128,11 +134,28 @@ async function handleForceStop() {
   }, 1000);
 }
 
-// Fallback: If user waits too long? No, force stop works at any time. Sift doesn't auto-resolve here.
-// But to prevent infinite stall, maybe auto-stop after 10s?
-// For now, let it ride.
+// Keyboard Support
+function handleKeyDown(e: KeyboardEvent) {
+  if (!isActiveStabilizing.value || isStopped.value) return;
+  
+  const key = e.key.toLowerCase();
+  if (key === ' ' || key === 't') {
+    e.preventDefault();
+    handleTether();
+  } else if (key === 'enter' || key === 's') {
+    e.preventDefault();
+    handleForceStop();
+  }
+}
 
-onUnmounted(() => cancelAnimationFrame(animationFrame));
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  cancelAnimationFrame(animationFrame);
+  window.removeEventListener('keydown', handleKeyDown);
+});
 
 const revealedItem = ref<any>(null); // Legacy support
 
