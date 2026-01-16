@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { supabase } from '@/lib/supabase';
 import { TOOL_CATALOG } from '@/constants/items';
 import type { VaultItem, ItemDefinition } from '@/types';
+import { useMMOStore } from './mmo';
 
 export interface MarketListing {
   id: string;
@@ -24,15 +25,15 @@ export const useGameStore = defineStore('game', () => {
   const inventory = ref<VaultItem[]>([]);
   const catalog = ref<ItemDefinition[]>([]);
   const activeListings = ref<MarketListing[]>([]);
-  
+
   const labState = ref({
     isActive: false,
     currentStage: 0,
   });
-  
+
   const log = ref<string[]>(['> Connection established.', '> Initializing bio-scanner...']);
   const isExtracting = ref(false);
-  
+
   // Progression
   const excavationXP = ref(0);
   const restorationXP = ref(0);
@@ -49,17 +50,17 @@ export const useGameStore = defineStore('game', () => {
   const now = ref(Date.now());
   const surveyProgress = ref(0);
   const passiveProgress = ref(0);
-  
+
   // Timer for reactivity
   setInterval(() => { now.value = Date.now() }, 100);
 
   // Getters
   // Backward compatibility for components expecting string[]
   const vaultItems = computed(() => inventory.value.map(i => i.item_id));
-  
+
   const discoveredCount = computed(() => inventory.value.length);
   const uniqueItemsFound = computed(() => new Set(inventory.value.map(i => i.item_id)).size);
-  
+
   // Sync with SQL Public.get_level
   function calculateLevel(xp: number) {
     let threshold = 0;
@@ -123,7 +124,7 @@ export const useGameStore = defineStore('game', () => {
 
   function startPassiveLoop() {
     if (passiveInterval) clearInterval(passiveInterval);
-    
+
     // Check if we have a passive tool
     const tool = TOOL_CATALOG.find(t => t.id === activeToolId.value);
     if (!tool || tool.automationRate <= 0) return;
@@ -134,11 +135,11 @@ export const useGameStore = defineStore('game', () => {
         const { data, error } = await supabase.rpc('rpc_passive_tick');
         if (error) throw error;
         if (data.success) {
-           if (data.crate_dropped) {
-             addLog(`PASSIVE: Automated unit found a Crate!`);
-             scrapBalance.value = Number(data.new_balance || scrapBalance.value); 
-             console.log('[Store] Passive Scrap Update:', scrapBalance.value);
-           }
+          if (data.crate_dropped) {
+            addLog(`PASSIVE: Automated unit found a Crate!`);
+            scrapBalance.value = Number(data.new_balance || scrapBalance.value);
+            console.log('[Store] Passive Scrap Update:', scrapBalance.value);
+          }
         }
       } catch (err) {
         console.error('Passive tick error', err);
@@ -164,7 +165,7 @@ export const useGameStore = defineStore('game', () => {
   async function init() {
     console.log('[Store] Initializing system sequence...');
     let { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       console.log('[Store] No active session. Using local identity...');
       // Primary fix: Use localStorage for identity since anonymous auth is disabled on Supabase
@@ -173,7 +174,7 @@ export const useGameStore = defineStore('game', () => {
         localId = crypto.randomUUID();
         localStorage.setItem('local_user_id', localId);
       }
-      
+
       // We'll treat this localId as the user.id for our RPC calls
       // Note: We're mimicking the user object for internal logic consistency
       user = { id: localId } as any;
@@ -196,9 +197,9 @@ export const useGameStore = defineStore('game', () => {
       .single();
 
     if (profileError && profileError.code !== 'PGRST116') { // PGRST116 is 'no rows'
-        console.error('[Store] Profile Fetch Error:', profileError);
+      console.error('[Store] Profile Fetch Error:', profileError);
     }
-      
+
     if (profile) {
       console.log('[Store] Profile state recovered:', profile);
       scrapBalance.value = Number(profile.scrap_balance || 0);
@@ -232,7 +233,7 @@ export const useGameStore = defineStore('game', () => {
     // 3. Fetch Catalog (Definitions)
     const { data: defs } = await supabase.from('item_definitions').select('*');
     if (defs) {
-        catalog.value = defs as ItemDefinition[];
+      catalog.value = defs as ItemDefinition[];
     }
 
     // 4. Fetch Inventory
@@ -240,24 +241,24 @@ export const useGameStore = defineStore('game', () => {
       .from('vault_items')
       .select('*')
       .eq('user_id', user.id);
-      
+
     if (items) {
       inventory.value = items.map((i: any) => {
-         const def = catalog.value.find(d => d.id === i.item_id);
-         return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
+        const def = catalog.value.find(d => d.id === i.item_id);
+        return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
       }) as VaultItem[];
     }
-    
+
     // 4. Fetch Owned Tools & Sets
     const { data: tools } = await supabase.from('owned_tools').select('tool_id, level').eq('user_id', user.id);
     if (tools && tools.length > 0) {
-        const toolMap: Record<string, number> = {};
-        tools.forEach(t => toolMap[t.tool_id] = t.level);
-        ownedTools.value = toolMap;
+      const toolMap: Record<string, number> = {};
+      tools.forEach(t => toolMap[t.tool_id] = t.level);
+      ownedTools.value = toolMap;
     }
     // Ensure default is always there
     if (!ownedTools.value['rusty_shovel']) {
-        ownedTools.value['rusty_shovel'] = 1;
+      ownedTools.value['rusty_shovel'] = 1;
     }
 
     const { data: sets } = await supabase.from('completed_sets').select('set_id').eq('user_id', user.id);
@@ -289,22 +290,22 @@ export const useGameStore = defineStore('game', () => {
           inventory.value.push(fullItem);
           addLog(`Server synced: Item received.`);
         } else if (payload.eventType === 'DELETE') {
-           inventory.value = inventory.value.filter(i => i.id !== payload.old.id);
+          inventory.value = inventory.value.filter(i => i.id !== payload.old.id);
         }
       })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'global_events' }, (payload) => {
-         const evt = payload.new;
-         // Handle global events (e.g. notifications)
-         if (evt.event_type === 'find') {
-            // Optional: Show toast
-         }
+        const evt = payload.new;
+        // Handle global events (e.g. notifications)
+        if (evt.event_type === 'find') {
+          // Optional: Show toast
+        }
       })
       .subscribe();
 
     // Phase 2 Startup
     await checkOfflineGains();
     startPassiveLoop();
-    
+
     // Watch active tool to restart loop if it changes
     // But we are outside setup(), so we need to validly watch?
     // Pinia stores don't have implicit watchers unless we use storeToRefs inside components?
@@ -318,15 +319,15 @@ export const useGameStore = defineStore('game', () => {
     if (isExtracting.value || isCooldown.value) return;
     isExtracting.value = true;
     surveyProgress.value = 0;
-    
+
     addLog('Bio-Scanners initializing...');
 
     // 1. Survey Phase (Manual interaction) - Animate progress
     const steps = 20;
     const stepDuration = surveyDurationMs.value / steps;
     for (let i = 0; i <= steps; i++) {
-        surveyProgress.value = (i / steps) * 100;
-        await new Promise(resolve => setTimeout(resolve, stepDuration));
+      surveyProgress.value = (i / steps) * 100;
+      await new Promise(resolve => setTimeout(resolve, stepDuration));
     }
 
     try {
@@ -347,15 +348,22 @@ export const useGameStore = defineStore('game', () => {
         if (data.double_loot) {
           addLog('MASTERY PERK: The Endless Vein doubled your yield!');
         }
-        
+
         // Optimistic / Immediate Update
         console.log('[Store] Extraction Data Received:', data);
+
+        const prevLevel = excavationLevel.value;
         scrapBalance.value = Number(data.new_balance ?? (scrapBalance.value + (data.scrap_gain || 0)));
         excavationXP.value = Number(data.new_xp ?? (excavationXP.value + (data.xp_gain || 0)));
+
+        if (excavationLevel.value > prevLevel) {
+          useMMOStore().addLocalNotification(`Excavation Level Up! (Level ${excavationLevel.value})`, 'success');
+        }
+
         trayCount.value = Number(data.new_tray_count ?? (data.crate_dropped ? trayCount.value + 1 : trayCount.value));
-        
+
         // Use local time for immediate cooldown to avoid server drift issues
-        lastExtractAt.value = new Date(); 
+        lastExtractAt.value = new Date();
       } else {
         addLog(`Error: ${data.error}`);
       }
@@ -370,11 +378,11 @@ export const useGameStore = defineStore('game', () => {
   async function sift() {
     if (isExtracting.value || !labState.value.isActive) return;
     isExtracting.value = true;
-    
+
     try {
       const { data, error } = await supabase.rpc('rpc_sift', { p_user_id: userSessionId.value });
       if (error) throw error;
-      
+
       if (data.success) {
         if (data.outcome === 'SUCCESS') {
           addLog(`Sequence Success: Layer ${data.new_stage} stabilized.`);
@@ -385,11 +393,15 @@ export const useGameStore = defineStore('game', () => {
           labState.value.currentStage = 0;
           trayCount.value = Number(trayCount.value || 0) - 1;
         } else if (data.outcome === 'ANOMALY') {
-           addLog('⚠ TEMPORAL RIFT: Sifting process bypassed dimensional limits.');
+          addLog('⚠ TEMPORAL RIFT: Sifting process bypassed dimensional limits.');
         }
 
         if (data.xp_gain) {
-           restorationXP.value = Number(restorationXP.value) + Number(data.xp_gain);
+          const prevLevel = restorationLevel.value;
+          restorationXP.value = Number(restorationXP.value) + Number(data.xp_gain);
+          if (restorationLevel.value > prevLevel) {
+            useMMOStore().addLocalNotification(`Restoration Level Up! (Level ${restorationLevel.value})`, 'success');
+          }
         }
       } else {
         addLog(`Sift Error: ${data.error}`);
@@ -455,7 +467,7 @@ export const useGameStore = defineStore('game', () => {
     // I need to start exposing `mint_number` in `market_listings` view?
     // I'll fetch `market_listings` and I might need to fetch the related item details.
     // If I can't join, I'll just show the listing.
-    
+
     const { data, error } = await supabase
       .from('market_listings')
       .select('*, vault_items(item_id, mint_number)') // Query foreign key
@@ -466,7 +478,7 @@ export const useGameStore = defineStore('game', () => {
       console.error(error);
       return;
     }
-    
+
     activeListings.value = data.map((l: any) => ({
       ...l,
       item_id: l.vault_items?.item_id || 'unknown',
@@ -481,7 +493,7 @@ export const useGameStore = defineStore('game', () => {
       p_hours: 24,
       p_user_id: userSessionId.value
     });
-    
+
     if (error) {
       addLog(`Listing Error: ${error.message}`);
       return false;
@@ -491,13 +503,17 @@ export const useGameStore = defineStore('game', () => {
       return false;
     }
     addLog('Item listed on Bazaar.');
+    const prevLevel = appraisalLevel.value;
     appraisalXP.value += 50; // Optimistic update
+    if (appraisalLevel.value > prevLevel) {
+      useMMOStore().addLocalNotification(`Appraisal Level Up! (Level ${appraisalLevel.value})`, 'success');
+    }
     return true; // Success
   }
 
   async function placeBid(listingId: string, amount: number) {
     if (scrapBalance.value < amount) return false;
-    
+
     // Optimistic update
     const previousBalance = scrapBalance.value;
     scrapBalance.value -= amount;
@@ -507,7 +523,7 @@ export const useGameStore = defineStore('game', () => {
       p_amount: amount,
       p_user_id: userSessionId.value
     });
-    
+
     if (error || !data?.success) {
       addLog(`Bid Error: ${error?.message || data?.error}`);
       scrapBalance.value = previousBalance; // Rollback
@@ -515,115 +531,124 @@ export const useGameStore = defineStore('game', () => {
     }
 
     addLog(`Bid placed: ${amount} scrap.`);
+    const prevLevel = appraisalLevel.value;
     appraisalXP.value += 10; // Optimistic update
+    if (appraisalLevel.value > prevLevel) {
+      useMMOStore().addLocalNotification(`Appraisal Level Up! (Level ${appraisalLevel.value})`, 'success');
+    }
     return true;
   }
-  
+
   // Smelting Action
   async function smeltItem(vaultItemId: string) {
-      const { data, error } = await supabase.rpc('rpc_smelt', {
-          p_item_id: vaultItemId,
-          p_user_id: userSessionId.value
-      });
+    const { data, error } = await supabase.rpc('rpc_smelt', {
+      p_item_id: vaultItemId,
+      p_user_id: userSessionId.value
+    });
 
-      if (error) {
-          addLog(`Smelt Error: ${error.message}`);
-          return;
-      }
+    if (error) {
+      addLog(`Smelt Error: ${error.message}`);
+      return;
+    }
 
-      if (data.success) {
-          addLog(`SMELTING COMPLETE: Recycled item for ${data.scrap_gained} Scrap.`);
-          scrapBalance.value = Number(data.new_balance || (scrapBalance.value + data.scrap_gained));
-          smeltingXP.value = Number(smeltingXP.value) + Number(data.xp_gained || 0);
-          inventory.value = inventory.value.filter(i => i.id !== vaultItemId);
-      } else {
-          addLog(`Smelt Failed: ${data.error}`);
+    if (data.success) {
+      addLog(`SMELTING COMPLETE: Recycled item for ${data.scrap_gained} Scrap.`);
+      const prevLevel = smeltingLevel.value;
+      scrapBalance.value = Number(data.new_balance || (scrapBalance.value + data.scrap_gained));
+      smeltingXP.value = Number(smeltingXP.value) + Number(data.xp_gained || 0);
+      if (smeltingLevel.value > prevLevel) {
+        useMMOStore().addLocalNotification(`Smelting Level Up! (Level ${smeltingLevel.value})`, 'success');
       }
+      inventory.value = inventory.value.filter(i => i.id !== vaultItemId);
+    } else {
+      addLog(`Smelt Failed: ${data.error}`);
+    }
   }
-  
+
   // Other Actions
   async function upgradeTool(toolId: string, cost: number) {
-      const { data, error } = await supabase.rpc('rpc_upgrade_tool', {
-        p_tool_id: toolId,
-        p_cost: cost,
-        p_user_id: userSessionId.value
-      });
-     if (data?.success) {
-        const newLevel = data.new_level || (getToolLevel(toolId) + 1);
-        addLog(`Tool ${toolId.toUpperCase()} reached Level ${newLevel}`);
-        ownedTools.value[toolId] = newLevel; 
-        activeToolId.value = toolId;
-        
-        // Sync balance manually as rpc_upgrade_tool returns success but doesn't return new_balance yet
-        scrapBalance.value -= cost;
-        
-        startPassiveLoop(); 
-      } else {
-        addLog(`Upgrade Interrupted: ${error?.message || data?.error || 'System error'}`);
-      }
+    const { data, error } = await supabase.rpc('rpc_upgrade_tool', {
+      p_tool_id: toolId,
+      p_cost: cost,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      const newLevel = data.new_level || (getToolLevel(toolId) + 1);
+      addLog(`Tool ${toolId.toUpperCase()} reached Level ${newLevel}`);
+      ownedTools.value[toolId] = newLevel;
+      activeToolId.value = toolId;
+
+      // Sync balance manually as rpc_upgrade_tool returns success but doesn't return new_balance yet
+      scrapBalance.value -= cost;
+
+      startPassiveLoop();
+    } else {
+      addLog(`Upgrade Interrupted: ${error?.message || data?.error || 'System error'}`);
+    }
   }
 
   async function setActiveTool(toolId: string) {
-      const { error } = await supabase.from('profiles').update({ active_tool_id: toolId }).eq('id', userSessionId.value);
-      if (error) {
-          addLog(`Deployment Error: ${error.message}`);
-      } else {
-          activeToolId.value = toolId;
-          addLog(`EQUIPMENT DEPLOYED: ${toolId.toUpperCase()}`);
-          startPassiveLoop();
-      }
+    const { error } = await supabase.from('profiles').update({ active_tool_id: toolId }).eq('id', userSessionId.value);
+    if (error) {
+      addLog(`Deployment Error: ${error.message}`);
+    } else {
+      activeToolId.value = toolId;
+      addLog(`EQUIPMENT DEPLOYED: ${toolId.toUpperCase()}`);
+      startPassiveLoop();
+    }
   }
 
   async function claimSet(setId: string, reward: number) {
-      // Use RPC
-      const { data, error } = await supabase.rpc('rpc_claim_set', { p_set_id: setId });
-      
-      if (error) {
-        addLog(`Claim Error: ${error.message}`);
-        return;
-      }
+    // Use RPC
+    const { data, error } = await supabase.rpc('rpc_claim_set', { p_set_id: setId });
 
-      if (data.success) {
-        addLog(`SET COMPLETED: ${setId}. Reward: ${data.reward_scrap > 0 ? '+' + data.reward_scrap + ' Scrap' : 'BUFF APPLIED'}`);
-        completedSetIds.value.push(setId);
-        // Refresh profile via subscription usually, but optimistic update helps UI
-      } else {
-        addLog(`Claim Failed: ${data.error}`);
-      }
+    if (error) {
+      addLog(`Claim Error: ${error.message}`);
+      return;
+    }
+
+    if (data.success) {
+      addLog(`SET COMPLETED: ${setId}. Reward: ${data.reward_scrap > 0 ? '+' + data.reward_scrap + ' Scrap' : 'BUFF APPLIED'}`);
+      completedSetIds.value.push(setId);
+      useMMOStore().addLocalNotification(`Set Complete: '${setId}'${data.reward_scrap > 0 ? ' (+' + data.reward_scrap + ' Scrap)' : ''}`, 'success');
+      // Refresh profile via subscription usually, but optimistic update helps UI
+    } else {
+      addLog(`Claim Failed: ${data.error}`);
+    }
   }
 
   async function purchaseInfluenceItem(itemKey: string) {
-      const { data, error } = await supabase.rpc('rpc_purchase_influence_item', { 
-        p_item_key: itemKey,
-        p_user_id: userSessionId.value
-      });
+    const { data, error } = await supabase.rpc('rpc_purchase_influence_item', {
+      p_item_key: itemKey,
+      p_user_id: userSessionId.value
+    });
 
-      if (error) {
-          addLog(`Purchase Error: ${error.message}`);
-          return false;
-      }
+    if (error) {
+      addLog(`Purchase Error: ${error.message}`);
+      return false;
+    }
 
-      if (!data.success) {
-          addLog(`Purchase Failed: ${data.error}`);
-          return false;
-      }
+    if (!data.success) {
+      addLog(`Purchase Failed: ${data.error}`);
+      return false;
+    }
 
-      addLog(`Purchased ${itemKey} from Influence Shop!`);
-      return true;
+    addLog(`Purchased ${itemKey} from Influence Shop!`);
+    return true;
   }
 
   async function overclockTool(toolId: string, cost: number) {
-     const { data, error } = await supabase.rpc('rpc_overclock_tool', { 
-       p_tool_id: toolId, 
-       p_cost: cost,
-       p_user_id: userSessionId.value
-     });
-     if (data?.success) {
-        addLog(`TECH PRESTIGE: Tool overclocked! Sift stability increased by 5%.`);
-        overclockBonus.value = data.new_bonus;
-     } else {
-        addLog(`Overclock Failed: ${error?.message || data?.error}`);
-     }
+    const { data, error } = await supabase.rpc('rpc_overclock_tool', {
+      p_tool_id: toolId,
+      p_cost: cost,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      addLog(`TECH PRESTIGE: Tool overclocked! Sift stability increased by 5%.`);
+      overclockBonus.value = data.new_bonus;
+    } else {
+      addLog(`Overclock Failed: ${error?.message || data?.error}`);
+    }
   }
 
   // Initialize
