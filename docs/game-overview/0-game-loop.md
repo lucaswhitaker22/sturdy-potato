@@ -23,6 +23,8 @@ This matches the navigation flow in [6 - UI/UX Wireframe & Flow](6-ui-ux-wirefra
 * Input: Manual clicks on **\[EXTRACT]**, plus passive auto-dig ticks.
 * Output: Mostly **Scrap**, sometimes an **Encapsulated Crate**, rarely an **Anomaly**.
 * UI: Progress bar fill, tray slot update, and global feed ping.
+* Optional active layer (Seismic Surge): A timing “Sweet Spot” can appear on the progress bar. Hitting it grants a **Perfect Survey** (+5% flat Crate drop rate for that action) and bonus Excavation XP.
+* Zone strategy layer (Vault Heatmaps): Each zone has a visible **Static Intensity**. High static grants +2% Crate drop rate, but applies a -5% Sift Stability penalty to items found there.
 
 Detailed mechanics live in [2: The Mechanics](2-the-mechanics.md).
 
@@ -41,6 +43,13 @@ Refining is the risk engine. The player chooses when to stop.
 
 * On success: Reveal the relic with **Rarity**, **Condition**, **Mint #**, and **Historical Value**.
 * On fail: Item **Shatters**. Pay out **Fine Dust** or trigger cooldown states.
+
+**Optional active layers (Micro expansions)**
+
+* Active Stabilization: Spend Fine Dust to “Tether” the Stability needle briefly.
+* Pre-Sift Appraisal: Before Stage 0, pay Scrap to preview Mint Probability / Condition Range. Appraisal 60+ can reveal one hidden sub-stat.
+* Shatter Salvage: On Standard Fail, a 1-second reaction window can improve failure payout (extra Fine Dust, or recover a rolled Cursed Fragment).
+* Anomaly Overload: Anomalies fill a 3-segment meter. Triggering it grants a 60s buff (faster extraction, slightly better Stage 0 outcomes).
 
 Loot metadata rules live in [3 - The Loot & Collection Schema](3-the-loot-and-collection-schema.md).
 

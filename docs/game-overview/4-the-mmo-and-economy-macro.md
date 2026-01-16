@@ -37,8 +37,9 @@ The Bazaar is integrated into the game's "heartbeat" via real-time social proof.
 
 The Appraisal skill is essential for players looking to specialize as merchants.
 
-* Level 60 (Certified Listings): Advanced Appraisers can certify items for a Scrap fee, adding a permanent "Certified" badge to the item. Certification reveals hidden sub-stats and "Mint Probability," significantly increasing an item's resale value.
+* Level 60 (Certified Listings + Previews): Advanced Appraisers can certify items for a Scrap fee, adding a permanent "Certified" badge to the item. Certification reveals hidden sub-stats and can surface Appraisal previews like "Mint Probability."
 * Level 99 (Master Trader): Reaching mastery in Appraisal unlocks the "Auctioneer" title and provides the ultimate economic benefit: reducing the Archive Tax from 5% down to 2.5%.
+  * Oracle edge: Appraisal mastery can also expose which item catalog IDs are currently “trending” per zone (pairs with Vault Heatmaps).
 
 **The Archive Tax & Economic Stability**
 

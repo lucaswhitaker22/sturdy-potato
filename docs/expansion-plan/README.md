@@ -1,35 +1,57 @@
 # Expansion Plan
 
-#### 1. Advanced Assembly & Engineering (The "Blueprints" Expansion)
+This section collects post-MVP expansions.
 
-Currently, Smelting is primarily used to break down junk for Scrap or recover rare Cursed Fragments. This expansion adds a creative layer to the "Refiner" path.
+It’s a mix of loop deepening (micro), MMO systems (macro), and skill growth.
 
-* Component Discovery: Instead of finding whole relics, certain high-tier zones could drop "Fragmented Components" (e.g., a "Lens Array" or "Corroded Circuit").
-* The Assembly Bench: A new UI deck where players use Smelting and Appraisal skills to combine components into "Custom Tools" or "Restored Masterpieces".
-* Blueprints: Building on the Phase 4 mention of "Unidentified Blueprints," players could sell specific assembly recipes in the Bazaar, creating a market for "Recipe Hunters".
+### Loop expansions
 
-#### 2. Archive Expeditions (Contractual Narrative Quests)
+* [Micro Loop Expansion](micro-loop-expansion/)
+* [Macro Loop Expansion](macro-loop-expansion.md)
+* [Skills Expansion](skills-expansion.md)
 
-The Archive is described as a serious, bureaucratic institution that assigns value to items. A quest system could formalize this relationship.
+### System proposals (grab bag)
 
-* Research Requisitions: Periodic "Archive Contracts" could appear in the Archive deck, requesting specific items with certain conditions (e.g., "Three _Preserved_ Soda Tabs").
-* Lore Rewards: Completing contracts could reward players with "Archive Clearance" (a temporary buff to hidden sub-stat visibility) or unique "Vault Research Notes" that reveal more about "The Great Static".
-* Rank Progression: Players could earn specific titles like "Junior Clerk" or "Lead Pathologist" that modify their interaction with the Bazaar or Museum.
+These should stay consistent with the canon in:
 
-#### 5. Influence-Gated Social Tiers (Macro Loop Expansion)
+* [2: The Mechanics](../game-overview/2-the-mechanics.md)
+* [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro.md)
 
-Using Historical Influence (HI), players can climb a social hierarchy that provides functional perks.
+#### 1. Advanced Assembly & Engineering (Blueprints)
 
-* The Clerical Tiers:
-  * Scavenger (Rank 0): Base access.
-  * Archive Clerk (Rank 1 - 1,000 HI): Unlocks the ability to "Watch" up to 5 Bazaar listings with real-time push notifications.
-  * Senior Pathologist (Rank 2 - 5,000 HI): Grants a dedicated "Certification" slot in the Bazaar, allowing the player to certify one item for free every 24 hours.
-  * High Curator (Rank 3 - 20,000 HI): Unlocks the "Master's Gallery"—a private sub-deck where players can display their 10 highest-HV items for public viewing without locking them from the Bazaar.
+Smelting is currently “break down junk”. This adds a creative craft/assembly layer.
 
-#### 6. "The Great Static" Anomalies (World Event Expansion)
+* Component discovery: High-tier zones can drop "Fragmented Components" (Lens Array, Corroded Circuit).
+* Assembly Bench: New deck where players combine components into custom tools or restored masterpieces.
+* Blueprint market: Recipes become tradable (supports “recipe hunters”).
 
-Fleshing out the 5% Anomaly chance and World Events, these create short-term "Mutators" for all players.
+#### 2. Archive Expeditions (Contracts + narrative)
 
-* Magnetic Interference: A global event where Auto-Diggers generate double Scrap, but Lab stability for electronic items (Rare tier) is reduced by 10%.
-* Archive Audit: A 24-hour window where the Archive Tax is temporarily increased to 10%, but all Museum scores are doubled.
-* Discovery Gold Rush: Triggered when a Unique item is found. For the next 60 minutes, the Crate Drop Rate is increased by +5% for all players currently in the same Zone.
+Formalize the Archive relationship as repeatable contracts.
+
+* Research requisitions: Requests for specific items + conditions (e.g., “Three Preserved Soda Tabs”).
+* Lore rewards: Vault Research Notes + temporary intel buffs.
+  * Keep intel readable. Prefer “bands/ranges”, not exact mint math.
+* Rank progression: Titles that unlock QoL in Bazaar/Museum.
+
+See: [1. Archive Expeditions (Contractual Narrative Quests)](macro-loop-expansion/1.-archive-expeditions-contractual-narrative-quests.md)
+
+#### 3. Influence-Gated Social Tiers (HI ladder)
+
+Spend Historical Influence (HI) to unlock social perks.
+
+* Archive Clerk (1,000 HI): Watch up to 5 Bazaar listings with push notifications.
+* Senior Pathologist (5,000 HI): One free certification per 24h.
+* High Curator (20,000 HI): “Master’s Gallery” display deck (no Bazaar lock).
+
+See: [2. Influence-Gated Social Tiers (Macro Loop Expansion)](macro-loop-expansion/2.-influence-gated-social-tiers-macro-loop-expansion.md)
+
+#### 4. “The Great Static” anomalies (world events)
+
+Time-boxed mutators that stack on top of core odds.
+
+* Magnetic Interference: Double Scrap from Auto-Diggers, and overload meter charges faster from Anomalies.
+* Archive Audit: Higher Archive Tax, but boosted Museum scoring.
+* Discovery Gold Rush: Short zone-based crate bonus after a Unique discovery.
+
+See: [3. "The Great Static" Anomalies (World Event Expansion)](macro-loop-expansion/3.-the-great-static-anomalies-world-event-expansion.md)

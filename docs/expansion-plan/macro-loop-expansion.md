@@ -1,6 +1,14 @@
 # Macro Loop Expansion
 
-The following expansion suggestions for the macro loop focus on deepening the player-driven economy, social competition, and long-term prestige systems while integrating with existing mechanics like Historical Influence (HI), Appraisal, and Digital Scarcity.
+These expansions deepen the macro loop: economy, social status, long-term sinks.
+
+They should integrate with:
+
+* Historical Influence (HI)
+* Appraisal as “intel + efficiency”
+* Digital scarcity (mint + condition)
+
+They should **not** contradict the canonical odds in [2: The Mechanics](../game-overview/2-the-mechanics.md).
 
 #### 1. The "Counter-Bazaar" (Black Market Trading)
 
@@ -51,3 +59,8 @@ Instead of competitive curation, these are specific, bureaucratic requests from 
 * The Mechanic: The Archive requests three specific items in a specific condition (e.g., "Two _Preserved_ Lightbulbs and one _Mint_ AA Battery").
 * Integration: Completing these contracts rewards unique Vault Research Notes that reveal hidden world-building or grant "Archive Clearance"—a temporary buff that shows the exact Mint Probability of any crate in the Lab.
 * Macro Impact: This encourages players to hunt for specific Condition Modifiers rather than just focusing on rarity.
+
+Alignment note:
+
+* Keep “Archive Clearance” consistent with Pre-Sift Appraisal rules.
+* It can upgrade **bands → more precise bands**, not reveal exact mint math or exact catalog IDs for free.

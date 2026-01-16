@@ -12,8 +12,6 @@ The Meso Loop is Workshop upgrades and efficiency scaling.
 
 ### 2.1 The Dig Site (Main Screen)
 
-#### 2.1 The Dig Site (Main Screen)
-
 The Dig Site, designated as \[01] THE FIELD, serves as the player's primary interface and represents the "Frontier" of the wasteland. It is designed with a high-noise, industrial aesthetic, featuring flickering text and scanlines to simulate a salvaged terminal.
 
 **The Active Dig (Manual)**
@@ -22,10 +20,13 @@ This is the core interaction for active play, allowing players to manually scave
 
 * The Action: A large, weathered button labeled \[EXTRACT].
 * The Mechanic: Each click triggers a "Survey" progress bar that takes between 0.5s and 2s to fill, depending on the equipped tool's efficiency. In the early stages (Phase 1), this action initiates a 3-second cooldown during which the button is disabled and the "Extraction Gauge" animates.
+  * Seismic Surge (optional active layer): During the bar fill, a timing “Sweet Spot” can appear. Clicking on the Sweet Spot grants a **Perfect Survey**.
 * The Output:
   * 80% Chance — Surface Scrap: The primary soft currency for workshop upgrades and training.
   * 15% Chance — Encapsulated Crate: Requires refinement in the Lab to reveal potential relics.
   * 5% Chance — Anomaly: Temporary mini-events or global modifiers that appear in the realtime feed.
+* Perfect Survey Bonus: +5% flat Crate drop rate for that specific action, plus bonus Excavation XP.
+  * Progression: Higher Excavation makes the Sweet Spot larger. Level 99 (“The Endless Vein”) can add a second Sweet Spot.
 
 **The Auto-Digger (Passive)**
 
@@ -49,6 +50,17 @@ Scrap is the fundamental currency used for progression, workshop upgrades, and e
 * Excavation Skill: Leveling this skill increases the base crate drop rate by +0.5% every five levels. At Level 99 Mastery ("The Endless Vein"), players gain a 15% chance for double loot drops on every find.
 * Tool Tiers: Higher-tier tools like the Industrial Drill or Seismic Array exponentially increase automation output (e.g., the Drill provides 100 Scrap/sec).
 * Collection Buffs: Completing sets like "The Morning Ritual" grants passive buffs, such as the "Caffeine Rush," which permanently reduces manual extraction cooldowns.
+
+#### Vault Heatmaps (Zone Strategy)
+
+Zones are not just cosmetics. Each unlocked zone exposes a visible **Static Intensity** heatmap.
+
+* Static tiers (example tuning): LOW / MED / HIGH
+  * Crate bonus: `+0% / +1% / +2%` flat while extracting in that zone.
+  * Lab penalty (for loot found there): `+0% / -2.5% / -5%` flat Sift Stability.
+* Source integrity: Crates should store their source zone + static tier at drop time. The Lab reads that stored metadata.
+* Personal Mitigation: High-level Excavators can **Survey** a zone to temporarily reduce the Static penalty for themselves.
+* Information Edge (Appraisal 99): “The Oracle” can see which item catalog IDs are currently “trending” per zone.
 
 ***
 
@@ -74,7 +86,15 @@ Refining is a multi-stage gambling process. Every "Encapsulated Crate" starts at
 A player’s effectiveness in the Lab is governed by their Restoration Skill. This skill is leveled by performing sifts, with successes granting full XP and failures providing a "Pity XP" award.
 
 * Stability Bonus: Every Restoration level adds a +0.1% flat bonus to the Stability Gauge, making high-level gambles significantly more viable for veterans.
-* Master Preserver: Reaching Level 99 grants the "Master Preserver" benefit, providing a permanent +10% Base Stability to all sifting tiers.
+* Master Preserver: Reaching Level 99 grants a permanent +10% Base Stability to all sifting tiers and makes the Stability needle 10% slower by default.
+
+#### Active Stabilization (Lab Triage)
+
+Sifting is not purely a binary roll. During the Stability needle swing, the player can spend **Fine Dust** to “Tether” the needle briefly.
+
+* This does not raise Stability directly.
+* It gives the player more time to **Force Stop** in a safer zone.
+* Restoration reduces Fine Dust cost per tether.
 
 **Failure States: The "Shatter" Outcomes**
 
@@ -83,6 +103,36 @@ If a stability check fails, the item Shatters. The severity of the failure and t
 * Standard Fail: The most common outcome. The player receives 5–10 Fine Dust, a material used for low-tier crafting.
 * Critical Fail: A catastrophic technical failure. The player receives zero materials, and the Refiner enters a 5-minute cooldown period due to overheating.
 * Cursed Fragment: There is a 1% chance upon shattering a high-tier item (Stage 3+) to recover a Cursed Fragment. These are rare components later used to craft "Stabilizer Charms" that can force a successful sift.
+
+#### Shatter Salvage (The Reaction Beat)
+
+When a sift fails and the “System Error” glitch fires, a 1-second reaction window opens.
+
+* Triggers on **Standard Fail** only. It does not trigger on Critical Fail / overheat.
+* If the player clicks **\[SALVAGE]** in time:
+  * Stage 1–2 shatters: Double Fine Dust payout.
+  * Stage 3+ shatters:
+    * Roll the Cursed Fragment chance as normal.
+    * If a fragment was rolled, salvage success recovers it.
+    * If salvage is missed, the fragment is lost in the break.
+* This is designed to make failure interactive without removing risk.
+
+#### Pre-Sift Appraisal (Crate Prep)
+
+Before the first sift (Stage 0), the player can pay a Scrap fee to **\[APPRAISE]** the crate.
+
+* On success: Reveal **Mint Probability** or a **Condition Range** preview (e.g., “80% Preserved+”).
+* Appraisal 60+: Also reveals one hidden sub-stat that will apply if the item is successfully claimed.
+
+#### Anomaly Overload (The Combo Meter)
+
+Anomalies fill an **Overload Meter** (3 segments) in the header UI.
+
+* At 3 segments, the player can trigger **Overload** manually.
+* Overload lasts 60 seconds:
+  * +50% extraction speed.
+  * Raw Open: If the result would have been Junk, it has an extra 5% chance to upgrade to Common.
+* World Event hook: During “Magnetic Interference,” anomalies fill the meter twice as fast.
 
 **Sensory Payoff: "The Reveal"**
 

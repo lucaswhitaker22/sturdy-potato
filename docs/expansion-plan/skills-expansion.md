@@ -7,7 +7,7 @@ To further deepen the RPG experience in Relic Vault, the following expansions fo
 Currently, skills primarily provide passive bonuses. Introducing active abilities would allow players to strategically influence the Micro and Meso loops.
 
 * Excavation — "Focused Survey": A toggleable ability that increases the Crate Drop Rate by +10% for 60 seconds but consumes Scrap per second.
-* Restoration — "Emergency Glue": A high-cooldown reaction. If a Sift results in a Shatter, the player has 3 seconds to click this ability to "save" the crate at its current stage, costing a Cursed Fragment.
+* Restoration — "Emergency Glue": A high-cooldown reaction on Standard Fail. During the Shatter beat, the player has 1 second to click this ability to “stabilize the wreck,” costing a Cursed Fragment.
 * Appraisal — "Hype Train": For a brief window, the player can "promote" their own Bazaar listing in the Global Feed, increasing its visibility for a small fee.
 * Smelting — "Overclock Furnace": Temporarily doubles Smelting XP gain and Scrap output but increases the risk of a "Critical Fail" (cooldown) on all Lab actions for 10 minutes.
 
@@ -25,7 +25,7 @@ Upon reaching Level 60, players could choose a "Specialist Branch" for each skil
   * Certified Valuator: Fees for certifying items for other players are reduced, and certifications grant a higher HV boost.
   * Economic Insider: Grants a 5-minute advanced warning in the Global Feed before a World Event or Museum Theme changes.
 * Smelting Specializations:
-  * Fragment Alchemist: Higher chance to recover Cursed Fragments from shatters.
+  * Fragment Alchemist: Higher chance to roll Cursed Fragments on Stage 3+ shatters. Can also buff Shatter Salvage (longer window or better recovery).
   * Scrap Tycoon: Maximizes Scrap yield from Junk-tier items.
 
 #### 3. Cross-Skill Masteries (Synergy Unlocks)

@@ -36,7 +36,7 @@
     * [4. "Pre-Sift Appraisal" (Crate Prep)](expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md)
     * [5. "Shatter Salvage" (The Reaction Beat)](expansion-plan/micro-loop-expansion/5.-shatter-salvage-the-reaction-beat.md)
     * [6. "Vault Heatmaps" (Zone Strategy)](expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md)
-  * [Macro Loop Expansion](expansion-plan/macro-loop-expansion/README.md)
+  * [Macro Loop Expansion](expansion-plan/macro-loop-expansion.md)
     * [1. Archive Expeditions (Contractual Narrative Quests)](expansion-plan/macro-loop-expansion/1.-archive-expeditions-contractual-narrative-quests.md)
     * [2. Influence-Gated Social Tiers (Macro Loop Expansion)](expansion-plan/macro-loop-expansion/2.-influence-gated-social-tiers-macro-loop-expansion.md)
     * [3. "The Great Static" Anomalies (World Event Expansion)](expansion-plan/macro-loop-expansion/3.-the-great-static-anomalies-world-event-expansion.md)
