@@ -580,6 +580,19 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  async function refreshLabState() {
+    if (!userSessionId.value) return;
+    const { data: labResp } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userSessionId.value });
+    if (labResp?.success && labResp.lab_state) {
+      const lab = labResp.lab_state;
+      labState.value = {
+        isActive: lab.is_active,
+        currentStage: lab.current_stage,
+        activeCrate: lab.active_crate
+      };
+    }
+  }
+
   async function startSifting(crateId: string) {
     if (crateTray.value.length > 0 && !labState.value.isActive) {
       try {
@@ -590,12 +603,19 @@ export const useGameStore = defineStore('game', () => {
           }
         });
         if (data?.success) {
+          // Force state to match what we expect
           labState.value.isActive = true;
           labState.value.currentStage = 0;
-          // Optimistically remove or wait for sync?
-          // Let's rely on the RPC result or realtime.
           addLog('Crate moved to Lab.');
-          await init(); // Refresh state for now to be safe
+
+          // Targeted refresh instead of full init
+          await refreshLabState();
+          // Also refresh profile to update crate tray
+          const { data: profileResp } = await supabase.rpc('rpc_get_profile', { p_user_id: userSessionId.value });
+          if (profileResp?.success && profileResp.profile) {
+            crateTray.value = profileResp.profile.crate_tray || [];
+            trayCount.value = Number(profileResp.profile.tray_count || 0);
+          }
         } else {
           addLog(`Start Sift Error: ${data?.error || error?.message}`);
         }
@@ -879,5 +899,6 @@ export const useGameStore = defineStore('game', () => {
 
     // Debug / Dev
     checkOfflineGains,
+    refreshLabState,
   };
 });
