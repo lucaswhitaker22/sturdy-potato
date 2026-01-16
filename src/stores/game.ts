@@ -650,14 +650,28 @@ export const useGameStore = defineStore('game', () => {
     return null;
   }
 
+  async function fetchInventory() {
+    if (!userSessionId.value) return;
+    const { data: items } = await supabase.from('vault_items').select('*').eq('user_id', userSessionId.value);
+    if (items) {
+      inventoryStore.inventory = items.map((i: any) => {
+        const def = inventoryStore.catalog.find(d => d.id === i.item_id);
+        return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
+      }) as VaultItem[];
+    }
+  }
+
   async function claim() {
     const { data, error } = await supabase.rpc('rpc_claim', { p_user_id: userSessionId.value });
     if (data?.success) {
       const item = data.item;
+
+      // Fix: Update inventory immediately
+      await fetchInventory();
+
       addLog(`ANALYSIS COMPLETE: Found ${item.name}`);
       labState.value.isActive = false;
       labState.value.currentStage = 0;
-      // inventoryStore.inventory will ideally update via realtime or we push manually
       return item;
     }
     const errMsg = error?.message || data?.error || JSON.stringify(data) || 'Unknown Error';
@@ -900,5 +914,6 @@ export const useGameStore = defineStore('game', () => {
     // Debug / Dev
     checkOfflineGains,
     refreshLabState,
+    fetchInventory,
   };
 });
