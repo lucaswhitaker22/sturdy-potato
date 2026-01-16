@@ -202,3 +202,32 @@ In the Bazaar, Prismatic Relics represent the pinnacle of digital scarcity.
 
 * Bidding Wars: Due to their triple HV and premium conversion potential, Prismatics often command the highest bids in Scrap or Vault Credits.
 * The Collector’s Ultimate Flex: Because the Prismatic state is independent of the Mint Number, finding a Prismatic #001 is considered the rarest achievement in _Relic Vault_, granting the owner significant prestige and Historical Influence.
+
+***
+
+### 3.6 Ownership states (escrow, leased, endowed)
+
+Items can be “real” objects in multiple systems.\n These states must be explicit and mutually compatible.
+
+#### Escrow (Bazaar listing)
+
+* The item is locked.\n
+* It cannot be smelted, leased, endowed, or submitted to the Museum.\n
+* Settlement is server-authoritative.
+
+#### Leased (rental economy)
+
+* The item temporarily moves to the borrower.\n
+* It becomes `LEASED` and untradeable.\n
+* It cannot be smelted, dissolved, endowed, or donated.\n
+* Leased items may enable **temporary** set buffs only.\n
+
+Details: [Artifact Leasing (The Rental Economy)](../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
+
+#### Endowed (permanent sink)
+
+* The item is permanently burned.\n
+* A Hall of Fame entry is created.\n
+* The item must never re-enter trade.\n
+
+Details: [Museum Endowments (Permanent Prestige)](../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)

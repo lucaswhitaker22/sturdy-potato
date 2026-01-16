@@ -15,8 +15,8 @@ The game is organized into five primary "Decks" (Tabs). Navigation is handled vi
 | \[01] THE FIELD  | Primary Gameplay | Large \[EXTRACT] button, **Vault Heatmaps**, Tool Status, Overload Meter.                       |
 | \[02] THE LAB    | RNG / Gambling   | Sifting tray, Stability gauge, **Tether controls**, Pre-Sift Appraisal, Shatter Salvage prompt. |
 | \[03] THE VAULT  | Inventory / RPG  | Grid view, Set completion trackers, Skill level bars.                                           |
-| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots.                                             |
-| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Global quests, Influence shop.                                              |
+| \[04] THE BAZAAR | MMO Economy      | Live auction ticker, Search filters, Listing slots, Bazaar/Counter-Bazaar toggle, Lease Offers. |
+| \[05] ARCHIVE    | Social / Macro   | Museum leaderboard, Contracts/Expeditions, Status Tiers, Hall of Fame (Endowments).             |
 
 #### The Flow: "The Scavenger's Routine"
 

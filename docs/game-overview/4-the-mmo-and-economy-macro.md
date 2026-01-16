@@ -55,6 +55,28 @@ The Bazaar is categorized as an "Oasis" screen, designed to feel like the safety
 * Visual Language: Unlike the high-noise "Wasteland" screens, the Bazaar features clean text, search filters, and stable UI elements.
 * Mobile Scaling: On mobile devices, the Bazaar includes large, thumb-accessible buttons and a condensed single-line Global Feed at the top of the screen.
 
+#### 4.1.1 The Counter-Bazaar (high-risk lane)
+
+The Counter-Bazaar is a parallel listing lane.\n It trades fees for uncertainty.
+
+* Archive Tax: `0%`.
+* Confiscation Risk: listings can be seized on a timed roll.
+* Appraisal reduces risk.
+* Appraisal 99 can unlock hidden “Under-the-Table” listings.
+
+Details: [The "Counter-Bazaar" (Black Market Trading)](../expansion-plan/macro-loop-expansion/1.-the-counter-bazaar-black-market-trading.md)
+
+#### 4.1.2 Artifact Leasing (temporary transfers)
+
+Leasing is a “rent, don’t sell” economy lane.\n It supports set completion without permanent transfers.
+
+Key rules:
+
+* Leased items are untradeable and cannot be donated/endowed.
+* Lease expiry auto-returns the item.
+
+Details: [Artifact Leasing (The Rental Economy)](../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
+
 ***
 
 ### 4.2 The Global Museum (Social Leaderboard)
@@ -94,6 +116,21 @@ The primary reward for Museum participation is Historical Influence, a non-trada
 
 * Influence Shop: HI can be spent in a specialized shop for high-level unlocks, including Zone Permits for new dig sites, elite skill training (levels 90–99), custom username titles for the global feed, and massive Vault expansions.
 * Social Proof: High-ranking curators display their "Master's Badges" in the Museum and Bazaar, signaling their expertise and status to the rest of the community.
+
+#### 4.2.1 Museum Endowments (Hall of Fame sink)
+
+Endowments are permanent item burns.\n They create a long-term Hall of Fame beyond weekly rotations.
+
+* Eligibility: Mythic+ recommended.
+* Reward: small permanent prestige.
+
+Details: [Museum Endowments (Permanent Prestige)](../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)
+
+#### 4.2.2 Influence tiers + Syndicate Permits
+
+HI can also buy permanent social ranks.\n Teams can pool HI for temporary zone access.
+
+Details: [Influence-Gated Social Tiers (and Syndicate Excavations)](../expansion-plan/macro-loop-expansion/2.-influence-gated-social-tiers-and-syndicate-excavations.md)
 
 ***
 
@@ -169,3 +206,16 @@ As players increase their Total Level (the sum of all four skills), they unlock 
 * Zone Permits: Specific high-level dig sites, such as _The Sunken Mall_ (Total Level 100) or _The Sovereign Vault_ (Total Level 380), are gated by skill progress.
 * The "Master's Badge": Reaching Level 99 in any skill triggers a Global Announcement in the feed: _"ARCHIVE ALERT: \[PlayerName] has achieved Level 99 Restoration!"_.
 * UI Transformation: Mastery results in a permanent icon next to the player's name in the Bazaar and Global Museum, signaling their status as an elite specialist to the community.
+
+### 4.5 World Events (“The Great Static”)
+
+World Events are server-owned timed mutators.\n They must not modify canonical loot odds.
+
+They can:
+
+* Change Bazaar tax.
+* Change Smelting yields.
+* Add explicit Museum scoring multipliers.
+* Add zone-local chase events.
+
+Details and guardrails: ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md)

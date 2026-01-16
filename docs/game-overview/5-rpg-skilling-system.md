@@ -41,6 +41,9 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 * XP Mechanics: Gained through active participation in the Bazaar's player-driven economy.
 * Mid-Game Milestones: At Level 60, players reveal hidden sub-stats and can perform Pre-Sift Appraisal to preview Mint Probability / Condition Range before gambling deeper.
 * Mastery: Unlocks “The Oracle” intel layer (zone trending IDs + best-in-slot previews) and the "Auctioneer" title. Also provides the lowest possible Archive Tax.
+* Macro expansions:\n
+  * Reduces Counter-Bazaar confiscation risk.\n
+  * Appraisal `90+` can receive early warnings for major Static events.\n See ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 
 4\. Smelting (The Refiner)
 
