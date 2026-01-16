@@ -23,40 +23,48 @@ Skills are leveled up through Action-Based Experience (XP). Every time a player 
 
 1\. Excavation (The Gatherer)
 
+Full spec: [Excavation](excavation.md).
+
 * XP Mechanics: Granted upon completion of a manual extraction or an automated tick.
 * Progression Perks: Every 5 levels increases the Crate Drop Rate by 0.5%.
 * Seismic Surge Synergy: Higher Excavation makes the extraction “Sweet Spot” larger.
-* Vault Heatmap Synergy: Higher Excavation unlocks **Survey**, temporarily reducing Static penalties on loot from a chosen zone.
-* Active ability (60+): **Focused Survey**.\n Paid 60s window that adds `+10%` flat Crate chance on manual extracts (clamped).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
-* Sub-specialization (pick at 60): **Urban Scavenger** vs **Tech Hunter**.\n These bias identity weighting after rarity is decided.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Vault Heatmap Synergy: Excavation `70+` unlocks **Survey**, temporarily reducing Static penalties on loot from a chosen zone.
+* Active ability (60+): **Focused Survey**.\n Paid 60s window that adds `+10%` flat Crate chance on manual extracts (clamped).\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Urban Scavenger** vs **Tech Hunter**.\n These bias identity weighting after rarity is decided.\n Details: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: At Level 99, Excavators become the primary suppliers for the Bazaar by finding unique blueprints required for high-tier Workshop upgrades.
 
 2\. Restoration (The Gambler)
 
+Full spec: [Restoration](restoration.md).
+
 * XP Mechanics: Completion of a Sift attempt awards XP. Success provides 100% XP, while a failure/shatter grants a 25% "Pity XP" award.
 * Progression Perks: Every level adds a +0.1% flat bonus to the Stability Gauge (Success Chance).
 * Active Stabilization Synergy: Restoration reduces the Fine Dust cost to “Tether” the Stability needle.
-* Active reaction (60+): **Emergency Glue**.\n On Standard Fail only, spend `1` Cursed Fragment to convert the fail into a forced claim at the current stage.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
-* Sub-specialization (pick at 60): **Stable Hand** (Stage 1–3 stability) vs **Quantum Gambler** (Stage 4–5 stability).\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Active reaction (60+): **Emergency Glue**.\n On Standard Fail only, spend `1` Cursed Fragment to convert the fail into a forced claim at the current stage.\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Stable Hand** (Stage 1–3 stability) vs **Quantum Gambler** (Stage 4–5 stability).\n Details: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Beyond the stability capstone, Masters receive a permanent boost to the Historical Value (HV) of every relic they recover, increasing their Museum and Bazaar potential.
 
 3\. Appraisal (The Merchant)
 
+Full spec: [Appraisal](appraisal.md).
+
 * XP Mechanics: Gained through active participation in the Bazaar's player-driven economy.
 * Mid-Game Milestones: At Level 60, players reveal hidden sub-stats and can perform Pre-Sift Appraisal to preview Mint Probability / Condition Range before gambling deeper.
-* Active ability (60+): **Hype Train**.\n Pay Scrap to promote one of your own listings for `5m` (visibility only).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
-* Sub-specialization (pick at 60): **Certified Valuator** vs **Economic Insider**.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Active ability (60+): **Hype Train**.\n Pay Scrap to promote one of your own listings for `5m` (visibility only).\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Certified Valuator** vs **Economic Insider**.\n Details: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Unlocks “The Oracle” intel layer (zone trending IDs + best-in-slot previews) and the "Auctioneer" title. Also provides the lowest possible Archive Tax.
 * Macro expansions:\n
   * Reduces Counter-Bazaar confiscation risk.\n
-  * Appraisal `90+` can receive early warnings for major Static events.\n See ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
+  * Appraisal `90+` can receive early warnings for major Static events.\n See ["The Great Static" Events (incl. Static Pulses)](../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 
 4\. Smelting (The Refiner)
 
+Full spec: [Smelting](smelting.md).
+
 * XP Mechanics: Earned by converting unwanted finds or junk into Scrap.
 * Mid-Game Milestones: Level 60 unlocks "Bulk Auto-Smelt," allowing players to process entire tiers of junk instantly.
-* Active ability (60+): **Overclock Furnace**.\n 60s burst for smelting XP/yield, followed by a Lab overheat-risk debuff for 10m.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
-* Sub-specialization (pick at 60): **Fragment Alchemist** vs **Scrap Tycoon**.\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Active ability (60+): **Overclock Furnace**.\n 60s burst for smelting XP/yield, followed by a Lab overheat-risk debuff for 10m.\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+* Sub-specialization (pick at 60): **Fragment Alchemist** vs **Scrap Tycoon**.\n Details: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
 * Mastery: Provides the highest yield of raw materials, plus top-tier salvage potential for crafting Stabilizer Charms.
 
 ***
@@ -105,7 +113,7 @@ The "Total Level" (the sum of all four primary skills) serves as a secondary pro
 
 In _Relic Vault_, skills are not isolated silos; they are designed to feed into one another, encouraging a balanced playstyle and rewarding players who diversify their expertise. This cross-training creates specialized "gameplay loops" that maximize efficiency and economic power.
 
-This section describes “how skills feed each other”.\n The explicit late-game reward layer is **Cross-Skill Masteries**.\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
+This section describes “how skills feed each other”.\n The explicit late-game reward layer is **Cross-Skill Masteries**.\n Details: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
 
 **1. The Archaeologist Loop (Gatherer + Gambler)**
 
@@ -218,10 +226,10 @@ In addition to raw skill levels, advanced zones often require a physical "Zone P
 
 These systems extend the four-skill model without rewriting core RNG.\n They are defined in the Skills Expansion set:
 
-* Active skill abilities: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
-* Sub-specializations: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
-* Cross-skill masteries: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
-* Skill-gated blueprints: [Skill-Gated "Ancient Blueprints"](../expansion-plan/skills-expansion/4.-skill-gated-ancient-blueprints.md)
+* Active skill abilities: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
+* Sub-specializations: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
+* Cross-skill masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
+* Skill-gated blueprints: [Skill-Gated "Ancient Blueprints"](../../expansion-plan/skills-expansion/4.-skill-gated-ancient-blueprints.md)
 
 ### 5.7 Prestige (optional): Archive Rebirth
 
@@ -234,4 +242,4 @@ High-level intent:
 * Gain a small, global modifier per ribbon (tunable).
 * Masteries that depend on the reset skill deactivate until re-earned.
 
-Canon reference: [Skills Expansion](../expansion-plan/skills-expansion.md).
+Canon reference: [Skills Expansion](../../expansion-plan/skills-expansion.md).

@@ -13,7 +13,7 @@ In this phase, every click counts for more than just Scrap. We introduce the Exp
 #### 1.1 Excavation Skill (The Gatherer)
 
 * XP Source: Every time a manual \[EXTRACT] finishes or an "Auto-dig" tick occurs.
-* The Curve: Use the OSRS-style curve from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
+* The Curve: Use the OSRS-style curve from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/).
 * The Payoff: Every 5 levels increases your "Crate Drop Rate" by 0.5%.
 
 #### 1.2 Restoration Skill (The Gambler)

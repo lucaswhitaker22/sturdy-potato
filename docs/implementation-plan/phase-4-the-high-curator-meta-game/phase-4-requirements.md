@@ -20,7 +20,7 @@ It must fully “cover” the functionality described in:
 * [0 - Game Loop](../../game-overview/0-game-loop.md)
 * [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
 * [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md)
-* [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)
+* [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/)
 * [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
 
 Coverage means:
@@ -197,7 +197,7 @@ They must be consistent across:
 
 #### L1 — XP to level mapping
 
-All skills must use the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
+All skills must use the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/).
 
 The UI must show:
 
@@ -370,7 +370,7 @@ Access to high-tier dig sites must be dual-gated:
 * A Zone Permit (HI purchase), and
 * A Total Level requirement (sum of Excavation + Restoration + Appraisal + Smelting levels).
 
-Minimum gates (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)):
+Minimum gates (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/)):
 
 * The Sunken Mall: Total Level `100`
 * The Corporate Archive: Total Level `250`
@@ -632,7 +632,7 @@ The badge must be visible in:
 
 #### R25 — Level 99 mastery perks (canon)
 
-When a player reaches level 99, the corresponding perk must activate permanently (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)):
+When a player reaches level 99, the corresponding perk must activate permanently (from [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/)):
 
 * Excavation: “The Endless Vein”
   * 15% chance for “double loot” on finds.

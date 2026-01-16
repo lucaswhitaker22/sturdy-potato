@@ -39,10 +39,11 @@ The core mechanics and gameplay features of Relic Vault are structured into thre
 #### Meso Loop Mechanics: Progression & Skilling
 
 * RPG Skilling System: Action-based XP is earned for four core skills:
-  * Excavation: Improves crate drop rates and unlocks high-tier tool blueprints.
-  * Restoration: Increases sifting stability and grants Historical Value (HV) bonuses to claimed items.
-  * Appraisal: Enables Pre-Sift Appraisal previews, reveals hidden item stats, unlocks certifications, and reduces market fees.
-  * Smelting: Increases Scrap yield from junk and facilitates bulk processing.
+  * [Excavation](game-overview/5-rpg-skilling-system/excavation.md): Improves crate drop rates and unlocks high-tier tool blueprints.
+  * [Restoration](game-overview/5-rpg-skilling-system/restoration.md): Increases sifting stability and grants Historical Value (HV) bonuses to claimed items.
+  * [Appraisal](game-overview/5-rpg-skilling-system/appraisal.md): Enables Pre-Sift Appraisal previews, reveals hidden item stats, unlocks certifications, and reduces market fees.
+  * [Smelting](game-overview/5-rpg-skilling-system/smelting.md): Increases Scrap yield from junk and facilitates bulk processing.
+  * Full system overview: [5 - RPG Skilling System](game-overview/5-rpg-skilling-system/)
 * Advanced skilling (60+): Each skill gains a “press moment” and a build choice.
   * Active abilities (unlocked at level `60`): Focused Survey, Emergency Glue, Hype Train, Overclock Furnace.
   * Sub-specializations (chosen at level `60`): one branch per skill (respec later).

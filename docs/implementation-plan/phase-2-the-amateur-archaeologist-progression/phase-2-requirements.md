@@ -18,7 +18,7 @@ It must fully “cover” the functionality described in:
 * [0 - Game Loop](../../game-overview/0-game-loop.md)
 * [2: The Mechanics](../../game-overview/2-the-mechanics.md)
 * [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
-* [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md)
+* [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/)
 * [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
 
 Coverage means:
@@ -139,7 +139,7 @@ XP must never decrease.
 
 #### R2 — Level curve
 
-The level curve must follow the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system.md).
+The level curve must follow the OSRS-style curve in [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/).
 
 The total XP required for a given level $$L$$ is:
 

@@ -60,7 +60,7 @@ Zones are not just cosmetics. Each unlocked zone exposes a visible **Static Inte
   * Crate bonus: `+0% / +1% / +2%` flat while extracting in that zone.
   * Lab penalty (for loot found there): `+0% / -2.5% / -5%` flat Sift Stability.
 * Source integrity: Crates should store their source zone + static tier at drop time. The Lab reads that stored metadata.
-* Personal Mitigation: High-level Excavators can **Survey** a zone to temporarily reduce the Static penalty for themselves.
+* Personal Mitigation: Excavation `70+` can **Survey** a zone to temporarily reduce the Static penalty for themselves (recommended gate).
 * Information Edge (Appraisal 99): “The Oracle” can see which item catalog IDs are currently “trending” per zone.
 
 ***

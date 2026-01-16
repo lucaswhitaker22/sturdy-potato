@@ -8,7 +8,11 @@
 * [2: The Mechanics](game-overview/2-the-mechanics.md)
 * [3 - The Loot & Collection Schema](game-overview/3-the-loot-and-collection-schema.md)
 * [4 - The MMO & Economy (Macro)](game-overview/4-the-mmo-and-economy-macro.md)
-* [5 - RPG Skilling System](game-overview/5-rpg-skilling-system.md)
+* [5 - RPG Skilling System](game-overview/5-rpg-skilling-system/README.md)
+  * [Excavation](game-overview/5-rpg-skilling-system/excavation.md)
+  * [Restoration](game-overview/5-rpg-skilling-system/restoration.md)
+  * [Appraisal](game-overview/5-rpg-skilling-system/appraisal.md)
+  * [Smelting](game-overview/5-rpg-skilling-system/smelting.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
 
 ## Implementation Plan

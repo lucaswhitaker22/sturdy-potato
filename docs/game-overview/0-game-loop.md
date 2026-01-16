@@ -95,7 +95,7 @@ Advanced layer (align with [Skills Expansion](../expansion-plan/skills-expansion
 * Optional endgame prestige:
   * “Archive Rebirth” (reset for ribbons + small permanent account perks).
 
-Skill definitions live in [5 - RPG Skilling System](5-rpg-skilling-system.md).
+Skill definitions live in [5 - RPG Skilling System](5-rpg-skilling-system/).
 
 #### Collection: Sets as Long-Term Goals
 
