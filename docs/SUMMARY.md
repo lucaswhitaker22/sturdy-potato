@@ -5,7 +5,7 @@
 * [Game Overview](README.md)
 * [0 - Game Loop](game-overview/0-game-loop.md)
 * [1. The Vision & World Bible](game-overview/1.-the-vision-and-world-bible.md)
-* [2: The Mechanics](game-overview/2-the-mechanics/README.md)
+* [2: The Mechanics](game-overview/2-the-mechanics.md)
   * [The Dig Site (Main Screen)](game-overview/2-the-mechanics/the-dig-site-main-screen.md)
   * [The Refiner (The Gambling Hub)](game-overview/2-the-mechanics/the-refiner-the-gambling-hub.md)
   * [The Workshop (Progression)](game-overview/2-the-mechanics/the-workshop-progression.md)
@@ -24,6 +24,7 @@
   * [Restoration](game-overview/5-rpg-skilling-system/restoration.md)
   * [Appraisal](game-overview/5-rpg-skilling-system/appraisal.md)
   * [Smelting](game-overview/5-rpg-skilling-system/smelting.md)
+* [6 - Progression, Quests, Achievements](game-overview/6-progression-quests-achievements.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
 
 ## Implementation Plan

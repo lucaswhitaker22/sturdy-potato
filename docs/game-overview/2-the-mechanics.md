@@ -21,7 +21,7 @@ This is the core interaction for active play, allowing players to manually scave
 * The Action: A large, weathered button labeled \[EXTRACT].
 * The Mechanic: Each click triggers a "Survey" progress bar that takes between 0.5s and 2s to fill, depending on the equipped tool's efficiency. In the early stages (Phase 1), this action initiates a 3-second cooldown during which the button is disabled and the "Extraction Gauge" animates.
   * Seismic Surge (optional active layer): During the bar fill, a timing “Sweet Spot” can appear. Clicking on the Sweet Spot grants a **Perfect Survey**.
-  * Excavation active ability (60+): **Focused Survey**.\n A paid 60s buff window that adds `+10%` flat Crate chance on **manual** extracts (clamped `≤ 95%`).\n It never changes the 5% Anomaly roll.\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+  * Excavation active ability (60+): **Focused Survey**.\n A paid 60s buff window that adds `+10%` flat Crate chance on **manual** extracts (clamped `≤ 95%`).\n It never changes the 5% Anomaly roll.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
 * The Output:
   * 80% Chance — Surface Scrap: The primary soft currency for workshop upgrades and training.
   * 15% Chance — Encapsulated Crate: Requires refinement in the Lab to reveal potential relics.
@@ -127,7 +127,7 @@ Emergency Glue is a rare “save” button that fires in the same 1-second failu
 * Effect: converts the failure into a forced **\[CLAIM]** at the **current stage**.\n It never converts a fail into a success.
 * Interaction rule: one failure beat = one reaction choice.\n If both buttons exist, the first pressed wins (the other disables).
 
-Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
 
 #### Pre-Sift Appraisal (Crate Prep)
 
@@ -195,7 +195,7 @@ Once a tool reaches "Max Efficiency," it can be Overclocked. This serves as a "s
 * The Reward: The process grants a permanent +5% multiplier to the "Sift" success rate in the Lab, making high-risk refinement significantly safer.
 
 {% hint style="info" %}
-Overclocking is tool-based “soft prestige”.\n It is separate from the optional skilling prestige concept (“Archive Rebirth”) in [Skills Expansion](../../expansion-plan/skills-expansion.md).
+Overclocking is tool-based “soft prestige”.\n It is separate from the optional skilling prestige concept (“Archive Rebirth”) in [Skills Expansion](../expansion-plan/skills-expansion.md).
 {% endhint %}
 
 **UI Component Summary**
@@ -215,8 +215,8 @@ This document defines canonical micro/meso odds.\n Macro systems must not rewrit
 
 Allowed:\n
 
-* World Events applying explicit, time-boxed modifiers.\n See ["The Great Static" Events (incl. Static Pulses)](../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
-* Contracts that change what players pursue.\n They never change base drop tables.\n See [Lore Keeper Requisitions (Archive Expeditions)](../../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
+* World Events applying explicit, time-boxed modifiers.\n See ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
+* Contracts that change what players pursue.\n They never change base drop tables.\n See [Lore Keeper Requisitions (Archive Expeditions)](../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
 
 Never allowed:\n
 

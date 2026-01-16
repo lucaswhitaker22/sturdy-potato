@@ -22,7 +22,7 @@ It is not rolled on failures.
 
 It is not found “directly” in the Field.
 
-Lab loop context: [2: The Mechanics](../2-the-mechanics/).
+Lab loop context: [2: The Mechanics](../2-the-mechanics.md).
 
 #### What it can apply to
 
