@@ -22,11 +22,11 @@ It’s an economy + efficiency tool.
 
 Canon anchors:
 
-* Core economy surfaces: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/)
+* Core economy surfaces: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * Smelt ability framework: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Smelting branches: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
 * Smelting masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
-* Canon lab fail outputs (Fine Dust / Cursed Fragments): [2: The Mechanics](../2-the-mechanics.md)
+* Canon lab fail outputs (Fine Dust / Cursed Fragments): [2: The Mechanics](../2-the-mechanics/)
 
 ### What Smelting affects (and what it never touches)
 
@@ -191,7 +191,7 @@ Canon shatter notes:
 * Standard Fail pays Fine Dust.
 * Stage `3+` shatters have a `1%` chance to roll a Cursed Fragment.
 
-Source: [2: The Mechanics](../2-the-mechanics.md).
+Source: [2: The Mechanics](../2-the-mechanics/).
 
 If you ever let Smelting modify fragment chance:
 
@@ -307,5 +307,5 @@ Track:
 * Smelting active ability: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Smelting branches: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
 * Smelting-related masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
-* Canon Lab fail materials: [2: The Mechanics](../2-the-mechanics.md)
+* Canon Lab fail materials: [2: The Mechanics](../2-the-mechanics/)
 * Lock state rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)

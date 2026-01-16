@@ -44,7 +44,7 @@ It can only apply explicit modifiers that are:
 
 Items enter the Vault by being **claimed** from the Lab loop.
 
-See [2: The Mechanics](../2-the-mechanics.md).
+See [2: The Mechanics](../2-the-mechanics/).
 {% endstep %}
 
 {% step %}
@@ -76,7 +76,7 @@ They **can** still be used for **Museum submissions** (recommended), since that�
 
 Museum locking is a separate temporary lock.
 
-See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 {% endstep %}
 {% endstepper %}
 
@@ -96,7 +96,7 @@ Collections add a new lock state (`SET_LOCKED`) that must coexist with the other
 * **Escrow** (Bazaar listing): locked, cannot be smelted/leased/endowed/Museum.
   * See [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
 * **Museum lock** (weekly submission): locked until week ends.
-  * See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+  * See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 * **Leased**: temporary, untradeable, cannot be smelted/dissolved/endowed/Museum.
   * Leased items can enable **temporary** set buffs only.
   * See [Artifact Leasing (The Rental Economy)](../../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md).
@@ -162,7 +162,7 @@ Recommended: keep collection rewards mostly **progression/QoL**, not raw Museum 
 
 Museum scoring already has set multipliers when you submit full themed sets.
 
-See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 
 ### Tiering framework (T0 → T5)
 
@@ -209,7 +209,7 @@ Any numeric values marked “tunable” are not canon.
 
 * Required items: AA Battery, Flashlight, Remote Control, USB Flash Drive (2GB)
 * Reward (tunable): `+1h` Battery Capacity for offline gains
-  * Pairs with the offline cap system in [2: The Mechanics](../2-the-mechanics.md).
+  * Pairs with the offline cap system in [2: The Mechanics](../2-the-mechanics/).
 
 **Set: “The Office” (example string used in requirements)**
 
@@ -228,7 +228,7 @@ Any numeric values marked “tunable” are not canon.
 
 * Required items: Eyeglass Frame, Safety Pin, Rubber Band, Lightbulb
 * Reward (tunable): `-10%` Fine Dust cost for Active Stabilization tethering
-  * Pairs with the triage layer in [2: The Mechanics](../2-the-mechanics.md).
+  * Pairs with the triage layer in [2: The Mechanics](../2-the-mechanics/).
 
 #### T4 — Economy sets (Bazaar efficiency)
 

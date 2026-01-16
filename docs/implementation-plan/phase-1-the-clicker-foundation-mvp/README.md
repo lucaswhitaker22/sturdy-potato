@@ -6,7 +6,7 @@ The MVP ships the Micro Loop:
 
 Field → Lab → Vault.
 
-Terms and core odds align to [2: The Mechanics](../../game-overview/2-the-mechanics.md).
+Terms and core odds align to [2: The Mechanics](../../game-overview/2-the-mechanics/).
 
 Build contract: [Phase 1 (MVP) requirements](phase-1-mvp-requirements.md).
 

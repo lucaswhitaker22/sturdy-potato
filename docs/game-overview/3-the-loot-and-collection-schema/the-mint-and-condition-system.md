@@ -22,7 +22,7 @@ It does not control:
 * Lab success odds.
 * Any extraction odds.
 
-Those are defined in [2: The Mechanics](../2-the-mechanics.md).
+Those are defined in [2: The Mechanics](../2-the-mechanics/).
 
 ### Data model (minimum)
 
@@ -125,7 +125,7 @@ Mint and Condition are part of the “reveal stamp” beat.
 
 They are never previewed for free at low levels.
 
-Lab loop details live in [2: The Mechanics](../2-the-mechanics.md).
+Lab loop details live in [2: The Mechanics](../2-the-mechanics/).
 
 #### Appraisal (bounded information, never RNG changes)
 
@@ -186,7 +186,7 @@ Bazaar listings should surface:
 * certification badge (if any)
 * HV breakdown (if HV is shown)
 
-Bazaar and tax rules: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+Bazaar and tax rules: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 
 #### Smelting (item sink, not identity rewrite)
 

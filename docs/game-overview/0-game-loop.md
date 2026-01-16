@@ -26,7 +26,7 @@ This matches the navigation flow in [6 - UI/UX Wireframe & Flow](6-ui-ux-wirefra
 * Optional active layer (Seismic Surge): A timing “Sweet Spot” can appear on the progress bar. Hitting it grants a **Perfect Survey** (+5% flat Crate drop rate for that action) and bonus Excavation XP.
 * Zone strategy layer (Vault Heatmaps): Each zone has a visible **Static Intensity**. High static grants +2% Crate drop rate, but applies a -5% Sift Stability penalty to items found there.
 
-Detailed mechanics live in [2: The Mechanics](2-the-mechanics.md).
+Detailed mechanics live in [2: The Mechanics](2-the-mechanics/).
 
 #### Step B — Refining (THE LAB)
 
@@ -118,7 +118,7 @@ The macro loop makes finds matter to other players. It also creates recurring re
   * Counter-Bazaar (0% tax, confiscation risk).
   * Artifact Leasing (temporary loans).
 
-Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-economy-macro/).
+Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-economy-macro.md).
 
 #### ARCHIVE (Weekly Museum Event)
 

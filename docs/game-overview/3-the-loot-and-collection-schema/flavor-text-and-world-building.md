@@ -58,7 +58,7 @@ It’s used as social proof and collection glue:
 * **Global Feed**: broadcast the note on rare finds (recommended).
 * **Museum**: weekly themes can key off these categories.
 
-Macro loop context: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+Macro loop context: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 
 ### Links
 
