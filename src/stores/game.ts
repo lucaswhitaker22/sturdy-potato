@@ -640,7 +640,8 @@ export const useGameStore = defineStore('game', () => {
       // inventoryStore.inventory will ideally update via realtime or we push manually
       return item;
     }
-    addLog(`Claim Error: ${error?.message}`);
+    const errMsg = error?.message || data?.error || JSON.stringify(data) || 'Unknown Error';
+    addLog(`Claim Error: ${errMsg}`);
     return null;
   }
 
