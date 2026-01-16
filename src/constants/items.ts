@@ -23,12 +23,12 @@ export interface Tool {
 }
 
 export const TOOL_CATALOG: Tool[] = [
-  { id: 'rusty_shovel', name: 'Rusty Shovel', cost: 0, automationRate: 0, findRateBonus: 0.05, flavorText: 'Better than using your hands (barely).' },
-  { id: 'pneumatic_pick', name: 'Pneumatic Pick', cost: 2500, automationRate: 5, findRateBonus: 0.08, flavorText: 'High-frequency vibration to shake loose the past.' },
-  { id: 'ground_radar', name: 'Ground Radar', cost: 15000, automationRate: 25, findRateBonus: 0.12, flavorText: 'See through the silt with ultrasound.' },
-  { id: 'industrial_drill', name: 'Industrial Drill', cost: 80000, automationRate: 100, findRateBonus: 0.18, flavorText: 'Pure mechanical force for deep extraction.' },
-  { id: 'seismic_array', name: 'Seismic Array', cost: 500000, automationRate: 500, findRateBonus: 0.25, flavorText: 'Reshaping the crust to reveal its secrets.' },
-  { id: 'satellite_uplink', name: 'Satellite Uplink', cost: 2500000, automationRate: 2500, findRateBonus: 0.40, flavorText: 'Orbital scanning for maximum efficiency.' },
+  { id: 'rusty_shovel', name: 'Rusty Shovel', cost: 10, automationRate: 0, findRateBonus: 0.05, flavorText: 'Better than using your hands (barely).' },
+  { id: 'pneumatic_pick', name: 'Pneumatic Pick', cost: 150, automationRate: 0.5, findRateBonus: 0.08, flavorText: 'High-frequency vibration to shake loose the past.' },
+  { id: 'ground_radar', name: 'Ground Radar', cost: 1000, automationRate: 4, findRateBonus: 0.12, flavorText: 'See through the silt with ultrasound.' },
+  { id: 'industrial_drill', name: 'Industrial Drill', cost: 8000, automationRate: 30, findRateBonus: 0.18, flavorText: 'Pure mechanical force for deep extraction.' },
+  { id: 'seismic_array', name: 'Seismic Array', cost: 50000, automationRate: 200, findRateBonus: 0.25, flavorText: 'Reshaping the crust to reveal its secrets.' },
+  { id: 'satellite_uplink', name: 'Satellite Uplink', cost: 300000, automationRate: 1200, findRateBonus: 0.40, flavorText: 'Orbital scanning for maximum efficiency.' },
 ];
 
 export interface CollectionSet {

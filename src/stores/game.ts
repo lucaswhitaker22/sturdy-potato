@@ -128,9 +128,14 @@ export const useGameStore = defineStore('game', () => {
     const tool = TOOL_CATALOG.find(t => t.id === toolId);
     if (!tool) return 0;
     const level = getToolLevel(toolId);
-    if (level === 0) return tool.cost;
+    // Exponential growth: base * 1.5 ^ level
     return Math.floor(tool.cost * Math.pow(1.5, level));
   }
+
+  const overclockCost = computed(() => {
+    // Centralized cost: 100k + 50k per current bonus step (0.05 increments)
+    return 100000 + (overclockBonus.value / 0.05) * 50000;
+  });
 
   // Active Stabilization Helpers
   function getTetherCost(stage: number) {
@@ -584,7 +589,23 @@ export const useGameStore = defineStore('game', () => {
 
   // Minimal stubs for others to ensure compilation
   const purchaseInfluenceItem = async (k: string) => true;
-  const overclockTool = async (t: string, c: number) => { };
+  async function overclockTool(toolId: string) {
+    const cost = overclockCost.value;
+    if (scrapBalance.value >= cost) {
+      const { data, error } = await supabase.rpc('rpc_overclock_tool', {
+        p_tool_id: toolId,
+        p_cost: cost
+      });
+      if (data?.success) {
+        overclockBonus.value = data.new_bonus;
+        scrapBalance.value -= cost;
+        inventoryStore.ownedTools[toolId] = 1; // Resets level
+        addLog(`OVERCLOCK SUCCESS: Hardware limits expanded.`);
+      } else {
+        addLog(`Overclock Error: ${error?.message || data?.error}`);
+      }
+    }
+  }
   const smeltItem = async (id: string) => { };
 
   // Init
@@ -594,7 +615,7 @@ export const useGameStore = defineStore('game', () => {
     // State
     scrapBalance, fineDustBalance, historicalInfluence, trayCount, crateTray,
     labState, log, isExtracting, lastExtractAt,
-    batteryCapacity, overclockBonus,
+    batteryCapacity, overclockBonus, overclockCost,
     seismicEnabled, reducedMotion,
 
     // Facades

@@ -28,10 +28,7 @@ const deploy = (toolId: string) => {
   store.setActiveTool(toolId);
 };
 
-const overclockCost = computed(() => {
-  // Arbitrary cost for now: 100k + 50k per current bonus (5% steps)
-  return 100000 + (store.overclockBonus / 0.05) * 50000;
-});
+const overclockCost = computed(() => store.overclockCost);
 
 const canOverclock = computed(() => {
   const currentLevel = store.ownedTools[store.activeToolId] || 0;
@@ -46,7 +43,7 @@ const overclock = () => {
   if (
     confirm(`Overclocking will cost ${overclockCost.value} Scrap. Proceed?`)
   ) {
-    store.overclockTool(store.activeToolId, overclockCost.value);
+    store.overclockTool(store.activeToolId);
   }
 };
 </script>
