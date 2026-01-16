@@ -62,8 +62,8 @@ Goal: ship the Archive loops.
 Plan: [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)\
 Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
 
-### Phase 5 — Juice & launch
+### Phase 5 — V1 polish
 
-Goal: make the UI feel premium and ship.
+Goal: polish the feel, add retention + monetization basics, and ship.
 
-Plan: [Phase 5: The "Polished Vault" (Juice & Launch)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/MGuFQHUR4VBl7odVipkA)
+Plan: [Phase 5: V1 Polish](phase-5-v1-polish/)

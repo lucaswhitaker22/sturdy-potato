@@ -14,19 +14,51 @@ Relic Vault is a persistent, UI-centric MMORPG where players take on the role of
 
 ### 1. The Core Loop: From Dust to Glory
 
-The gameplay is structured into three distinct layers that feed into one another:
+The core mechanics and gameplay features of Relic Vault are structured into three distinct layers that govern the player's progression from a lone scavenger to a prestigious curator.
 
-#### The Micro Loop: Extract & Sift
+#### Core Gameplay Loops
 
-Players interact with the Field to dig up raw Scrap and Encapsulated Crates. These crates are taken to the Lab, where players engage in a multi-stage gambling mini-game called Sifting. Each stage increases the item's rarity but also the risk of it "Shattering" into worthless dust.
+* Micro Loop (Seconds/Minutes): Players manually or passively Extract raw Scrap and Encapsulated Crates from the Field, then move to the Lab to Refine crates through multiple high-stakes gambling stages to Reveal ancient relics.
+* Meso Loop (Hours/Days): Players convert Scrap into Workshop tool upgrades and earn XP to level up RPG Skills, while completing Collection Sets in the Vault to unlock permanent account-wide buffs.
+* Macro Loop (Weeks/Months): Players engage in the global economy via the Bazaar for trading and compete in the Global Museum for Historical Influence and social prestige.
 
-#### The Meso Loop: Skilling & Automation
+#### Micro Loop Mechanics: The Field & The Lab
 
-Through OSRS-inspired skilling, players level up Excavation, Restoration, Appraisal, and Smelting. Higher levels unlock more efficient tools (Auto-diggers) and increase the statistical odds of successful refinement.
+* Manual Extraction: Players click the \[EXTRACT] button to trigger a survey progress bar (0.5s–2s) to find Scrap (80%), Crates (15%), or Anomalies (5%).
+* Passive Extraction: Automated tools (Auto-Diggers) generate Scrap and Crates every 10-second "Tick," even while the player is offline, up to a "Battery Capacity" limit.
+* The Refiner (Sifting): A multi-stage gambling process (Stages 0–5) where players choose between \[CLAIM] (safely taking the current item) or \[SIFT] (risking the item to reach higher rarity tiers).
+* Stability Gauge: Each sifting stage has a success percentage (from 100% at Stage 0 to 10% at Stage 5) that can be improved by the Restoration skill.
+* Shatter State: If a stability check fails, the item is destroyed, awarding the player "Fine Dust" or "Pity XP" instead of a relic.
 
-#### The Macro Loop: The Global Economy
+#### Meso Loop Mechanics: Progression & Skilling
 
-Every successful relic find is assigned a Global Mint Number (e.g., _Walkman #001_). These items are unique, tradable assets. Players list items in the Bazaar (Auction House) or donate them to the Global Museum to earn prestige and "Historical Influence."
+* RPG Skilling System: Action-based XP is earned for four core skills:
+  * Excavation: Improves crate drop rates and unlocks high-tier tool blueprints.
+  * Restoration: Increases sifting stability and grants Historical Value (HV) bonuses to claimed items.
+  * Appraisal: Reveals hidden item stats, unlocks certifications, and reduces market fees.
+  * Smelting: Increases Scrap yield from junk and facilitates bulk processing.
+* Workshop Tool Tiers: Progression through equipment tiers—from the Rusty Shovel to the Satellite Uplink—which exponentially increases Scrap/sec and crate find rates.
+* Collection Sets: Grouping specific items (e.g., "The Morning Ritual") to lock them into the Vault in exchange for permanent modifiers like reduced extraction cooldowns.
+
+#### Macro Loop Mechanics: The MMO Economy
+
+* The Bazaar: A player-driven auction house featuring real-time bidding, listing deposits to prevent spam, and a 5% "Archive Tax" on successful sales.
+* Global Museum: A weekly competitive event where players curate themed collections to earn a Museum Score and Historical Influence.
+* World Events: Global modifiers (48–72 hours) that introduce event-only loot and shared community goals, such as mining a set amount of Scrap together.
+* Level-Gated Zones: Access to deep-wasteland areas like the Sovereign Vault is restricted by both Total Level requirements and Historical Influence "Zone Permits."
+
+#### Loot & Scarcity Systems
+
+* Rarity Hierarchy: Items are tiered from Junk (Grey) to Unique (Red/Glow), determining their base Historical Value.
+* Minting System: Every artifact is assigned a globally unique Mint Number (Serial ID); low-digit mints (#1–10) receive a +50% multiplier to their value.
+* Condition Modifiers: Items are recovered in states ranging from Wasteland Wrecked (0.5x value) to Mint Condition (2.5x value).
+* Prismatic Relics: Rare variants (1% sift chance) that pulse with a rainbow gradient and can be "Dissolved" into premium currency.
+
+#### Tri-Currency Model
+
+* Scrap: The primary soft currency earned by digging and smelting; used for tool upgrades and Bazaar bidding.
+* Vault Credits: Premium currency for high-end trading, cosmetic UI skins, and Stabilizer Charms.
+* Historical Influence (HI): Non-tradable currency earned through the Museum to unlock "The Unbuyables," such as elite skill training and zone permits.
 
 ***
 

@@ -23,7 +23,8 @@
   * [Phase 3 requirements](implementation-plan/phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
 * [Phase 4: The "High Curator" (Meta-Game)](implementation-plan/phase-4-the-high-curator-meta-game/README.md)
   * [Phase 4 requirements](implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md)
-* [Phase 5: V1 Polish](implementation-plan/phase-5-v1-polish.md)
+* [Phase 5: V1 Polish](implementation-plan/phase-5-v1-polish/README.md)
+  * [Phase 5 requirements](implementation-plan/phase-5-v1-polish/phase-5-requirements.md)
 
 ***
 
@@ -36,7 +37,7 @@
     * [5. "Shatter Salvage" (The Reaction Beat)](expansion-plan/micro-loop-expansion/5.-shatter-salvage-the-reaction-beat.md)
     * [6. "Vault Heatmaps" (Zone Strategy)](expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md)
   * [Macro Loop Expansion](expansion-plan/macro-loop-expansion.md)
-  * [Skills Expansion](expansion-plan/skills-expansion/README.md)
+  * [Skills Expansion](expansion-plan/skills-expansion.md)
     * [3. Cross-Skill Masteries (Synergy Unlocks)](expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
     * [1. Active Skill Abilities (Tactile Commands)](expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
     * [2. Skill Sub-Specializations (The Branching Path)](expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
