@@ -20,7 +20,7 @@ export const useWorldEventStore = defineStore('worldEvent', () => {
 
     async function fetchActiveEvent() {
         try {
-            const { data, error } = await supabase.rpc('rpc_world_event_get_active', {});
+            const { data, error } = await supabase.rpc('rpc_world_event_get_active');
             if (error) {
                 if (error.message?.includes('SecurityError')) {
                     // Silent fail for security restrictions

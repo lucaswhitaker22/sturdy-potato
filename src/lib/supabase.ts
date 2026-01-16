@@ -13,7 +13,11 @@ if (typeof navigator !== 'undefined' && navigator.locks && navigator.locks.reque
             if (err.name === 'SecurityError' || err.message?.includes('SecurityError')) {
                 console.warn('[Supabase] navigator.locks.request() blocked by security policy. Bypassing lock.');
                 const callback = args[args.length - 1];
-                if (typeof callback === 'function') return callback();
+                if (typeof callback === 'function') {
+                    // Pass a mock lock object to satisfy gotrue-js internal checks
+                    const mockLock = { name: args[0], mode: 'exclusive' };
+                    return await callback(mockLock);
+                }
                 return;
             }
             throw err;

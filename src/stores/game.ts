@@ -374,8 +374,8 @@ export const useGameStore = defineStore('game', () => {
       const gradesStr = seismicStore.seismicState.grades.length > 0
         ? seismicStore.seismicState.grades.join(',') : null;
 
-      // Use the seismic-aware extractor
-      const { data, error } = await supabase.rpc('rpc_extract_seismic', {
+      // Use the canonical extractor
+      const { data, error } = await supabase.rpc('rpc_extract', {
         p_user_id: userSessionId.value,
         p_seismic_grade: gradesStr
       });
