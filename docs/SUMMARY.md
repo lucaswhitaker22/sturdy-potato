@@ -30,7 +30,9 @@
     * [Power progression (Scrap → Workshop)](game-overview/6-progression-quests-achievements/progression-pillars/power-progression-scrap-workshop.md)
     * [Mastery progression (skills 1–99)](game-overview/6-progression-quests-achievements/progression-pillars/mastery-progression-skills-1-99.md)
     * [Prestige progression (Museum + HI)](game-overview/6-progression-quests-achievements/progression-pillars/prestige-progression-museum-+-hi.md)
-  * [Quest System](game-overview/6-progression-quests-achievements/quest-system.md)
+  * [Quest System](game-overview/6-progression-quests-achievements/quest-system/README.md)
+    * [Onboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/onboarding-quest-list.md)
+    * [Unboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/unboarding-quest-list.md)
   * [Achievement System](game-overview/6-progression-quests-achievements/achievement-system.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
 

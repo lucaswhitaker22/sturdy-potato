@@ -11,7 +11,7 @@ They should feel like the Archive stamping your dossier.
 Related anchors:
 
 * Progression framing: [6 - Progression, Quests, Achievements](./)
-* Quests (short-term goals): [Quest System](quest-system.md)
+* Quests (short-term goals): [Quest System](quest-system/)
 * Global feed + what’s worth broadcasting: [Phase 3: The "Connected World" (The MMO Layer)](../../implementation-plan/phase-3-the-connected-world-the-mmo-layer/)
 
 ***
