@@ -24,7 +24,14 @@
   * [Restoration](game-overview/5-rpg-skilling-system/restoration.md)
   * [Appraisal](game-overview/5-rpg-skilling-system/appraisal.md)
   * [Smelting](game-overview/5-rpg-skilling-system/smelting.md)
-* [6 - Progression, Quests, Achievements](game-overview/6-progression-quests-achievements.md)
+* [6 - Progression, Quests, Achievements](game-overview/6-progression-quests-achievements/README.md)
+  * [Progression Pillars](game-overview/6-progression-quests-achievements/progression-pillars/README.md)
+    * [Collection progression (sets and identity)](game-overview/6-progression-quests-achievements/progression-pillars/collection-progression-sets-and-identity.md)
+    * [Power progression (Scrap → Workshop)](game-overview/6-progression-quests-achievements/progression-pillars/power-progression-scrap-workshop.md)
+    * [Mastery progression (skills 1–99)](game-overview/6-progression-quests-achievements/progression-pillars/mastery-progression-skills-1-99.md)
+    * [Prestige progression (Museum + HI)](game-overview/6-progression-quests-achievements/progression-pillars/prestige-progression-museum-+-hi.md)
+  * [Quest System](game-overview/6-progression-quests-achievements/quest-system.md)
+  * [Achievement System](game-overview/6-progression-quests-achievements/achievement-system.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
 
 ## Implementation Plan
