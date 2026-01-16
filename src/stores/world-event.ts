@@ -4,24 +4,24 @@ import { ref } from 'vue';
 import { supabase } from '@/lib/supabase';
 
 export interface WorldEvent {
-  id: string;
-  name: string;
-  description: string;
-  starts_at: string;
-  ends_at: string;
-  status: 'upcoming' | 'active' | 'ended';
-  modifiers: Record<string, any>;
-  global_goal_target: number;
-  global_goal_progress: number;
+    id: string;
+    name: string;
+    description: string;
+    starts_at: string;
+    ends_at: string;
+    status: 'upcoming' | 'active' | 'ended';
+    modifiers: Record<string, any>;
+    global_goal_target: number;
+    global_goal_progress: number;
 }
 
 export const useWorldEventStore = defineStore('worldEvent', () => {
     const activeEvent = ref<WorldEvent | null>(null);
 
     async function fetchActiveEvent() {
-        const { data, error } = await supabase.rpc('rpc_world_event_get_active');
+        const { data, error } = await supabase.rpc('rpc_world_event_get_active', {});
         if (error) {
-            console.error(error);
+            console.error('Failed to fetch active world event', error);
             return;
         }
         if (data.success && data.active_event) {

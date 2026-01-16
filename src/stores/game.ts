@@ -157,7 +157,7 @@ export const useGameStore = defineStore('game', () => {
 
     passiveInterval = setInterval(async () => {
       try {
-        const { data, error } = await supabase.rpc('rpc_passive_tick');
+        const { data, error } = await supabase.rpc('rpc_passive_tick', { p_user_id: userSessionId.value });
         if (error) throw error;
         if (data.success && data.crate_dropped) {
           addLog(`PASSIVE: Automated unit found a Crate!`);
@@ -171,7 +171,7 @@ export const useGameStore = defineStore('game', () => {
 
   async function checkOfflineGains() {
     try {
-      const { data, error } = await supabase.rpc('rpc_handle_offline_gains');
+      const { data, error } = await supabase.rpc('rpc_handle_offline_gains', { p_user_id: userSessionId.value });
       if (error) throw error;
       if (data.success && data.scrap_gain > 0) {
         addLog(`OFFLINE REPORT: Yield: +${data.scrap_gain} Scrap.`);
@@ -195,6 +195,12 @@ export const useGameStore = defineStore('game', () => {
       user = { id: localId } as any;
     }
 
+    // Debug Ping
+    supabase.rpc('rpc_ping').then(({ data, error }) => {
+      if (error) console.error('Ping failed:', error);
+      else console.log('Ping success:', data);
+    });
+
     if (!user) {
       addLog('CRITICAL: Access Denied. Sector lock active.');
       return;
@@ -203,9 +209,11 @@ export const useGameStore = defineStore('game', () => {
     userSessionId.value = user.id;
     addLog(`Operator Identified: ${user.id.substring(0, 8)}`);
 
-    // 1. Fetch Profile
-    const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-    if (profile) {
+    // 1. Fetch Profile via RPC (Bypasses RLS for local users)
+    const { data: profileResp, error: profileErr } = await supabase.rpc('rpc_get_profile', { p_user_id: userSessionId.value });
+
+    if (profileResp?.success && profileResp.profile) {
+      const profile = profileResp.profile;
       scrapBalance.value = Number(profile.scrap_balance || 0);
       fineDustBalance.value = Number(profile.fine_dust_balance || 0);
       historicalInfluence.value = Number(profile.historical_influence || 0);
@@ -222,11 +230,14 @@ export const useGameStore = defineStore('game', () => {
       // Note: Owned tools and inventory are more efficiently handled by their stores if needed, 
       // but for now we load here to ensure sync.
       inventoryStore.activeToolId = profile.active_tool_id || 'rusty_shovel';
+    } else if (profileErr) {
+      console.error('Profile fetch failed:', profileErr);
     }
 
     // 2. Fetch Lab State
-    const { data: lab } = await supabase.from('lab_state').select('*').eq('user_id', user.id).single();
-    if (lab) {
+    const { data: labResp } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userSessionId.value });
+    if (labResp?.success && labResp.lab_state) {
+      const lab = labResp.lab_state;
       labState.value = { isActive: lab.is_active, currentStage: lab.current_stage };
     }
 
@@ -316,8 +327,12 @@ export const useGameStore = defineStore('game', () => {
       const gradesStr = seismicStore.seismicState.grades.length > 0
         ? seismicStore.seismicState.grades.join(',') : null;
 
-      const payload = { p_user_id: userSessionId.value, p_seismic_grade: gradesStr };
-      const { data, error } = await supabase.rpc('rpc_extract_json', { payload });
+      // Use the seismic-aware extractor
+      const { data, error } = await supabase.rpc('rpc_extract_seismic', {
+        p_user_id: userSessionId.value,
+        p_seismic_grade: gradesStr
+      });
+
 
       if (error) throw error;
       if (data.success) {
