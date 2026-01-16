@@ -6,7 +6,7 @@ Excavation is the “gatherer” skill.
 
 It governs how often you pull **Crates** out of the Field.
 
-It never changes the base extraction outcome odds.\n Core odds stay canonical in [2: The Mechanics](../2-the-mechanics.md).
+It never changes the base extraction outcome odds.\n Core odds stay canonical in [2: The Mechanics](../2-the-mechanics/).
 
 ### What Excavation affects (and what it never touches)
 
@@ -45,7 +45,7 @@ This bonus applies to:
 * passive extraction rolls (Auto-Digger ticks)
 
 {% hint style="info" %}
-Canon base Crate chance is `15%` per Extract outcome roll.\n See [2: The Mechanics](../2-the-mechanics.md).
+Canon base Crate chance is `15%` per Extract outcome roll.\n See [2: The Mechanics](../2-the-mechanics/).
 {% endhint %}
 
 #### Exact formula (recommended)
@@ -98,7 +98,7 @@ These are the unlock beats players should feel.
 
 * Your passive perk ramps Crate rate via the `+0.5%` / 5 levels rule.
 * Seismic Surge becomes easier as Excavation rises.\n Spec: [Seismic Surge](../../expansion-plan/micro-loop-expansion/1.-the-seismic-surge-active-extraction.md).
-* Tool gating uses Excavation as the primary “field power” requirement.\n See the tool tier table in [2: The Mechanics](../2-the-mechanics.md).
+* Tool gating uses Excavation as the primary “field power” requirement.\n See the tool tier table in [2: The Mechanics](../2-the-mechanics/).
 
 #### Level 60+: advanced skilling starts
 
@@ -221,7 +221,7 @@ Authority rules:
 ### Integrity constraints (non-negotiable)
 
 * Extraction always resolves **exactly one** outcome (Scrap / Crate / Anomaly).
-* No system is allowed to modify the base 5% Anomaly outcome.\n World events can add explicit overlays, but must not rewrite the base roll.\n See [2: The Mechanics](../2-the-mechanics.md).
+* No system is allowed to modify the base 5% Anomaly outcome.\n World events can add explicit overlays, but must not rewrite the base roll.\n See [2: The Mechanics](../2-the-mechanics/).
 * Any bonus to Crate chance must be:
   * visible in UI,
   * flat/additive, and
@@ -239,7 +239,7 @@ Track:
 
 ### Links
 
-* Canon extraction rules and clamps: [2: The Mechanics](../2-the-mechanics.md)
+* Canon extraction rules and clamps: [2: The Mechanics](../2-the-mechanics/)
 * Core skilling model and mastery perks: [5 - RPG Skilling System](./)
 * Active Excavation ability (60+): [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Excavation branches (60+): [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)

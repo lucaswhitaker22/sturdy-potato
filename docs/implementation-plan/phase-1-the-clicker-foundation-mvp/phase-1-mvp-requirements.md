@@ -10,7 +10,7 @@ It turns the Phase 1 plan into concrete requirements.
 
 Canon for Phase 1 terms and odds:
 
-* [2: The Mechanics](../../game-overview/2-the-mechanics.md)
+* [2: The Mechanics](../../game-overview/2-the-mechanics/)
 * [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
 
 ### Scope

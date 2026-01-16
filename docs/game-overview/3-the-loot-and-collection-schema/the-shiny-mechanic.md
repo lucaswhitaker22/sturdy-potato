@@ -22,7 +22,7 @@ It is not rolled on failures.
 
 It is not found “directly” in the Field.
 
-Lab loop context: [2: The Mechanics](../2-the-mechanics.md).
+Lab loop context: [2: The Mechanics](../2-the-mechanics/).
 
 #### What it can apply to
 
@@ -79,7 +79,7 @@ Guardrails:
 * You can’t dissolve if the item is locked (escrow, leased, museum, set-locked).
 * Show a burn warning and exact payout before confirming.
 
-Premium currency context: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/).
+Premium currency context: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 
 ### Lock states (compatibility)
 

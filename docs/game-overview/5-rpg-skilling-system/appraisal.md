@@ -22,7 +22,7 @@ Canon anchors:
 
 * Core loop + what Appraisal is allowed to surface: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)
 * Pre-open crate intel system: [Pre-Sift Appraisal (Crate Prep)](../../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md)
-* Bazaar + certification + Appraisal 99 tax lane: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/)
+* Bazaar + certification + Appraisal 99 tax lane: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * 60+ active ability: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * 60+ branches: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
 * 80/80 masteries: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
@@ -150,7 +150,7 @@ Canon rules:
 
 See:
 
-* [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/)
+* [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * [Vault Heatmaps](../../expansion-plan/micro-loop-expansion/6.-vault-heatmaps-zone-strategy.md)
 
 ### Pillar 1 — Pre-Sift Appraisal (crate preview)
@@ -331,7 +331,7 @@ Track:
 ### Links
 
 * Loot identity + HV breakdown rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)
-* Bazaar + Appraisal macro effects: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro/)
+* Bazaar + Appraisal macro effects: [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md)
 * Pre-open crate intel: [Pre-Sift Appraisal (Crate Prep)](../../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md)
 * Active ability (Hype Train): [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Branch picks: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
