@@ -276,7 +276,7 @@ Sources:
 
 * [6 - Progression, Quests, Achievements](../game-overview/6-progression-quests-achievements/)
 * [Quest System](../game-overview/6-progression-quests-achievements/quest-system.md)
-* [Achievement System](../game-overview/6-progression-quests-achievements/achievement-system.md)
+* [Achievement System](../game-overview/6-progression-quests-achievements/achievement-system/)
 
 Quest system:
 
@@ -440,7 +440,7 @@ Spec anchors:
 
 Backlog:
 
-* [ ] Achievement system backend tracking ([Achievement System](../game-overview/6-progression-quests-achievements/achievement-system.md)).
+* [ ] Achievement system backend tracking ([Achievement System](../game-overview/6-progression-quests-achievements/achievement-system/)).
 * [ ] Quest system contract board ([Quest System](../game-overview/6-progression-quests-achievements/quest-system.md)).
 * [ ] Blueprint system:
   * [ ] find “Blueprint Fragments”.
@@ -546,7 +546,7 @@ This mirrors the roadmap pages:
   * [Quest System](../game-overview/6-progression-quests-achievements/quest-system.md)
     * [Onboarding Quest List](../game-overview/6-progression-quests-achievements/quest-system/onboarding-quest-list.md)
     * [Unboarding Quest List](../game-overview/6-progression-quests-achievements/quest-system/unboarding-quest-list.md)
-  * [Achievement System](../game-overview/6-progression-quests-achievements/achievement-system.md)
+  * [Achievement System](../game-overview/6-progression-quests-achievements/achievement-system/)
 * [6 - UI/UX Wireframe & Flow](../game-overview/6-ui-ux-wireframe-and-flow.md)
 
 #### Implementation plan

@@ -10,8 +10,8 @@ They should feel like the Archive stamping your dossier.
 
 Related anchors:
 
-* Progression framing: [6 - Progression, Quests, Achievements](./)
-* Quests (short-term goals): [Quest System](quest-system.md)
+* Progression framing: [6 - Progression, Quests, Achievements](../)
+* Quests (short-term goals): [Quest System](../quest-system.md)
 * Global feed + what’s worth broadcasting: [Phase 3: The "Connected World" (The MMO Layer)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/4rU38xhwZ4ktq4Txw2Ib)
 
 ***
@@ -51,7 +51,7 @@ Recommended surfaces:
 
 UI behavior should match:
 
-* [6 - UI/UX Wireframe & Flow](../6-ui-ux-wireframe-and-flow.md)
+* [6 - UI/UX Wireframe & Flow](../../6-ui-ux-wireframe-and-flow.md)
 
 ***
 
@@ -82,7 +82,7 @@ Examples:
 * Reach level `99` in a skill.
 * Reach Total Level `100 / 250 / 380`.
 
-Skill model anchor: [5 - RPG Skilling System](../5-rpg-skilling-system/).
+Skill model anchor: [5 - RPG Skilling System](../../5-rpg-skilling-system/).
 
 #### 3) Risk (Lab identity)
 
@@ -94,7 +94,7 @@ Examples:
 * Attempt Stage `5` `10` times.
 * “Clean Run”: Sift from Stage 0 → Stage 4 without a fail.
 
-Lab rules anchor: [The Refiner (The Gambling Hub)](../2-the-mechanics/the-refiner-the-gambling-hub.md).
+Lab rules anchor: [The Refiner (The Gambling Hub)](../../2-the-mechanics/the-refiner-the-gambling-hub.md).
 
 #### 4) Collection (completionism)
 
@@ -106,7 +106,7 @@ Examples:
 * Complete `10 / 25 / 50` sets.
 * Complete a full tier line (e.g., “All Uncommon Sets”, if shipped).
 
-Set rules anchor: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
+Set rules anchor: [3 - The Loot & Collection Schema](../../3-the-loot-and-collection-schema.md).
 
 #### 5) Economy (Bazaar identity)
 
@@ -118,7 +118,7 @@ Examples:
 * Total Scrap earned from sales milestones.
 * Highest single sale milestone.
 
-Bazaar rules anchor: [The Bazaar (Auction House)](../4-the-mmo-and-economy-macro/the-bazaar-auction-house.md).
+Bazaar rules anchor: [The Bazaar (Auction House)](../../4-the-mmo-and-economy-macro/the-bazaar-auction-house.md).
 
 #### 6) Prestige (Museum + HI)
 
@@ -130,7 +130,7 @@ Examples:
 * Place Top `1%` in a Museum week.
 * Complete an Endowment (if shipped).
 
-Museum rules anchor: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
+Museum rules anchor: [The Global Museum (Social Leaderboard)](../../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
 
 #### 7) Legacy (rare receipts)
 
@@ -142,7 +142,7 @@ Examples:
 * First Prismatic reveal.
 * First low-mint find (e.g., mint `<= 10`).
 
-Loot identity anchor: [The "Mint & Condition" System](../3-the-loot-and-collection-schema/the-mint-and-condition-system.md).
+Loot identity anchor: [The "Mint & Condition" System](../../3-the-loot-and-collection-schema/the-mint-and-condition-system.md).
 
 ***
 
@@ -175,7 +175,7 @@ Power belongs in:
 Currency constraints:
 
 * HI is non-tradable and not purchasable.\
-  See: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md).
+  See: [Currency Systems](../../4-the-mmo-and-economy-macro/currency-systems.md).
 
 ***
 
@@ -265,9 +265,9 @@ Claim rule:
 
 Canonical systems to keep aligned:
 
-* Field odds and immutable anomaly chance: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md)
-* Lab stage table and stability rules: [The Refiner (The Gambling Hub)](../2-the-mechanics/the-refiner-the-gambling-hub.md)
-* Museum lock + scoring expectations: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
+* Field odds and immutable anomaly chance: [The Dig Site (Main Screen)](../../2-the-mechanics/the-dig-site-main-screen.md)
+* Lab stage table and stability rules: [The Refiner (The Gambling Hub)](../../2-the-mechanics/the-refiner-the-gambling-hub.md)
+* Museum lock + scoring expectations: [The Global Museum (Social Leaderboard)](../../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
 
 ***
 

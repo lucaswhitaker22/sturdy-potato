@@ -386,4 +386,4 @@ Red flags:
 * Quest mechanics + objective language: [Quest System](quest-system.md)
 * Onboarding quest content: [Onboarding Quest List](quest-system/onboarding-quest-list.md)
 * Unboarding quest content: [Unboarding Quest List](quest-system/unboarding-quest-list.md)
-* Achievement taxonomy + reward rules: [Achievement System](achievement-system.md)
+* Achievement taxonomy + reward rules: [Achievement System](achievement-system/)

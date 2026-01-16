@@ -33,7 +33,12 @@
   * [Quest System](game-overview/6-progression-quests-achievements/quest-system.md)
     * [Onboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/onboarding-quest-list.md)
     * [Unboarding Quest List](game-overview/6-progression-quests-achievements/quest-system/unboarding-quest-list.md)
-  * [Achievement System](game-overview/6-progression-quests-achievements/achievement-system.md)
+  * [Achievement System](game-overview/6-progression-quests-achievements/achievement-system/README.md)
+    * [Milestones Achievement List](game-overview/6-progression-quests-achievements/achievement-system/milestones-achievement-list.md)
+    * [Mastery Achievement List](game-overview/6-progression-quests-achievements/achievement-system/mastery-achievement-list.md)
+    * [Risk Achievement List](game-overview/6-progression-quests-achievements/achievement-system/risk-achievement-list.md)
+    * [Collection Achievement List](game-overview/6-progression-quests-achievements/achievement-system/collection-achievement-list.md)
+    * [Economy Achievement List](game-overview/6-progression-quests-achievements/achievement-system/economy-achievement-list.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
 
 ## Implementation Plan

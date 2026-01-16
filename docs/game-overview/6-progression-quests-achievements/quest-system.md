@@ -207,7 +207,7 @@ Canon anchors:
 
 If you want “chase” content, use Achievements.
 
-See: [Achievement System](achievement-system.md).
+See: [Achievement System](achievement-system/).
 
 ***
 
