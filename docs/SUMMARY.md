@@ -41,16 +41,6 @@
 * [Summary](implementation-plan/summary.md)
 * [Status](implementation-plan/status.md)
 * [Technical Framework (Vue + Supabase)](implementation-plan/technical-framework-vue-+-supabase.md)
-* [Phase 1: The "Clicker" Foundation (MVP)](implementation-plan/phase-1-the-clicker-foundation-mvp/README.md)
-  * [Phase 1 (MVP) requirements](implementation-plan/phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
-* [Phase 2: The "Amateur Archaeologist" (Progression)](implementation-plan/phase-2-the-amateur-archaeologist-progression/README.md)
-  * [Phase 2 requirements](implementation-plan/phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md)
-* [Phase 3: The "Connected World" (The MMO Layer)](implementation-plan/phase-3-the-connected-world-the-mmo-layer/README.md)
-  * [Phase 3 requirements](implementation-plan/phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
-* [Phase 4: The "High Curator" (Meta-Game)](implementation-plan/phase-4-the-high-curator-meta-game/README.md)
-  * [Phase 4 requirements](implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md)
-* [Phase 5: V1 Polish](implementation-plan/phase-5-v1-polish/README.md)
-  * [Phase 5 requirements](implementation-plan/phase-5-v1-polish/phase-5-requirements.md)
 
 ***
 

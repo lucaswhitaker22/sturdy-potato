@@ -29,8 +29,8 @@ Goal: ship the Field → Lab → Vault loop.
 * Lab supports `[CLAIM]` vs `[SIFT]`, with Shatter failures.
 * A tiny starter catalog (20 items) with Archive-style flavor text.
 
-Plan: [Phase 1: The "Clicker" Foundation (MVP)](phase-1-the-clicker-foundation-mvp/)\
-Build contract: [Phase 1 (MVP) requirements](phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
+Plan: [Phase 1: The "Clicker" Foundation (MVP)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/vXgJqkczaUUC4axkOsrA)\
+Build contract: [Phase 1 (MVP) requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/whZFSOeTpyhQynDJUqds)
 
 ### Phase 2 — Progression
 
@@ -41,8 +41,8 @@ Goal: turn the loop into a grind with persistence.
 * Collections (sets) grant permanent buffs.
 * Supabase persistence, autosave, and offline gains (Battery Capacity cap).
 
-Plan: [Phase 2: The "Amateur Archaeologist" (Progression)](phase-2-the-amateur-archaeologist-progression/)\
-Build contract: [Phase 2 requirements](phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md)
+Plan: [Phase 2: The "Amateur Archaeologist" (Progression)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/9CdolvIw9isrCE0LzFzC)\
+Build contract: [Phase 2 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3UMkX37vTIwHL0uoayLS)
 
 ### Phase 3 — MMO layer
 
@@ -59,8 +59,8 @@ Economy canon:
 * Historical Influence (HI) becomes relevant in Phase 4.
 * Vault Credits (premium) is Phase 5+.
 
-Plan: [Phase 3: The "Connected World" (The MMO Layer)](phase-3-the-connected-world-the-mmo-layer/)\
-Build contract: [Phase 3 requirements](phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
+Plan: [Phase 3: The "Connected World" (The MMO Layer)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/4rU38xhwZ4ktq4Txw2Ib)\
+Build contract: [Phase 3 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/GcPUD3swAP8KbhaBt30Q)
 
 ### Phase 4 — Meta-game
 
@@ -70,14 +70,14 @@ Goal: ship the Archive loops.
 * Advanced skills (Appraisal + Smelting).
 * Advanced skilling layer:\n active abilities + specialization branches + cross-skill masteries.
 
-Plan: [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)\
-Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
+Plan: [Phase 4: The "High Curator" (Meta-Game)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3uQOaWYvcOgpxH24hlV2)\
+Build contract: [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm)
 
 ### Phase 5 — V1 polish
 
 Goal: polish the feel, add retention + monetization basics, and ship.
 
-Plan: [Phase 5: V1 Polish](phase-5-v1-polish/)
+Plan: [Phase 5: V1 Polish](/broken/spaces/W0NXJBdtLzebirumENnw/pages/ZdcsomiEpbMvVDZ0OJsb)
 
 ### Post-V1 (future): Archive Rebirth
 
