@@ -24,6 +24,8 @@ const excavationProgress = computed(() => getLevelProgress(store.excavationXP));
 const restorationProgress = computed(() =>
   getLevelProgress(store.restorationXP)
 );
+const appraisalProgress = computed(() => getLevelProgress(store.appraisalXP));
+const smeltingProgress = computed(() => getLevelProgress(store.smeltingXP));
 
 const activeTool = computed(
   () => TOOL_CATALOG.find((t) => t.id === store.activeToolId) || TOOL_CATALOG[0]
@@ -116,6 +118,64 @@ const displayedInfluence = computed(() =>
               <div
                 class="h-full bg-black transition-all duration-300"
                 :style="{ width: `${restorationProgress}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="font-bold underline">APPRAISAL:</span>
+          <div class="flex flex-col items-center">
+            <span
+              class="text-xl font-bold leading-none"
+              title="Higher levels unlock market perks"
+              >Lvl. {{ store.appraisalLevel }}</span
+            >
+            <div class="w-24 h-2 border border-black relative">
+              <div
+                class="absolute inset-0 bg-black opacity-20"
+                style="
+                  background-image: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    #000 2px,
+                    #000 4px
+                  );
+                "
+              ></div>
+              <div
+                class="h-full bg-black transition-all duration-300"
+                :style="{ width: `${appraisalProgress}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="font-bold underline">SMELTING:</span>
+          <div class="flex flex-col items-center">
+            <span
+              class="text-xl font-bold leading-none"
+              title="Lvl 99: Double Scrap from Junk"
+              >Lvl. {{ store.smeltingLevel }}</span
+            >
+            <div class="w-24 h-2 border border-black relative">
+              <div
+                class="absolute inset-0 bg-black opacity-20"
+                style="
+                  background-image: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    #000 2px,
+                    #000 4px
+                  );
+                "
+              ></div>
+              <div
+                class="h-full bg-black transition-all duration-300"
+                :style="{ width: `${smeltingProgress}%` }"
               ></div>
             </div>
           </div>

@@ -343,6 +343,10 @@ export const useGameStore = defineStore('game', () => {
         } else {
           addLog('Nothing found in this sector.');
         }
+
+        if (data.double_loot) {
+          addLog('MASTERY PERK: The Endless Vein doubled your yield!');
+        }
         
         // Optimistic / Immediate Update
         console.log('[Store] Extraction Data Received:', data);
@@ -487,6 +491,7 @@ export const useGameStore = defineStore('game', () => {
       return false;
     }
     addLog('Item listed on Bazaar.');
+    appraisalXP.value += 50; // Optimistic update
     return true; // Success
   }
 
@@ -510,6 +515,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     addLog(`Bid placed: ${amount} scrap.`);
+    appraisalXP.value += 10; // Optimistic update
     return true;
   }
   
@@ -528,6 +534,7 @@ export const useGameStore = defineStore('game', () => {
       if (data.success) {
           addLog(`SMELTING COMPLETE: Recycled item for ${data.scrap_gained} Scrap.`);
           scrapBalance.value = Number(data.new_balance || (scrapBalance.value + data.scrap_gained));
+          smeltingXP.value = Number(smeltingXP.value) + Number(data.xp_gained || 0);
           inventory.value = inventory.value.filter(i => i.id !== vaultItemId);
       } else {
           addLog(`Smelt Failed: ${data.error}`);

@@ -37,6 +37,19 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
     selectedItem.value = item;
   }
 };
+
+const smeltItem = async () => {
+  if (!selectedItem.value || !selectedItem.value.bestInstance) return;
+  if (
+    !confirm(
+      "Are you sure you want to SMELT this item into Scrap? This cannot be undone."
+    )
+  )
+    return;
+
+  await store.smeltItem(selectedItem.value.bestInstance.id);
+  selectedItem.value = null; // Close overlay
+};
 </script>
 
 <template>
@@ -128,23 +141,35 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
       </p>
 
       <div
-        class="mt-auto pt-4 border-t border-gray-300 text-[10px] font-mono text-gray-500 uppercase flex justify-between"
+        class="mt-auto pt-4 border-t border-gray-300 text-[10px] font-mono text-gray-500 uppercase flex justify-between items-center"
       >
-        <span>Verified by: AGENT_A</span>
-        <span
-          >Value:
-          {{ selectedItem.bestInstance?.historical_value || "??" }} HV</span
-        >
-        <span
-          >Date:
-          {{
-            selectedItem.bestInstance
-              ? new Date(
-                  selectedItem.bestInstance.discovered_at
-                ).toLocaleDateString()
-              : "UNKNOWN"
-          }}</span
-        >
+        <div class="flex gap-4">
+          <span>Verified by: AGENT_A</span>
+          <span
+            >Value:
+            {{ selectedItem.bestInstance?.historical_value || "??" }} HV</span
+          >
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            @click="smeltItem"
+            class="hover:bg-red-600 hover:text-white px-2 py-1 transition-colors border border-transparent hover:border-black"
+            title="Recycle for Scrap"
+          >
+            [SMELT]
+          </button>
+          <span>
+            Date:
+            {{
+              selectedItem.bestInstance
+                ? new Date(
+                    selectedItem.bestInstance.discovered_at
+                  ).toLocaleDateString()
+                : "UNKNOWN"
+            }}
+          </span>
+        </div>
       </div>
     </div>
 
