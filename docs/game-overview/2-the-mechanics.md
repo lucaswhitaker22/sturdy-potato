@@ -190,3 +190,19 @@ The Workshop UI is designed to feel like a salvaged industrial terminal, emphasi
 * The Tray: A dedicated area at the bottom of the screen that holds up to 5 unrefined Crates. If the tray is full, manual extraction is disabled to encourage players to move to the Lab.
 * The Feed: A scrolling ticker that broadcasts major player events, such as finding a rare relic via a Quantum Reveal. This feed provides social proof and creates psychological pressure to engage in high-risk sifting.
 * Tactile Feedback: "Buy" buttons remain dim and greyed out until the player meets both the Scrap cost and the Excavation level requirement. Every purchase is met with a unique, heavy mechanical "click" sound to provide weight to the progression.
+
+***
+
+### 2.4 Macro integrity notes (events + contracts)
+
+This document defines canonical micro/meso odds.\n Macro systems must not rewrite them.
+
+Allowed:\n
+
+* World Events applying explicit, time-boxed modifiers.\n See ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
+* Contracts that change what players pursue.\n They never change base drop tables.\n See [Lore Keeper Requisitions (Archive Expeditions)](../expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
+
+Never allowed:\n
+
+* Modifying the base 5% Anomaly outcome.\n
+* Revealing exact mint math or exact catalog IDs for free.

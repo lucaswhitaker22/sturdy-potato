@@ -49,9 +49,18 @@ The core mechanics and gameplay features of Relic Vault are structured into thre
 #### Macro Loop Mechanics: The MMO Economy
 
 * The Bazaar: A player-driven auction house featuring real-time bidding, listing deposits to prevent spam, and a 5% "Archive Tax" on successful sales.
+  * Macro expansion: **Counter-Bazaar**, a 0% tax lane with confiscation risk.\n Details in [The "Counter-Bazaar" (Black Market Trading)](expansion-plan/macro-loop-expansion/1.-the-counter-bazaar-black-market-trading.md).
+  * Macro expansion: **Artifact Leasing**, temporary item loans for set completion.\n Details in [Artifact Leasing (The Rental Economy)](expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md).
 * Global Museum: A weekly competitive event where players curate themed collections to earn a Museum Score and Historical Influence.
+  * Macro expansion: **Museum Endowments**, permanent item burns into a Hall of Fame.\n Details in [Museum Endowments (Permanent Prestige)](expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md).
 * World Events: Global modifiers (48–72 hours) that introduce event-only loot and shared community goals, such as mining a set amount of Scrap together.
+  * Macro expansion: **The Great Static** event system, including macro-economic “Static Pulses”.\n Details in ["The Great Static" Events (incl. Static Pulses)](expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 * Level-Gated Zones: Access to deep-wasteland areas like the Sovereign Vault is restricted by both Total Level requirements and Historical Influence "Zone Permits."
+  * Macro expansion: **Syndicate Permits**.\n Teams pool HI for temporary shared access.\n Details in [Influence-Gated Social Tiers (and Syndicate Excavations)](expansion-plan/macro-loop-expansion/2.-influence-gated-social-tiers-and-syndicate-excavations.md).
+
+#### Macro “quest” layer (directed goals)
+
+The Archive can also issue contracts that ask for specific evidence.\n This creates long-term targets and item sinks.\n Details in [Lore Keeper Requisitions (Archive Expeditions)](expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md).
 
 #### Loot & Scarcity Systems
 

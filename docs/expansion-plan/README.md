@@ -34,7 +34,7 @@ Formalize the Archive relationship as repeatable contracts.
   * Keep intel readable. Prefer “bands/ranges”, not exact mint math.
 * Rank progression: Titles that unlock QoL in Bazaar/Museum.
 
-See: [1. Archive Expeditions (Contractual Narrative Quests)](macro-loop-expansion/1.-archive-expeditions-contractual-narrative-quests.md)
+See: [1. Archive Expeditions (Contractual Narrative Quests)](macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md)
 
 #### 3. Influence-Gated Social Tiers (HI ladder)
 
@@ -44,7 +44,7 @@ Spend Historical Influence (HI) to unlock social perks.
 * Senior Pathologist (5,000 HI): One free certification per 24h.
 * High Curator (20,000 HI): “Master’s Gallery” display deck (no Bazaar lock).
 
-See: [2. Influence-Gated Social Tiers (Macro Loop Expansion)](macro-loop-expansion/2.-influence-gated-social-tiers-macro-loop-expansion.md)
+See: [2. Influence-Gated Social Tiers (Macro Loop Expansion)](macro-loop-expansion/2.-influence-gated-social-tiers-and-syndicate-excavations.md)
 
 #### 4. “The Great Static” anomalies (world events)
 
@@ -54,4 +54,4 @@ Time-boxed mutators that stack on top of core odds.
 * Archive Audit: Higher Archive Tax, but boosted Museum scoring.
 * Discovery Gold Rush: Short zone-based crate bonus after a Unique discovery.
 
-See: [3. "The Great Static" Anomalies (World Event Expansion)](macro-loop-expansion/3.-the-great-static-anomalies-world-event-expansion.md)
+See: [3. "The Great Static" Anomalies (World Event Expansion)](macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md)

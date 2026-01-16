@@ -102,6 +102,9 @@ The macro loop makes finds matter to other players. It also creates recurring re
 * List items with a Scrap deposit to reduce spam.
 * Use Appraisal to certify listings and surface hidden value.
 * Apply an “Archive tax” as a money sink.
+* Expansion lanes:
+  * Counter-Bazaar (0% tax, confiscation risk).
+  * Artifact Leasing (temporary loans).
 
 Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-economy-macro.md).
 
@@ -110,6 +113,11 @@ Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-econo
 * Weekly theme request.
 * Players donate items for a Museum Score.
 * Rewards pay out **Historical Influence** and rare keys/crates.
+* Macro expansions:
+  * Influence tiers (HI → permanent status perks).
+  * Syndicate permits (pool HI for temporary team zone access).
+  * Endowments (permanent item burn + Hall of Fame).
+  * Expeditions (contracts / requisitions).
 
 #### World Events and New Zones
 
@@ -120,6 +128,8 @@ Events should be implemented as time-boxed modifiers to existing systems. Exampl
 * Bazaar fee reductions (more liquidity during events).
 
 Keep these aligned with total-level gates and zone unlock rules.
+
+Static-driven macro volatility is defined in ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 
 ***
 
