@@ -30,6 +30,7 @@ const passiveProgress = ref(0);
 let passiveAnimInterval: any = null;
 
 onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
   passiveAnimInterval = setInterval(() => {
     if (hasAutomation.value) {
       passiveProgress.value += 1;
@@ -44,16 +45,41 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (passiveAnimInterval) clearInterval(passiveAnimInterval);
+  window.removeEventListener('keydown', handleKeydown);
 });
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.code === 'Space') {
+    e.preventDefault(); // Prevent scrolling
+    handleExtract(); // Trigger same logic as button
+  }
+}
 
 const isShaking = ref(false);
 
-async function handleExtract() {
-  isShaking.value = true;
-  setTimeout(() => (isShaking.value = false), 200);
-  if (store.isExtracting || store.isCooldown) return;
-  store.extract();
-}
+  async function handleExtract() {
+    // If extracting and seismic active, this is a strike
+    if (store.isExtracting && store.seismicState.isActive) {
+      if (store.seismicState.grades.length < store.seismicState.maxStrikes) {
+        isShaking.value = true;
+        setTimeout(() => (isShaking.value = false), 100);
+        store.strike();
+      }
+      return;
+    }
+
+    isShaking.value = true;
+    setTimeout(() => (isShaking.value = false), 200);
+    if (store.isExtracting || store.isCooldown) return;
+    store.extract();
+  }
+
+  const lastGrade = computed(() => {
+     if (store.seismicState.grades.length > 0) {
+        return store.seismicState.grades[store.seismicState.grades.length - 1];
+     }
+     return null;
+  });
 </script>
 
 <template>
@@ -112,7 +138,7 @@ async function handleExtract() {
             class="relative w-72 h-32 bg-[#FDFDF5] border-4 border-ink-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col items-center justify-center overflow-hidden"
             :class="[
               store.isExtracting || store.isCooldown
-                ? 'bg-gray-50 opacity-90'
+                ? 'bg-gray-50'
                 : 'bg-[#FFFFF0]',
               isShaking ? 'animate-shake-mild' : '',
             ]"
@@ -131,11 +157,13 @@ async function handleExtract() {
               class="font-serif font-black text-5xl tracking-tighter text-ink-black uppercase transform group-hover:-rotate-1 transition-transform select-none"
             >
               {{
-                store.isExtracting
-                  ? "SURVEYING"
-                  : store.isCooldown
-                  ? "COOLDOWN"
-                  : "[ EXTRACT ]"
+                store.isExtracting && store.seismicState.isActive
+                   ? "STRIKE!" 
+                   : store.isExtracting
+                   ? "SURVEYING"
+                   : store.isCooldown
+                   ? "COOLDOWN"
+                   : "[ EXTRACT ]"
               }}
             </span>
 
@@ -144,13 +172,22 @@ async function handleExtract() {
               class="text-[10px] font-mono mt-2 tracking-widest text-gray-500 uppercase"
             >
               {{
-                store.isExtracting
+                store.isExtracting && store.seismicState.isActive
+                  ? "LOCK SIGNAL NOW"
+                  : store.isExtracting
                   ? "ACCESSING SUB-LAYERS"
                   : store.isCooldown
                   ? "MECHANICAL RESET"
                   : "INITIATE BIO-SCAN"
               }}
             </span>
+
+            <!-- Seismic Result Feedback Overlay -->
+            <div v-if="store.isExtracting && lastGrade" class="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+                <span class="text-4xl font-black text-red-600 bg-white px-2 border-2 border-red-600 transform -rotate-12 shadow-xl">
+                    {{ lastGrade === 'PERFECT' ? 'PERFECT SURVEY!' : lastGrade === 'HIT' ? 'SIGNAL LOCKED' : 'MISS' }}
+                </span>
+            </div>
 
             <!-- Scanning Line Visual -->
             <div
@@ -178,17 +215,36 @@ async function handleExtract() {
             }}</span>
           </div>
           <div
-            class="h-1.5 w-full bg-gray-100 border border-gray-200 overflow-hidden"
+            class="h-6 w-full bg-gray-100 border border-gray-200 overflow-hidden relative cursor-pointer"
+            @click="store.strike()"
           >
+            <!-- Seismic Overlay -->
+            <template v-if="store.seismicState.isActive">
+               <!-- Sweet Spot -->
+               <div class="absolute top-0 bottom-0 bg-yellow-200/50 border-x border-yellow-400"
+                    :style="{ left: `${store.seismicState.config.sweetSpotStart}%`, width: `${store.seismicState.config.sweetSpotWidth}%` }">
+                   
+                   <!-- Perfect Core (Center 30%) -->
+                   <div class="absolute top-0 bottom-0 left-[35%] w-[30%] bg-green-200/60 border-x border-green-400"></div>
+               </div>
+               
+               <!-- Level 99 Second Spot (Not implemented in visualization yet, logic supports it) -->
+               
+               <!-- Impact Line -->
+               <div class="absolute top-0 bottom-0 w-0.5 bg-red-600 z-10"
+                    :style="{ left: `${store.seismicState.impactPos}%` }">
+               </div>
+            </template>
+
+            <!-- Original Progress Bar (Background) -->
             <div
-              class="h-full bg-stamp-blue transition-all ease-linear"
+              class="h-full bg-stamp-blue transition-all ease-linear opacity-20"
               :style="{
                 width: store.isExtracting
                   ? `${store.surveyProgress}%`
                   : store.isCooldown
                   ? '100%'
-                  : '0%',
-                opacity: store.isCooldown ? 0.3 : 1,
+                  : '0%'
               }"
             ></div>
           </div>

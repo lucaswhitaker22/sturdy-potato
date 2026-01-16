@@ -4,6 +4,13 @@ import { supabase } from '@/lib/supabase';
 import { TOOL_CATALOG } from '@/constants/items';
 import type { VaultItem, ItemDefinition } from '@/types';
 import { useMMOStore } from './mmo';
+import {
+  type SeismicState,
+  type SeismicGrade,
+  calculateSweetSpotWidth,
+  generateSweetSpotStart,
+  gradeStrike
+} from '@/lib/seismic';
 
 export interface MarketListing {
   id: string;
@@ -45,6 +52,15 @@ export const useGameStore = defineStore('game', () => {
   const overclockBonus = ref(0);
   const batteryCapacity = ref(8.0);
   const lastExtractAt = ref<Date | null>(null);
+
+  // Seismic Surge State
+  const seismicState = ref<SeismicState>({
+    isActive: false,
+    config: { sweetSpotWidth: 10, perfectZoneWidth: 30, sweetSpotStart: 50 },
+    impactPos: 0,
+    grades: [],
+    maxStrikes: 1
+  });
 
   // Animation State
   const now = ref(Date.now());
@@ -320,19 +336,72 @@ export const useGameStore = defineStore('game', () => {
     isExtracting.value = true;
     surveyProgress.value = 0;
 
+    // Initialize Seismic Surge
+    const level = excavationLevel.value;
+    const width = calculateSweetSpotWidth(level);
+    const start = generateSweetSpotStart(width);
+    const isMaster = level >= 99;
+
+    seismicState.value = {
+      isActive: true,
+      config: {
+        sweetSpotWidth: width,
+        perfectZoneWidth: 30, // 30% of width
+        sweetSpotStart: start
+      },
+      impactPos: 0,
+      grades: [],
+      maxStrikes: isMaster ? 2 : 1
+    };
+
     addLog('Bio-Scanners initializing...');
 
     // 1. Survey Phase (Manual interaction) - Animate progress
-    const steps = 20;
-    const stepDuration = surveyDurationMs.value / steps;
+    const steps = 50; // Higher resolution for smooth UI
+    const totalDuration = surveyDurationMs.value;
+    const stepDuration = totalDuration / steps;
+
+    // Simulation loop
+    let startTime = Date.now();
+
+    // Check for user strikes during the duration
+    // We use a polling loop here or just rely on CSS animation?
+    // For the logic to be precise, we should track time.
+    // However, existing loop sleeps. We can just update seismic state inside the loop.
+
     for (let i = 0; i <= steps; i++) {
-      surveyProgress.value = (i / steps) * 100;
+      // Calculate progress 0-100
+      const progress = (i / steps) * 100;
+      surveyProgress.value = progress;
+
+      // Update seismic impact position (sweep once 0 -> 100)
+      seismicState.value.impactPos = progress;
+
       await new Promise(resolve => setTimeout(resolve, stepDuration));
     }
 
+    // End Seismic Phase
+    seismicState.value.isActive = false;
+
     try {
+      // Collect grades
+      // If no strike, grade is undefined (server treats as standard)
+      // If multiple grades (Mastery), we might send array or just best?
+      // RPC should probably handle 'grade' or 'grades'.
+      // For simplicity/backward compat, let's determine the "effective" bonus grade or pass list.
+      // Let's pass the raw grades array to RPC if multiple, or single if not.
+      // The RPC migration plan said p_seismic_grade TEXT. 
+      // Maybe we encode it: "HIT", "PERFECT", "HIT,PERFECT"
+
+      const gradesStr = seismicState.value.grades.length > 0
+        ? seismicState.value.grades.join(',')
+        : undefined;
+
       // Note: We use the local userSessionId as a param if auth is NULL on server
-      const { data, error } = await supabase.rpc('rpc_extract', { p_user_id: userSessionId.value });
+      const { data, error } = await supabase.rpc('rpc_extract', {
+        p_user_id: userSessionId.value,
+        p_seismic_grade: gradesStr
+      });
       if (error) throw error;
       if (data.success) {
         if (data.result === 'ANOMALY') {
@@ -372,7 +441,19 @@ export const useGameStore = defineStore('game', () => {
     } finally {
       isExtracting.value = false;
       surveyProgress.value = 0;
+      seismicState.value.isActive = false;
     }
+  }
+
+  function strike() {
+    if (!isExtracting.value || !seismicState.value.isActive) return;
+    if (seismicState.value.grades.length >= seismicState.value.maxStrikes) return;
+
+    const grade = gradeStrike(seismicState.value.impactPos, seismicState.value.config);
+    seismicState.value.grades.push(grade);
+
+    // UI feedback can be handled in component via watching grades or returning result here
+    return grade;
   }
 
   async function sift() {
@@ -702,6 +783,8 @@ export const useGameStore = defineStore('game', () => {
     isCooldown,
     lastExtractAt,
     batteryCapacity,
-    userSessionId
+    userSessionId,
+    seismicState,
+    strike
   };
 });
