@@ -76,6 +76,28 @@ The combination of Mint and Condition defines an item’s total value in both th
 * Skill Synergies:
   * Appraisal: Enables Pre-Sift Appraisal previews (Mint Probability / Condition Range) and can reveal hidden sub-stats that further influence value.
   * Restoration: Advanced restoration skills grant a passive +1% bonus to the Historical Value of any item successfully claimed from a sift.
+  * Advanced skilling (60+ and beyond): Certification and cross-skill masteries can add explicit HV bonuses.\n See [Skills Expansion](../expansion-plan/skills-expansion.md).
+
+#### 3.2.1 HV modifiers (stacking rules)
+
+HV must stay readable.\n Any modifier must be explicit and capped where relevant.
+
+Recommended player-facing breakdown:
+
+* Base HV (rarity tier)
+* Condition multiplier
+* Mint multiplier (low digits)
+* Set multiplier (if any)
+* Skill-based HV bonuses (explicit lines)
+  * Restoration 99 passive (always-on)
+  * Appraisal branch “Certified Valuator” `+2%` HV on certification (once per item)
+  * Cross-skill mastery “Certified Restorer” `+5%` HV when restored by you + certified by you (once per item)
+
+Hard rules:
+
+* “Once per item” bonuses must not stack infinitely.
+* Tooltips must show the exact delta and its source.
+* No hidden multipliers.
 
 ***
 

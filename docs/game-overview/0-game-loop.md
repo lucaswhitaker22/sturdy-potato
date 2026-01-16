@@ -83,6 +83,18 @@ Actions pay XP into four skills. This ensures “veteran power” persists beyon
 * Appraisal: Better trading information and fees.
 * Smelting: Better Scrap conversion.
 
+Advanced layer (align with [Skills Expansion](../expansion-plan/skills-expansion.md)):
+
+* Level `60` unlocks (per skill):
+  * 1 active ability (a “press moment”).
+  * 1 sub-specialization branch pick (build choice).
+* Level `80/80` pair unlocks:
+  * Always-on cross-skill masteries (synergy perks).\n Example: **Certified Restorer** (Restoration+Appraisal) and **Efficiency Engine** (Excavation+Smelting).
+* All skills `90+`:
+  * Total mastery: **Senior Researcher** (Archive intel + identity).
+* Optional endgame prestige:
+  * “Archive Rebirth” (reset for ribbons + small permanent account perks).
+
 Skill definitions live in [5 - RPG Skilling System](5-rpg-skilling-system.md).
 
 #### Collection: Sets as Long-Term Goals

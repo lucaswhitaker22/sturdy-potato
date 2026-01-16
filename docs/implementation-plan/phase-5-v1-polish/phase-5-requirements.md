@@ -46,6 +46,8 @@ Explicit non-goals for Phase 5:
 
 * New core gameplay loops, new refine stages, or new rarity tiers.
 * New skills beyond those already defined.
+* Prestige systems (post-V1):
+  * Archive Rebirth (skill resets for ribbons/permanent perks).
 * Friends, guilds, chat, DMs.
 * Anti-bot enforcement beyond server-authoritative state + basic rate limiting.
 * Regional servers.

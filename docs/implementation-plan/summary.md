@@ -9,6 +9,16 @@ Use these docs as canon:
 * [3 - The Loot & Collection Schema](../game-overview/3-the-loot-and-collection-schema.md) (tiers, identity, HV/mint/condition)
 * [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro.md) (Bazaar, tax, tri-currency)
 * [5 - RPG Skilling System](../game-overview/5-rpg-skilling-system.md) (OSRS XP curve, mastery perks, Total Level gates)
+* [Skills Expansion](../expansion-plan/skills-expansion.md) (active abilities, specializations, cross-skill masteries, blueprints, prestige)
+
+### Skilling gates (shared language across phases)
+
+Use these thresholds consistently:
+
+* Level `60+`: “advanced skilling starts” (active abilities + specialization branch pick).
+* `80/80`: pair cross-skill masteries (always-on synergy perks).
+* All skills `90+`: total mastery (e.g., **Senior Researcher**).
+* Level `90 -> 99` for Appraisal/Smelting may be HI-gated (Phase 4).
 
 ### Phase 1 — Clicker Foundation (MVP)
 
@@ -58,6 +68,7 @@ Goal: ship the Archive loops.
 
 * Museum, Historical Influence, world events.
 * Advanced skills (Appraisal + Smelting).
+* Advanced skilling layer:\n active abilities + specialization branches + cross-skill masteries.
 
 Plan: [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)\
 Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
@@ -67,3 +78,7 @@ Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-
 Goal: polish the feel, add retention + monetization basics, and ship.
 
 Plan: [Phase 5: V1 Polish](phase-5-v1-polish/)
+
+### Post-V1 (future): Archive Rebirth
+
+Archive Rebirth is optional prestige.\n It resets a skill for ribbons + tiny permanent perks.\n It is intentionally not required for V1 scope.
