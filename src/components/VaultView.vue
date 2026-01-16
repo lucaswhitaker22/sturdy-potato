@@ -2,8 +2,29 @@
 import { useGameStore } from "@/stores/game";
 import type { VaultItem, ItemDefinition } from "@/types";
 import { computed, ref } from "vue";
+import SpecializationPanel from "./vault/SpecializationPanel.vue";
 
 const store = useGameStore();
+const viewMode = ref<'archive' | 'specs'>('archive');
+
+const SKILL_BRANCHES = {
+  excavation: [
+    { id: 'area_specialist', name: 'Area Specialist', desc: 'Expertise in urban recovery. Increases odds of finding Household and Branded items.', effect: 'Loot Bias: Household / Branded' },
+    { id: 'deep_seeker', name: 'Deep Seeker', desc: 'Expertise in deep-crust tech recovery. Increases odds of finding Complex Tech and Key Cultural items.', effect: 'Loot Bias: Tech / Cultural' }
+  ],
+  restoration: [
+    { id: 'master_preserver', name: 'Master Preserver', desc: 'A gentle hand for delicate beginnings. Improves Stability in early stages (1-3).', effect: '+3% Stability (Stages 1-3)' },
+    { id: 'swift_handler', name: 'Swift Handler', desc: 'Steady nerves for the final stretch. Improves Stability in late stages (4-5).', effect: '+2% Stability (Stages 4-5)' }
+  ],
+  appraisal: [
+    { id: 'authenticator', name: 'Authenticator', desc: 'Certified to verify authenticity. Can issue Certificates of Authenticity for HV boost.', effect: 'Unlock: Certify Action (+HV)' },
+    { id: 'market_maker', name: 'Market Maker', desc: 'Predicts the flow of the gray market. Reveals Zone Trends ahead of time.', effect: 'Passive: Trends Revealed in Appraisal' }
+  ],
+  smelting: [
+    { id: 'fragment_alchemist', name: 'Fragment Alchemist', desc: 'Turning failure into potential. Increased Fine Dust from stabilized fails and higher Fragment chance.', effect: '+10% Dust (Fail) / +Fragments' },
+    { id: 'scrap_tycoon', name: 'Scrap Tycoon', desc: 'Industrial efficiency. Smelt items directly for increased Scrap yield.', effect: 'Unlock: Smelt Action (1.25x Junk)' }
+  ]
+};
 
 const vaultGrid = computed(() => {
   // If catalog is empty (loading), might want to fallback or show nothing
@@ -50,17 +71,43 @@ const smeltItem = async () => {
   await store.smeltItem(selectedItem.value.bestInstance.id);
   selectedItem.value = null; // Close overlay
 };
+
+const certifyItem = async () => {
+  if (!selectedItem.value || !selectedItem.value.bestInstance) return;
+  const cost = 500; // Base cost, technically stored in RPC but good for UI hint
+  if (
+    !confirm(
+      `Purchase Certificate of Authenticity? (+HV)\nCost: ~${cost} Scrap (varies with Spec support)`
+    )
+  ) return;
+  
+  await store.certifyItem(selectedItem.value.bestInstance.id);
+};
 </script>
 
 <template>
   <div class="h-full flex flex-col gap-4 relative">
-    <!-- Header -->
+    <!-- Header / Tabs -->
     <div
       class="flex justify-between items-center border-b border-gray-400 pb-2 border-dashed"
     >
-      <h3 class="uppercase font-serif font-bold text-sm tracking-wider">
-        Archive Log 2026
-      </h3>
+      <div class="flex gap-4">
+        <button 
+          @click="viewMode = 'archive'"
+          class="uppercase font-serif font-bold text-sm tracking-wider hover:text-black transition-colors"
+          :class="viewMode === 'archive' ? 'text-black underline' : 'text-gray-400'"
+        >
+          Archive Log 2026
+        </button>
+        <button 
+          @click="viewMode = 'specs'"
+          class="uppercase font-serif font-bold text-sm tracking-wider hover:text-black transition-colors"
+          :class="viewMode === 'specs' ? 'text-black underline' : 'text-gray-400'"
+        >
+          Specializations
+        </button>
+      </div>
+
       <div
         class="text-[10px] font-mono bg-gray-200 px-2 rounded-full border border-gray-300"
       >
@@ -68,9 +115,9 @@ const smeltItem = async () => {
       </div>
     </div>
 
-    <!-- Index Card Details Overlay -->
+    <!-- Index Card Details Overlay (Archive Mode Only) -->
     <div
-      v-if="selectedItem"
+      v-if="selectedItem && viewMode === 'archive'"
       class="absolute inset-2 z-20 bg-[#FDFDFB] p-6 flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-300 transform rotate-1"
       style="
         background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
@@ -110,6 +157,9 @@ const smeltItem = async () => {
         <span class="font-mono text-[10px] text-gray-600"
           >REF_ID: {{ selectedItem.id }}</span
         >
+        <span v-if="selectedItem.bestInstance?.certified" class="text-[10px] font-bold text-blue-800 border-b border-blue-800">
+           CERTIFIED
+        </span>
 
         <!-- Mint & Condition -->
         <div v-if="selectedItem.bestInstance" class="flex items-center gap-1">
@@ -152,13 +202,26 @@ const smeltItem = async () => {
         </div>
 
         <div class="flex gap-2">
+           <!-- Authenticator Action -->
+           <button
+            v-if="store.appraisalBranch === 'authenticator' && !selectedItem.bestInstance?.certified"
+            @click="certifyItem"
+            class="hover:bg-blue-600 hover:text-white px-2 py-1 transition-colors border border-transparent hover:border-black"
+            title="Certify Authenticity"
+          >
+            [CERTIFY]
+          </button>
+
+          <!-- Scrap Tycoon Action -->
           <button
+            v-if="store.smeltingBranch === 'scrap_tycoon'"
             @click="smeltItem"
             class="hover:bg-red-600 hover:text-white px-2 py-1 transition-colors border border-transparent hover:border-black"
             title="Recycle for Scrap"
           >
             [SMELT]
           </button>
+          
           <span>
             Date:
             {{
@@ -173,8 +236,40 @@ const smeltItem = async () => {
       </div>
     </div>
 
-    <!-- Grid Layout -->
-    <div class="flex-1 overflow-y-auto pr-1">
+    <!-- SPECS VIEW -->
+    <div v-if="viewMode === 'specs'" class="flex-1 overflow-y-auto pr-1 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-min">
+      <SpecializationPanel 
+        skill="excavation" 
+        label="Excavation Protocol" 
+        :level="store.excavationLevel" 
+        :current-branch="store.excavationBranch"
+        :branches="SKILL_BRANCHES.excavation"
+      />
+      <SpecializationPanel 
+        skill="restoration" 
+        label="Restoration Protocol" 
+        :level="store.restorationLevel" 
+        :current-branch="store.restorationBranch"
+        :branches="SKILL_BRANCHES.restoration"
+      />
+      <SpecializationPanel 
+        skill="appraisal" 
+        label="Appraisal Protocol" 
+        :level="store.appraisalLevel" 
+        :current-branch="store.appraisalBranch"
+        :branches="SKILL_BRANCHES.appraisal"
+      />
+      <SpecializationPanel 
+        skill="smelting" 
+        label="Smelting Protocol" 
+        :level="store.smeltingLevel" 
+        :current-branch="store.smeltingBranch"
+        :branches="SKILL_BRANCHES.smelting"
+      />
+    </div>
+
+    <!-- ARCHIVE VIEW (Grid Layout) -->
+    <div v-else class="flex-1 overflow-y-auto pr-1">
       <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-1">
         <div
           v-for="item in vaultGrid"

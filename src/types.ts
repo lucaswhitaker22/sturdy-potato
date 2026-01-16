@@ -20,12 +20,13 @@ export interface VaultItem {
     is_prismatic: boolean;
     historical_value: number;
     discovered_at: string; // ISO Date
-    
+    certified?: boolean; // New Appraiser Branch property
+
     // Joined fields (if we fetch with join, or we map them)
-    item?: ItemDefinition; 
-    
+    item?: ItemDefinition;
+
     // For legacy support until migration is fully run
-    name?: string; 
+    name?: string;
     flavorText?: string;
     tier?: ItemTier;
 }

@@ -65,6 +65,9 @@ export const useGameStore = defineStore('game', () => {
   const isFocusedSurveyActive = ref(false);
   const vaultHeatmaps = ref<Record<string, number>>({});
   const lastSurveyAt = ref<number | null>(null);
+  const excavationBranch = ref<string | null>(null);
+  const restorationBranch = ref<string | null>(null);
+  const appraisalBranch = ref<string | null>(null);
   const smeltingBranch = ref<string | null>(null);
 
   let focusedSurveyTimer: any = null;
@@ -296,6 +299,9 @@ export const useGameStore = defineStore('game', () => {
       overclockBonus.value = Number(profile.overclock_bonus || 0);
       crateTray.value = profile.crate_tray || [];
       lastExtractAt.value = profile.last_extract_at ? new Date(profile.last_extract_at) : null;
+      excavationBranch.value = profile.excavation_branch || null;
+      restorationBranch.value = profile.restoration_branch || null;
+      appraisalBranch.value = profile.appraisal_branch || null;
       smeltingBranch.value = profile.smelting_branch || null;
 
       // Sync Sub-Stores
@@ -367,6 +373,9 @@ export const useGameStore = defineStore('game', () => {
         activeZoneId.value = p.active_zone_id || 'industrial_zone';
         isFocusedSurveyActive.value = p.is_focused_survey_active ?? false;
         lastSurveyAt.value = p.last_survey_at ? new Date(p.last_survey_at).getTime() : null;
+        excavationBranch.value = p.excavation_branch || null;
+        restorationBranch.value = p.restoration_branch || null;
+        appraisalBranch.value = p.appraisal_branch || null;
         smeltingBranch.value = p.smelting_branch || null;
       })
       // Inventory updates omitted for brevity but should be here
@@ -757,7 +766,74 @@ export const useGameStore = defineStore('game', () => {
       }
     }
   }
-  const smeltItem = async (id: string) => { };
+  async function chooseSpecialization(skill: string, branch: string) {
+    const { data, error } = await supabase.rpc('rpc_choose_specialization', {
+      p_skill: skill,
+      p_branch: branch,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      addLog(`SPECIALIZATION CONFIRMED: ${skill.toUpperCase()} // ${branch.toUpperCase()}`);
+      return true;
+    } else {
+      addLog(`Spec Error: ${data?.error || error?.message}`);
+      return false;
+    }
+  }
+
+  async function respecSpecialization(skill: string) {
+    if (!confirm('Respecializing costs 25,000 Scrap. Reset this skill branch?')) return false;
+    const { data, error } = await supabase.rpc('rpc_respec_specialization', {
+      p_skill: skill,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      addLog(`RESPEC COMPLETE: ${skill.toUpperCase()} registry cleared.`);
+      scrapBalance.value = data.new_balance;
+      return true;
+    } else {
+      addLog(`Respec Error: ${data?.error || error?.message}`);
+      return false;
+    }
+  }
+
+  async function certifyItem(itemId: string) {
+    const { data, error } = await supabase.rpc('rpc_certify_item', {
+      p_item_id: itemId,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      addLog(`CERTIFICATION COMPLETE. Value increased (+${data.hv_gain} HV).`);
+      scrapBalance.value = data.new_balance;
+      // Optimistically update item in inventory (optional, strictly managed by init/refetch usually but let's try)
+      const cachedItem = inventoryStore.inventory.find(i => i.id === itemId);
+      if (cachedItem) {
+        cachedItem.historical_value = (cachedItem.historical_value || 0) + data.hv_gain;
+        // manually set certified flag if we had it in type definition
+      }
+      return true;
+    } else {
+      addLog(`Certification Error: ${data?.error || error?.message}`);
+      return false;
+    }
+  }
+
+  const smeltItem = async (id: string) => {
+    const { data, error } = await supabase.rpc('rpc_smelt_item', {
+      p_item_id: id,
+      p_user_id: userSessionId.value
+    });
+    if (data?.success) {
+      addLog(`SMELTING: Breakdown complete. +${data.scrap_gain} Scrap.`);
+      scrapBalance.value = data.new_balance;
+      if (data.xp_gain) skillsStore.smeltingXP += data.xp_gain; // if returned
+      // Remove from local inventory
+      const idx = inventoryStore.inventory.findIndex(i => i.id === id);
+      if (idx !== -1) inventoryStore.inventory.splice(idx, 1);
+    } else {
+      addLog(`Smelt Error: ${data?.error || error?.message}`);
+    }
+  };
 
   // Init
   init();
@@ -776,7 +852,7 @@ export const useGameStore = defineStore('game', () => {
     excavationLevel, restorationLevel, appraisalLevel, smeltingLevel,
     seismicState,
     activeZoneId, isFocusedSurveyActive, vaultHeatmaps, lastSurveyAt,
-    smeltingBranch,
+    excavationBranch, restorationBranch, appraisalBranch, smeltingBranch,
 
     // Actions
     init, extract, strike, sift, startSifting, appraiseCrate, claim,
@@ -795,6 +871,9 @@ export const useGameStore = defineStore('game', () => {
     userSessionId, // Exported for components dependent on checking auth
 
     // Derived (Missing in previous commit)
-    vaultItems, discoveredCount, uniqueItemsFound
+    vaultItems, discoveredCount, uniqueItemsFound,
+
+    // Skill Actions
+    chooseSpecialization, respecSpecialization, certifyItem,
   };
 });
