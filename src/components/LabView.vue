@@ -171,6 +171,28 @@ async function handleClaim() {
 
 <template>
   <div class="flex-1 flex flex-col min-h-[400px] gap-6 p-4">
+    <!-- Results Overlay -->
+    <div 
+      v-if="revealedItem"
+      class="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/80 backdrop-blur-sm"
+    >
+      <div class="bg-white border-4 border-black p-6 shadow-[8px_8px_0_0_rgba(0,0,0,1)] max-w-sm w-full">
+         <div class="text-xs font-mono text-gray-400 mb-2 uppercase tracking-widest">Analysis Result</div>
+         <h3 class="text-3xl font-serif font-black mb-1 uppercase">{{ revealedItem.name }}</h3>
+         <div class="inline-block px-2 py-0.5 bg-black text-white text-[10px] font-mono mb-4 uppercase">
+            {{ revealedItem.tier }}
+         </div>
+         <p class="text-sm font-serif italic text-gray-600 mb-6">"{{ revealedItem.flavor_text }}"</p>
+         
+         <button 
+           @click="revealedItem = null"
+           class="w-full py-3 bg-black text-white font-mono font-bold hover:bg-gray-800 transition-all"
+         >
+           [ACKNOWLEDGE]
+         </button>
+      </div>
+    </div>
+
     <!-- Header -->
     <div
       class="flex justify-between items-center border-b-2 border-black pb-2 form-line"
@@ -277,13 +299,21 @@ async function handleClaim() {
           </button>
       </div>
 
-      <!-- Initial Start Button -->
-      <div class="w-full px-8" v-else>
+      <!-- Initial Start Button & Claim -->
+      <div class="w-full px-8 flex flex-col gap-4" v-else>
          <button
+            v-if="store.labState.currentStage < 5"
             @click="startStabilization"
             class="w-full py-6 bg-black text-white font-mono text-xl font-bold hover:bg-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all"
          >
             [BEGIN STABILIZATION]
+         </button>
+
+         <button
+           @click="handleClaim"
+           class="w-full py-3 border-2 border-black font-mono text-sm font-bold hover:bg-gray-100 transition-all shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none bg-white"
+         >
+           [CLAIM SPECIMEN @ STAGE {{ store.labState.currentStage }}]
          </button>
       </div>
       
