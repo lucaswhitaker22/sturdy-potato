@@ -67,6 +67,6 @@ This expansion makes the choice of where to dig more interactive based on the Gl
 
 * The Mechanic: The Field UI displays a "Static Intensity" heatmap for each unlocked Zone (e.g., The Sunken Mall vs. Rusty Suburbs).
 * The Impact: Zones with higher "Static" grant up to `+2%` flat Crate drop rate, but apply up to `-5%` flat Sift Stability penalty in the Lab for items found there.
-* Progression Integration: High-level Excavators can "Survey" a zone to briefly reduce its Static penalty for themselves, while Appraisal Level 99 ("The Oracle") provides the ability to see exactly which item catalog IDs are currently "trending" (dropping more frequently) in each zone.
+* Progression Integration: Excavation `70+` can "Survey" a zone to briefly reduce its Static penalty for themselves, while Appraisal Level 99 ("The Oracle") provides the ability to see exactly which item catalog IDs are currently "trending" (dropping more frequently) in each zone.
 
 Spec: [6. "Vault Heatmaps" (Zone Strategy)](6.-vault-heatmaps-zone-strategy.md)

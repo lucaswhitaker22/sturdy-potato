@@ -6,9 +6,9 @@ Use these docs as canon:
 
 * [1. The Vision & World Bible](../game-overview/1.-the-vision-and-world-bible.md) (terms, vibe, pillars)
 * [2: The Mechanics](../game-overview/2-the-mechanics.md) (loops, odds, stage names)
-* [3 - The Loot & Collection Schema](../game-overview/3-the-loot-and-collection-schema.md) (tiers, identity, HV/mint/condition)
+* [3 - The Loot & Collection Schema](../game-overview/3-the-loot-and-collection-schema/) (tiers, identity, HV/mint/condition)
 * [4 - The MMO & Economy (Macro)](../game-overview/4-the-mmo-and-economy-macro.md) (Bazaar, tax, tri-currency)
-* [5 - RPG Skilling System](../game-overview/5-rpg-skilling-system.md) (OSRS XP curve, mastery perks, Total Level gates)
+* [5 - RPG Skilling System](../game-overview/5-rpg-skilling-system/) (OSRS XP curve, mastery perks, Total Level gates)
 * [Skills Expansion](../expansion-plan/skills-expansion.md) (active abilities, specializations, cross-skill masteries, blueprints, prestige)
 
 ### Skilling gates (shared language across phases)

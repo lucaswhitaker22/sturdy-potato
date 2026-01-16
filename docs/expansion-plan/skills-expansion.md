@@ -1,6 +1,13 @@
 # Skills Expansion
 
-To further deepen the RPG experience in Relic Vault, the following expansions focus specifically on enhancing the four core skills (Excavation, Restoration, Appraisal, and Smelting) and the underlying skilling systems.
+To further deepen the RPG experience in Relic Vault, the following expansions focus specifically on enhancing the four core skills and the underlying skilling systems.
+
+Core skill specs:
+
+* [Excavation](../game-overview/5-rpg-skilling-system/excavation.md)
+* [Restoration](../game-overview/5-rpg-skilling-system/restoration.md)
+* [Appraisal](../game-overview/5-rpg-skilling-system/appraisal.md)
+* [Smelting](../game-overview/5-rpg-skilling-system/smelting.md)
 
 #### 1. Active Skill Abilities (Tactile Commands)
 
