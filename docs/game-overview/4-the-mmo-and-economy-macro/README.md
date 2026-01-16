@@ -37,17 +37,17 @@ The Bazaar is integrated into the game's "heartbeat" via real-time social proof.
 
 The Appraisal skill is essential for players looking to specialize as merchants.
 
-Full spec: [Appraisal](5-rpg-skilling-system/appraisal.md).
+Full spec: [Appraisal](../5-rpg-skilling-system/appraisal.md).
 
 * Level 60 (Certified Listings + Previews): Advanced Appraisers can certify items for a Scrap fee, adding a permanent "Certified" badge to the item. Certification reveals hidden sub-stats and can surface Appraisal previews like "Mint Probability."
-  * Appraisal active ability (60+): **Hype Train**.\n Pay Scrap to promote your own active listing for `5m` (visibility only).\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
+  * Appraisal active ability (60+): **Hype Train**.\n Pay Scrap to promote your own active listing for `5m` (visibility only).\n Details: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
 * Level 99 (Master Trader): Reaching mastery in Appraisal unlocks the "Auctioneer" title and provides the ultimate economic benefit: reducing the Archive Tax from 5% down to 2.5%.
   * Oracle edge: Appraisal mastery can also expose which item catalog IDs are currently “trending” per zone (pairs with Vault Heatmaps).
 
 Advanced build layer (60+):
 
-* Appraisal sub-specializations (pick one at level `60`):\n **Certified Valuator** (cheaper certs + explicit HV bonus) vs **Economic Insider** (early intel).\n Details: [Skill Sub-Specializations](../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
-* Cross-skill masteries (80/80):\n Example Bazaar-relevant masteries include **Chain of Custody** (cheaper cert for self-excavated items) and **Certified Restorer** (HV bonus when restored+certified by you).\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
+* Appraisal sub-specializations (pick one at level `60`):\n **Certified Valuator** (cheaper certs + explicit HV bonus) vs **Economic Insider** (early intel).\n Details: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md).
+* Cross-skill masteries (80/80):\n Example Bazaar-relevant masteries include **Chain of Custody** (cheaper cert for self-excavated items) and **Certified Restorer** (HV bonus when restored+certified by you).\n Details: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
 
 **The Archive Tax & Economic Stability**
 
@@ -72,7 +72,7 @@ The Counter-Bazaar is a parallel listing lane.\n It trades fees for uncertainty.
 * Appraisal reduces risk.
 * Appraisal 99 can unlock hidden “Under-the-Table” listings.
 
-Details: [The "Counter-Bazaar" (Black Market Trading)](../expansion-plan/macro-loop-expansion/1.-the-counter-bazaar-black-market-trading.md)
+Details: [The "Counter-Bazaar" (Black Market Trading)](../../expansion-plan/macro-loop-expansion/1.-the-counter-bazaar-black-market-trading.md)
 
 #### 4.1.2 Artifact Leasing (temporary transfers)
 
@@ -83,7 +83,7 @@ Key rules:
 * Leased items are untradeable and cannot be donated/endowed.
 * Lease expiry auto-returns the item.
 
-Details: [Artifact Leasing (The Rental Economy)](../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
+Details: [Artifact Leasing (The Rental Economy)](../../expansion-plan/macro-loop-expansion/3.-artifact-leasing-the-rental-economy.md)
 
 ***
 
@@ -132,13 +132,13 @@ Endowments are permanent item burns.\n They create a long-term Hall of Fame beyo
 * Eligibility: Mythic+ recommended.
 * Reward: small permanent prestige.
 
-Details: [Museum Endowments (Permanent Prestige)](../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)
+Details: [Museum Endowments (Permanent Prestige)](../../expansion-plan/macro-loop-expansion/4.-museum-endowments-permanent-prestige.md)
 
 #### 4.2.2 Influence tiers + Syndicate Permits
 
 HI can also buy permanent social ranks.\n Teams can pool HI for temporary zone access.
 
-Details: [Influence-Gated Social Tiers (and Syndicate Excavations)](../expansion-plan/macro-loop-expansion/2.-influence-gated-social-tiers-and-syndicate-excavations.md)
+Details: [Influence-Gated Social Tiers (and Syndicate Excavations)](../../expansion-plan/macro-loop-expansion/2.-influence-gated-social-tiers-and-syndicate-excavations.md)
 
 ***
 
@@ -159,7 +159,7 @@ Scrap is the primary progression currency used for the majority of in-game trans
 * Generation: Players earn Scrap through manual extraction, passive auto-digging, and smelting unwanted junk items.
 * Economic Sink: To maintain value, Scrap is removed from the economy through "Archive Taxes" in the Bazaar (5% fee), tool upgrade costs in the Workshop, and fees for certifying items.
 * Skill Synergy: High-level Smelters control the Scrap-to-Credit flow by maximizing the yield from junk-tier items.
-  * Full spec: [Smelting](5-rpg-skilling-system/smelting.md).
+  * Full spec: [Smelting](../5-rpg-skilling-system/smelting.md).
 
 **2. Vault Credits: The Scarcity Lever**
 
@@ -179,7 +179,7 @@ Historical Influence is a non-tradable, social currency that measures a player�
 
 Late-game identity hook:
 
-* Total mastery (all skills `90+`) unlocks **Senior Researcher**.\n It adds an Archive “Research Notes” panel with early theme preview and a cosmetic badge.\n Details: [Cross-Skill Masteries](../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
+* Total mastery (all skills `90+`) unlocks **Senior Researcher**.\n It adds an Archive “Research Notes” panel with early theme preview and a cosmetic badge.\n Details: [Cross-Skill Masteries](../../expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md).
 
 **Economic Balance and Interplay**
 
@@ -198,11 +198,11 @@ The interaction between RPG skilling and the global economy is defined by three 
   * Level 60: Unlocks "Certified" listings in the Bazaar, revealing "Mint Probability" and hidden sub-stats on relics to potential buyers.
   * Level 99: The "Master Trader" rank reduces Bazaar listing fees to 2.5% and unlocks the "Auctioneer" title for use in the Global Feed.
 * Restoration (The High-Roller Skill):
-  * Full spec: [Restoration](5-rpg-skilling-system/restoration.md).
+  * Full spec: [Restoration](../5-rpg-skilling-system/restoration.md).
   * This skill directly influences the Museum Score by providing a passive +1% bonus to the Historical Value of any item successfully claimed from a sift.
   * Higher levels are essential for high-stakes gambling in the Lab, as they provide permanent stability bonuses that mitigate the risk of shattering high-tier artifacts.
 * Excavation (The Gatherer Skill):
-  * Full spec: [Excavation](5-rpg-skilling-system/excavation.md).
+  * Full spec: [Excavation](../5-rpg-skilling-system/excavation.md).
   * High-level Excavators serve as the primary "suppliers" for the Bazaar.
   * At Level 99, they gain the ability to find "Unidentified Blueprints," which can be sold to other players to unlock advanced Workshop upgrades.
 
@@ -233,4 +233,4 @@ They can:
 * Add explicit Museum scoring multipliers.
 * Add zone-local chase events.
 
-Details and guardrails: ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md)
+Details and guardrails: ["The Great Static" Events (incl. Static Pulses)](../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md)

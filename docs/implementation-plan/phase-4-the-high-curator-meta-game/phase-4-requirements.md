@@ -18,8 +18,8 @@ It must fully “cover” the functionality described in:
 
 * [Game Overview](../../)
 * [0 - Game Loop](../../game-overview/0-game-loop.md)
-* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema/)
-* [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md)
+* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
+* [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro/)
 * [5 - RPG Skilling System](../../game-overview/5-rpg-skilling-system/)
 * [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
 
@@ -163,7 +163,7 @@ Phase 4 must define canonical mappings for:
 * `rarity_tier -> base_hv`
 * `condition -> multiplier`
 
-Canon values (from [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema/)):
+Canon values (from [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)):
 
 Rarity tiers (minimum supported set):
 
@@ -206,7 +206,7 @@ The UI must show:
 
 #### L1a — Elite training gate (90 -> 99)
 
-To align with [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md), advanced skilling past level 90 requires an Influence Shop unlock.
+To align with [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro/), advanced skilling past level 90 requires an Influence Shop unlock.
 
 By default:
 

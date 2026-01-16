@@ -16,8 +16,8 @@ This page is the Phase 5 source of truth.
 
 It must fully cover the functionality described in:
 
-* [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro.md)
-* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema/)
+* [4 - The MMO & Economy (Macro)](../../game-overview/4-the-mmo-and-economy-macro/)
+* [3 - The Loot & Collection Schema](../../game-overview/3-the-loot-and-collection-schema.md)
 * [6 - UI/UX Wireframe & Flow](../../game-overview/6-ui-ux-wireframe-and-flow.md)
 * [Technical Framework (Vue + Supabase)](../technical-framework-vue-+-supabase.md)
 

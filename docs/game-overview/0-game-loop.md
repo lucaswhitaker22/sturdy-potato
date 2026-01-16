@@ -51,7 +51,7 @@ Refining is the risk engine. The player chooses when to stop.
 * Shatter Salvage: On Standard Fail, a 1-second reaction window can improve failure payout (extra Fine Dust, or recover a rolled Cursed Fragment).
 * Anomaly Overload: Anomalies fill a 3-segment meter. Triggering it grants a 60s buff (faster extraction, slightly better Stage 0 outcomes).
 
-Loot metadata rules live in [3 - The Loot & Collection Schema](3-the-loot-and-collection-schema/).
+Loot metadata rules live in [3 - The Loot & Collection Schema](3-the-loot-and-collection-schema.md).
 
 #### Step C — The “Reveal” Payoff
 
@@ -118,7 +118,7 @@ The macro loop makes finds matter to other players. It also creates recurring re
   * Counter-Bazaar (0% tax, confiscation risk).
   * Artifact Leasing (temporary loans).
 
-Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-economy-macro.md).
+Full economy details live in [4 - The MMO & Economy (Macro)](4-the-mmo-and-economy-macro/).
 
 #### ARCHIVE (Weekly Museum Event)
 
