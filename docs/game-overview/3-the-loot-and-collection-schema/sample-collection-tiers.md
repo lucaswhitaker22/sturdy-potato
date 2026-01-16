@@ -208,8 +208,8 @@ Any numeric values marked “tunable” are not canon.
 **Set: “Battery Pack Theory” (example)**
 
 * Required items: AA Battery, Flashlight, Remote Control, USB Flash Drive (2GB)
-* Reward (tunable): `+1h` Battery Capacity for offline gains
-  * Pairs with the offline cap system in [2: The Mechanics](../2-the-mechanics.md).
+* Reward (tunable): `+1h` Scanner Battery offline buffer\n (equivalently: increases AA cap by the matching amount under the canonical mapping)
+  * Pairs with AA + offline buffer rules in [Archive Authorization (AA) System Spec](../archive-authorization-aa-system-spec.md).
 
 **Set: “The Office” (example string used in requirements)**
 

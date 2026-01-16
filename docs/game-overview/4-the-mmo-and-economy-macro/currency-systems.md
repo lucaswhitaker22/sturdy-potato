@@ -54,6 +54,10 @@ Primary sinks:
   * paid intel actions (where applicable)
 * Active ability costs (Scrap sinks, not taxes).
 
+Non-currency note:
+
+* **Archive Authorizations (AA)** are not a currency.\n They are a time-based “permission” resource.\n Treat them like stamina, not money.\n Spec anchor: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md).
+
 Integrity rules:
 
 * All deductions and grants are server-ledgered.
@@ -109,6 +113,7 @@ Primary sinks:
   * elite training unlocks (push skills `90–99`, if used)
   * status tiers and titles
   * permanent Vault expansions
+  * deep-cycle battery permits (AA regen rate bonus)
 
 Spec anchor:
 

@@ -12,6 +12,7 @@ Related:
 
 * Loop context: [0 - Game Loop](../0-game-loop.md)
 * Field inputs: [The Dig Site (Main Screen)](the-dig-site-main-screen.md)
+* AA system spec: [Archive Authorization (AA) System Spec](../archive-authorization-aa-system-spec.md)
 * Loot identity rules: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md)
 * Skill powering this screen: [Restoration](../5-rpg-skilling-system/restoration.md)
 
@@ -38,6 +39,7 @@ Non-goals:
 #### Inputs
 
 * **Encapsulated Crates** from the Field.
+* **Archive Authorizations (AA)** (only for deep pushes; see below).
 * Optional consumables:
   * **Fine Dust** (used for Active Stabilization).
   * **Cursed Fragments** (used for Emergency Glue).
@@ -76,6 +78,27 @@ Notes:
 * Stage 0 is always safe.
 * Stages 1–5 can shatter.
 * Stage names are UI copy. Keep them consistent everywhere.
+
+***
+
+### Archive Authorizations (AA) costs (deep sifts)
+
+AA is the “permission” layer that limits high-intensity operations.
+
+It creates a daily decision: many low-risk opens, or a few deep pushes.
+
+Rules (baseline tuning):
+
+* Stage `0–3` **\[SIFT]** actions cost `0` AA.
+* Stage `4` **\[SIFT]** (Molecular Scan) costs `5` AA.
+* Stage `5` **\[SIFT]** (Quantum Reveal) costs `10` AA.
+
+Failure handling:
+
+* AA is consumed on attempt start.\n The roll is still server-owned.
+* If AA is insufficient, disable the action and show:\n `DAILY AUTHORIZATION DEPLETED. PLEASE WAIT FOR ARCHIVE RE-CERTIFICATION.`
+
+Spec anchor for AA regen + cap: [The Dig Site (Main Screen)](the-dig-site-main-screen.md).
 
 ***
 

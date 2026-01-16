@@ -39,7 +39,7 @@ Goal: turn the loop into a grind with persistence.
 * Skills: Excavation + Restoration.
 * Workshop tools unlock passive extraction (10s tick).
 * Collections (sets) grant permanent buffs.
-* Supabase persistence, autosave, and offline gains (Battery Capacity cap).
+* Supabase persistence, autosave, and offline gains (Scanner Battery cap).\n This cap also becomes the player’s AA cap once Archive Authorization ships.
 
 Plan: [Phase 2: The "Amateur Archaeologist" (Progression)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/9CdolvIw9isrCE0LzFzC)\
 Build contract: [Phase 2 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3UMkX37vTIwHL0uoayLS)

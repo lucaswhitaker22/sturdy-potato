@@ -12,6 +12,7 @@ Related:
 
 * Loop context: [0 - Game Loop](../0-game-loop.md)
 * Field output this powers: [The Dig Site (Main Screen)](the-dig-site-main-screen.md)
+* AA system spec: [Archive Authorization (AA) System Spec](../archive-authorization-aa-system-spec.md)
 * Skill gates and scaling: [Excavation](../5-rpg-skilling-system/excavation.md)
 * Currency rules: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md)
 
@@ -33,7 +34,7 @@ This screen must:
 #### Permanent-ish progression (account power)
 
 * Tool tiers and upgrades (core).
-* Battery Capacity (offline cap).
+* Scanner Battery Capacity (AA cap + offline buffer cap).
 * Extraction Power (passive throughput).
 
 #### What it must NOT control
@@ -92,7 +93,7 @@ Baseline:
 * Each tick:
   * awards Scrap based on Extraction Power,
   * rolls Crate chance using passive stats.
-* Offline gains are capped by Battery Capacity.
+* Offline gains are capped by Scanner Battery Capacity (offline buffer).
 
 See: [The Dig Site (Main Screen)](the-dig-site-main-screen.md).
 
@@ -159,8 +160,9 @@ See: [Skills Expansion](../../expansion-plan/skills-expansion.md).
   * next upgrade effect,
   * cost,
   * requirements.
-* Battery Capacity panel:
-  * current offline cap,
+* Scanner Battery panel:
+  * current AA cap,
+  * current offline buffer cap,
   * next cap upgrade cost.
 * Overclock panel (late-game):
   * warning copy,
@@ -189,7 +191,7 @@ Recommended sinks:
 
 * New tool tiers (big spikes).
 * Tool upgrade levels (steady drain).
-* Battery Capacity upgrades (mid-game friction).
+* Scanner Battery upgrades (mid-game friction).\n This scales AA cap and offline buffer together.
 * Overclocking (late-game drain).
 
 If Scrap inflation rises, adjust:
@@ -227,13 +229,13 @@ Track:
 * Scrap spent per category:
   * tool purchases,
   * tool upgrades,
-  * battery upgrades,
+  * scanner battery upgrades,
   * overclocks.
 * Time-to-next-tier per cohort (D1/D7/D30).
 * Automation share:
   * % Scrap from passive ticks vs manual extracts.
 * Battery pressure:
-  * % of players hitting the offline cap per day.
+  * % of players hitting the offline buffer cap per day.
 * Overclock adoption:
   * overclocks per player,
   * stability multiplier distribution.

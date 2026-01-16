@@ -51,6 +51,8 @@ You can add fields later, but don’t remove auditability.
   * `scrap_balance`
   * `vault_credits_balance` (phase 5+)
   * `historical_influence_balance` (phase 4+)
+  * AA state (Archive Authorizations):\n `aa_current`, `aa_max`, `aa_updated_at`, `aa_regen_rate_mult`
+  * Offline buffer clock:\n `last_seen_at` (or `last_logout_at`)
   * XP fields per skill (or a single xp table)
   * skill branch picks (nullable until 60)
 * `inventory_items`

@@ -55,5 +55,5 @@ Building on the Excavation Mastery concept, high-level players could find and "A
 A long-term "Endgame" loop for players who have reached the Level 99 cap in all skills.
 
 * Rebirth Mechanic: Players can "Reset" a skill to Level 1 in exchange for a permanent Archive Ribbon on their profile.
-* Permanent Perks: Each Ribbon provides a small, global multiplier (e.g., +1% total XP gain, -0.5% Archive Tax, or +2% Battery Capacity for offline gains).
+* Permanent Perks: Each Ribbon provides a small, global multiplier (e.g., +1% total XP gain, -0.5% Archive Tax, or +2% **Scanner Battery Capacity** (AA cap + offline buffer)).
 * The Founder’s Seal (Evolution): For every skill reset, the Founder’s Seal UI frame gains a new visual layer, such as a more intense "Obsidian Dust" pulse or a shifting prismatic color.

@@ -99,7 +99,8 @@ Source: [Phase 2 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3UMkX37
   * [ ] `profiles`: scrap, excavation\_xp, restoration\_xp, active\_tool\_id, last\_logout.
   * [ ] `inventory`: player\_id + item\_catalog\_id rows.
   * [ ] Autosave every 30s + on major events.
-  * [ ] Offline gains calculation + Battery Capacity cap + UI readout.
+  * [ ] Offline gains calculation + **Scanner Battery** cap + UI readout.
+  * [ ] Archive Authorization (AA) state + regen (uses Scanner Battery as AA cap).
 * [ ] Integrity:
   * [ ] Server-owned RNG for any new RNG in Phase 2 (passive crate rolls).
 

@@ -21,6 +21,7 @@ This matches the navigation flow in [6 - UI/UX Wireframe & Flow](6-ui-ux-wirefra
 #### Step A — Extraction (THE FIELD)
 
 * Input: Manual clicks on **\[EXTRACT]**, plus passive auto-dig ticks.
+* Active limiter: each manual **\[EXTRACT]** consumes `1` **Archive Authorization (AA)**.\n AA regenerates over time and is capped by your **Scanner Battery**.
 * Output: Mostly **Scrap**, sometimes an **Encapsulated Crate**, rarely an **Anomaly**.
 * UI: Progress bar fill, tray slot update, and global feed ping.
 * Optional active layer (Seismic Surge): A timing “Sweet Spot” can appear on the progress bar. Hitting it grants a **Perfect Survey** (+5% flat Crate drop rate for that action) and bonus Excavation XP.
@@ -43,6 +44,7 @@ Refining is the risk engine. The player chooses when to stop.
 
 * On success: Reveal the relic with **Rarity**, **Condition**, **Mint #**, and **Historical Value**.
 * On fail: Item **Shatters**. Pay out **Fine Dust** or trigger cooldown states.
+* High-stakes pushes: Stage `4–5` **\[SIFT]** attempts consume extra AA.\n This makes “go for Mythic/Unique” a daily decision.
 
 **Optional active layers (Micro expansions)**
 

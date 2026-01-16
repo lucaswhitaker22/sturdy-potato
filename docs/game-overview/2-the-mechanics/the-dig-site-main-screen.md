@@ -12,6 +12,7 @@ Related:
 
 * Full loop context: [0 - Game Loop](../0-game-loop.md)
 * Micro/meso rules master doc: [2: The Mechanics](../2-the-mechanics.md)
+* AA system spec: [Archive Authorization (AA) System Spec](../archive-authorization-aa-system-spec.md)
 * Skill powering this screen: [Excavation](../5-rpg-skilling-system/excavation.md)
 
 ***
@@ -34,7 +35,8 @@ This screen must:
 * **Header (“Vitals”)**
   * Scrap balance.
   * Crate tray usage.
-  * Battery / offline capacity (once automation exists).
+  * Archive Authorizations (AA) gauge.\n Capped by Scanner Battery.
+  * Scanner Battery / offline buffer (once automation exists).
   * Overload meter (if enabled; see “Anomaly Overload”).
 * **Main action block**
   * Large button: **\[EXTRACT]**
@@ -60,6 +62,25 @@ This screen must:
 Manual extraction is the default interaction.
 
 It should stay viable forever, even after automation.
+
+#### Archive Authorizations (AA) (active play limiter)
+
+AA is the Archive’s bureaucratic “clearance” to run high-powered field scans.
+
+Rules:
+
+* Manual **\[EXTRACT]** costs `1` AA per attempt.
+* AA regenerates over time.\n Baseline tuning: `+1 AA / 10m`.
+* AA is capped by **Scanner Battery Capacity**.\n Baseline start: `100`.\n Long-term cap target: `1,000` (tuning knob).
+
+Out-of-AA behavior:
+
+* Disable **\[EXTRACT]**.
+* Show message:\n `DAILY AUTHORIZATION DEPLETED. PLEASE WAIT FOR ARCHIVE RE-CERTIFICATION.`
+
+{% hint style="info" %}
+AA is not a currency.\n It is a time-based limiter on active play.\n It exists to support a “few minutes a day” cadence.
+{% endhint %}
 
 #### Player action
 
@@ -137,17 +158,21 @@ The exact gate is a tuning knob. Keep it **early enough** to feel meaningful.
 #### Offline gains and battery capacity
 
 * Passive extraction continues while offline.
-* Offline accumulation is capped by **Battery Capacity**.
-* Battery capacity is a hard limit on stored “offline time.”
+* Offline accumulation is capped by **Scanner Battery Capacity**.\n Think of this as your “offline buffer.”
+* Passive extraction does **not** consume AA.
 
 Implementation model (simple and robust):
 
 * Store `lastSeenAt`.
 * On login:
   * compute `elapsedSeconds`,
-  * clamp to `batterySeconds`,
+  * clamp to `batterySeconds` (derived from Scanner Battery),
   * simulate `floor(clampedElapsed / 10)` ticks,
   * award results in a single payout burst.
+
+Recommended mapping (keeps systems consistent):
+
+* `batterySeconds = aaMax * aaRegenSeconds`\n Example: `100 AA * 600s = 60,000s ≈ 16.7h`.
 
 {% hint style="warning" %}
 Offline gains should never overfill the Crate tray.\n If a crate would drop while full, convert it to Scrap.\n Or queue it to a “stash.”\n Pick one rule.\n Keep it consistent.

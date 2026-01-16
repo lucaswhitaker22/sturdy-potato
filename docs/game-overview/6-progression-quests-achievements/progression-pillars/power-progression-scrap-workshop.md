@@ -36,7 +36,7 @@ Sources:
 Sinks:
 
 * Workshop tool tiers and upgrades.\n Primary sink.
-* Battery Capacity upgrades.\n Offline cap sink.
+* Scanner Battery upgrades.\n AA cap + offline buffer sink.
 * Bazaar fees.\n Deposits and tax.
 * Appraisal actions.\n Certification and intel.
 * Late-game sinks.\n Overclocking, endgame upgrades.
@@ -49,7 +49,7 @@ It controls:
 
 * Tool tiers.\n Speed and crate rate surfaces.
 * Automation throughput.\n Tick-based Scrap engine.
-* Battery Capacity.\n Offline cap.
+* Scanner Battery Capacity.\n AA cap + offline buffer cap.
 * Overclocking.\n Late-game, reset-for-perk sink.
 
 Full spec: [The Workshop (Progression)](../../2-the-mechanics/the-workshop-progression.md)
@@ -65,7 +65,7 @@ Canonical automation rules:
 * Tick length is `10s`.
 * Each tick awards Scrap.
 * Each tick can roll a Crate drop.
-* Offline time is capped by Battery Capacity.
+* Offline time is capped by Scanner Battery Capacity.
 
 Canon: [The Dig Site (Main Screen)](../../2-the-mechanics/the-dig-site-main-screen.md)
 
@@ -97,7 +97,7 @@ These are design targets, not balance promises.
 #### Mid (D1–D7)
 
 * Automation becomes the majority of Scrap.
-* Battery Capacity becomes meaningful friction.
+* Scanner Battery becomes meaningful friction.\n It gates offline buffer and AA cap.
 * Tool gates start referencing skill levels.\n Keeps builds relevant.
 
 #### Late (D30+)

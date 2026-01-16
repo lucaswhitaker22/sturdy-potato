@@ -196,6 +196,7 @@ Baseline catalog:
 * Username titles for the global feed.
 * Permanent Vault expansions.
 * Status tiers (social ranks).
+* Deep-cycle battery permits.\n Small passive AA regen rate bonus.
 
 Expansion lane:
 

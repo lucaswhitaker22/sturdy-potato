@@ -24,10 +24,11 @@ The core mechanics and gameplay features of Relic Vault are structured into thre
 
 #### Micro Loop Mechanics: The Field & The Lab
 
-* Manual Extraction: Players click the \[EXTRACT] button to trigger a survey progress bar (0.5s–2s) to find Scrap (80%), Crates (15%), or Anomalies (5%).
+* Manual Extraction: Players click the \[EXTRACT] button to trigger a survey progress bar (0.5s–2s) to find Scrap (80%), Crates (15%), or Anomalies (5%).\n Each manual extract consumes `1` **Archive Authorization (AA)**.\n AA regenerates over time and is capped by the **Scanner Battery**.
   * Active extraction add-on (Seismic Surge): A timing “Sweet Spot” can appear on the bar. Hitting it grants a **Perfect Survey** (+5% flat Crate drop rate for that action) and bonus Excavation XP.
-* Passive Extraction: Automated tools (Auto-Diggers) generate Scrap and Crates every 10-second "Tick," even while the player is offline, up to a "Battery Capacity" limit.
+* Passive Extraction: Automated tools (Auto-Diggers) generate Scrap and Crates every 10-second "Tick," even while the player is offline.\n Offline accumulation is capped by the **Scanner Battery** (offline buffer).\n Passive extraction does **not** consume AA.
 * The Refiner (Sifting): A multi-stage gambling process (Stages 0–5) where players choose between \[CLAIM] (safely taking the current item) or \[SIFT] (risking the item to reach higher rarity tiers).
+  * High-stakes AA sink: deep **\[SIFT]** attempts at Stages `4–5` consume bonus AA.
 * Stability Gauge: Each sifting stage has a success percentage (from 100% at Stage 0 to 10% at Stage 5) that can be improved by the Restoration skill.
   * Active lab add-on (Active Stabilization): Players can spend Fine Dust to “Tether” the needle, slowing it briefly.
 * Shatter State: If a stability check fails, the item is destroyed, awarding the player "Fine Dust" or "Pity XP" instead of a relic.

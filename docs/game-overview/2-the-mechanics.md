@@ -19,7 +19,7 @@ The Dig Site, designated as \[01] THE FIELD, serves as the player's primary inte
 This is the core interaction for active play, allowing players to manually scavenge the surface.
 
 * The Action: A large, weathered button labeled \[EXTRACT].
-* The Mechanic: Each click triggers a "Survey" progress bar that takes between 0.5s and 2s to fill, depending on the equipped tool's efficiency. In the early stages (Phase 1), this action initiates a 3-second cooldown during which the button is disabled and the "Extraction Gauge" animates.
+* The Mechanic: Each click triggers a "Survey" progress bar that takes between 0.5s and 2s to fill, depending on the equipped tool's efficiency.\n Each manual extract consumes `1` **Archive Authorization (AA)**.\n AA regenerates over time and is capped by the player’s **Scanner Battery**.\n In the early stages (Phase 1), this action also initiates a 3-second cooldown during which the button is disabled and the "Extraction Gauge" animates.
   * Seismic Surge (optional active layer): During the bar fill, a timing “Sweet Spot” can appear. Clicking on the Sweet Spot grants a **Perfect Survey**.
   * Excavation active ability (60+): **Focused Survey**.\n A paid 60s buff window that adds `+10%` flat Crate chance on **manual** extracts (clamped `≤ 95%`).\n It never changes the 5% Anomaly roll.\n Details: [Active Skill Abilities](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md).
 * The Output:
@@ -34,7 +34,7 @@ This is the core interaction for active play, allowing players to manually scave
 Progression past basic manual tools unlocks automated systems, allowing for resource gathering without constant manual input.
 
 * Unlocking: Automated Extraction units become available once the player upgrades beyond the initial Shovel.
-* Passive Income: These units generate Scrap and Crates continuously. This extraction continues while the player is offline, though total accumulation is limited by the current "Battery Capacity".
+* Passive Income: These units generate Scrap and Crates continuously.\n This extraction continues while the player is offline, though total accumulation is limited by the current **Scanner Battery** (offline buffer).\n Passive extraction does **not** consume AA.
 * The Logic: Automation operates on a 10-second "Tick" system. Every tick, the game rolls for a find based on the player’s total Extraction Power. On the UI, this is represented by a secondary passive progress bar that fills automatically.
 
 **Resource Generation (Scrap)**
@@ -81,6 +81,10 @@ Refining is a multi-stage gambling process. Every "Encapsulated Crate" starts at
 | 3         | Sonic Vibration | Epic (15%)           | 50%                       |
 | 4         | Molecular Scan  | Mythic (10%)         | 25%                       |
 | 5         | Quantum Reveal  | Unique (1%)          | 10%                       |
+
+High-stakes pacing:
+
+* Stage `4–5` **\[SIFT]** attempts consume bonus **Archive Authorization (AA)**.\n This makes “push for Mythic/Unique” a daily decision.
 
 **Skill Synergy: Restoration**
 
@@ -185,7 +189,7 @@ To prevent rapid completion, tool costs follow an exponential growth formula: $$
 Once an automated tool is purchased, the \[THE FIELD] screen initiates a secondary passive progress bar.
 
 * Tick System: Automation operates on a 10-second tick. Every time the passive bar fills, the player gains Scrap and a chance for a Crate drop based on their current Extraction Power.
-* Offline Gains: Passive units continue to work while the player is logged out. Upon returning, the game calculates the time elapsed and awards Scrap, though this is capped by the current "Battery Capacity" of the player's equipment.
+* Offline Gains: Passive units continue to work while the player is logged out.\n Upon returning, the game calculates the time elapsed and awards Scrap.\n Offline accumulation is capped by the player’s **Scanner Battery** (offline buffer).
 
 **Prestige Mechanic: Overclocking**
 
@@ -203,6 +207,7 @@ Overclocking is tool-based “soft prestige”.\n It is separate from the option
 The Workshop UI is designed to feel like a salvaged industrial terminal, emphasizing tactile feedback.
 
 * The "Vitals" Bar: A persistent header showing Scrap balance, Vault Credits, and current Battery/Offline time.
+  * This header should also surface **Archive Authorizations (AA)** once the system ships.
 * The Tray: A dedicated area at the bottom of the screen that holds up to 5 unrefined Crates. If the tray is full, manual extraction is disabled to encourage players to move to the Lab.
 * The Feed: A scrolling ticker that broadcasts major player events, such as finding a rare relic via a Quantum Reveal. This feed provides social proof and creates psychological pressure to engage in high-risk sifting.
 * Tactile Feedback: "Buy" buttons remain dim and greyed out until the player meets both the Scrap cost and the Excavation level requirement. Every purchase is met with a unique, heavy mechanical "click" sound to provide weight to the progression.

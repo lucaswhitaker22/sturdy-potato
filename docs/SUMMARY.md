@@ -40,6 +40,7 @@
     * [Collection Achievement List](game-overview/6-progression-quests-achievements/achievement-system/collection-achievement-list.md)
     * [Economy Achievement List](game-overview/6-progression-quests-achievements/achievement-system/economy-achievement-list.md)
 * [6 - UI/UX Wireframe & Flow](game-overview/6-ui-ux-wireframe-and-flow.md)
+* [Archive Authorization (AA) System Spec](game-overview/archive-authorization-aa-system-spec.md)
 
 ## Implementation Plan
 

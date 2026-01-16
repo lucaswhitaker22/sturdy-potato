@@ -123,6 +123,7 @@ At the end of each week, the leaderboard is finalized and rewards are distribute
 The primary reward for Museum participation is Historical Influence, a non-tradable social currency used to unlock "The Unbuyables".
 
 * Influence Shop: HI can be spent in a specialized shop for high-level unlocks, including Zone Permits for new dig sites, elite skill training (levels 90–99), custom username titles for the global feed, and massive Vault expansions.
+  * Also supports long-term efficiency unlocks like **Deep-Cycle Battery permits** (small passive AA regen bonus).
 * Social Proof: High-ranking curators display their "Master's Badges" in the Museum and Bazaar, signaling their expertise and status to the rest of the community.
 
 #### 4.2.1 Museum Endowments (Hall of Fame sink)
