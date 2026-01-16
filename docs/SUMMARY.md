@@ -44,9 +44,9 @@
     * [5. "The Great Static" Events (incl. Static Pulses)](expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md)
     * [6. Lore Keeper Requisitions (Archive Expeditions)](expansion-plan/macro-loop-expansion/6.-lore-keeper-requisitions-archive-expeditions.md)
   * [Skills Expansion](expansion-plan/skills-expansion.md)
-    * [3. Cross-Skill Masteries (Synergy Unlocks)](expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
     * [1. Active Skill Abilities (Tactile Commands)](expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
     * [2. Skill Sub-Specializations (The Branching Path)](expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
+    * [3. Cross-Skill Masteries (Synergy Unlocks)](expansion-plan/skills-expansion/3.-cross-skill-masteries-synergy-unlocks.md)
     * [4. Skill-Gated "Ancient Blueprints"](expansion-plan/skills-expansion/4.-skill-gated-ancient-blueprints.md)
 
 ## Assets

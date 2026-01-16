@@ -16,25 +16,25 @@ Currently, skills primarily provide passive bonuses. Introducing active abilitie
 Upon reaching Level 60, players could choose a "Specialist Branch" for each skill, allowing for diverse high-level builds.
 
 * Excavation Specializations:
-  * Urban Scavenger: Higher drop rates for "Household" and "Branded" items.
-  * Tech Hunter: Higher drop rates for "Complex Tech" and "Cultural Touchstones".
+  * Urban Scavenger: Biases item identity rolls toward "Household" and "Branded" (does not change rarity odds).
+  * Tech Hunter: Biases item identity rolls toward "Complex Tech" and "Cultural Touchstones" (does not change rarity odds).
 * Restoration Specializations:
-  * Stable Hand: Permanently increases Stability for Stages 0–3.
-  * Quantum Gambler: Reduces the success penalty for Stage 4 and 5 Quantum Reveals.
+  * Stable Hand: Flat Stability bonus for Stages 1–3 (visible, clamped).
+  * Quantum Gambler: Flat Stability bonus for Stages 4–5 (visible, clamped).
 * Appraisal Specializations:
-  * Certified Valuator: Fees for certifying items for other players are reduced, and certifications grant a higher HV boost.
-  * Economic Insider: Grants a 5-minute advanced warning in the Global Feed before a World Event or Museum Theme changes.
+  * Certified Valuator: Reduced certification fees + small explicit HV bonus on certification (once per item).
+  * Economic Insider: Small early-warning edge for theme/zone shifts. Large event warnings remain gated by higher Appraisal.
 * Smelting Specializations:
-  * Fragment Alchemist: Higher chance to roll Cursed Fragments on Stage 3+ shatters. Can also buff Shatter Salvage (longer window or better recovery).
-  * Scrap Tycoon: Maximizes Scrap yield from Junk-tier items.
+  * Fragment Alchemist: Buffs failure salvage (longer window / better Dust recovery). Any base fragment-chance changes require canon updates.
+  * Scrap Tycoon: Increased Junk-tier Scrap yield (stacks cleanly with Smelting 99).
 
 #### 3. Cross-Skill Masteries (Synergy Unlocks)
 
 These unique perks unlock when two specific skills reach high levels, rewarding players for balanced progression.
 
-* The Restorer-Merchant (Resto 80 / Appraisal 80): "Certified Restorer" — Successfully certifying an item you restored yourself provides an additional +5% Historical Value (HV).
-* The Industrialist (Excav 80 / Smelt 80): "Efficiency Engine" — Auto-Diggers generate 5% more Scrap and have a 1% chance to find Fine Dust directly.
-* The Archive Elite (All Skills 90+): "Senior Researcher" — Access to a private Archive chat channel and early access to the next week's Museum Theme.
+* The Restorer-Merchant (Restoration 80 / Appraisal 80): **Certified Restorer** — If an item is restored by you and certified by you, it gains `+5%` HV (once per item).
+* The Industrialist (Excavation 80 / Smelting 80): **Efficiency Engine** — Auto-Diggers generate `+5%` more Scrap. While online, they have a small chance to generate Fine Dust (tunable).
+* The Archive Elite (All skills 90+): **Senior Researcher** — Unlock an Archive “Research Notes” panel, including an early preview of the next Museum Theme.
 
 #### 4. Skill-Gated "Ancient Blueprints"
 
