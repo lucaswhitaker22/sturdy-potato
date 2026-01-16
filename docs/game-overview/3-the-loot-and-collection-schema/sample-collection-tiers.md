@@ -44,7 +44,7 @@ It can only apply explicit modifiers that are:
 
 Items enter the Vault by being **claimed** from the Lab loop.
 
-See [2: The Mechanics](../2-the-mechanics/).
+See [2: The Mechanics](../2-the-mechanics.md).
 {% endstep %}
 
 {% step %}
@@ -209,7 +209,7 @@ Any numeric values marked “tunable” are not canon.
 
 * Required items: AA Battery, Flashlight, Remote Control, USB Flash Drive (2GB)
 * Reward (tunable): `+1h` Battery Capacity for offline gains
-  * Pairs with the offline cap system in [2: The Mechanics](../2-the-mechanics/).
+  * Pairs with the offline cap system in [2: The Mechanics](../2-the-mechanics.md).
 
 **Set: “The Office” (example string used in requirements)**
 
@@ -228,7 +228,7 @@ Any numeric values marked “tunable” are not canon.
 
 * Required items: Eyeglass Frame, Safety Pin, Rubber Band, Lightbulb
 * Reward (tunable): `-10%` Fine Dust cost for Active Stabilization tethering
-  * Pairs with the triage layer in [2: The Mechanics](../2-the-mechanics/).
+  * Pairs with the triage layer in [2: The Mechanics](../2-the-mechanics.md).
 
 #### T4 — Economy sets (Bazaar efficiency)
 

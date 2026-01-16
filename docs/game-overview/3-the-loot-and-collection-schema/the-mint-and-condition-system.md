@@ -22,7 +22,7 @@ It does not control:
 * Lab success odds.
 * Any extraction odds.
 
-Those are defined in [2: The Mechanics](../2-the-mechanics/).
+Those are defined in [2: The Mechanics](../2-the-mechanics.md).
 
 ### Data model (minimum)
 
@@ -125,7 +125,7 @@ Mint and Condition are part of the “reveal stamp” beat.
 
 They are never previewed for free at low levels.
 
-Lab loop details live in [2: The Mechanics](../2-the-mechanics/).
+Lab loop details live in [2: The Mechanics](../2-the-mechanics.md).
 
 #### Appraisal (bounded information, never RNG changes)
 

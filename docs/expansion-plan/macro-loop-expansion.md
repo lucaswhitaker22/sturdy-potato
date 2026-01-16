@@ -8,7 +8,7 @@ They must integrate with:
 * Appraisal as “intel + efficiency”
 * Digital scarcity (mint + condition)
 
-They must **not** contradict canonical odds in [2: The Mechanics](../game-overview/2-the-mechanics/).
+They must **not** contradict canonical odds in [2: The Mechanics](../game-overview/2-the-mechanics.md).
 
 ### Expansion set (current proposal)
 

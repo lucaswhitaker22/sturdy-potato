@@ -4,7 +4,7 @@ The following expansions deepen the micro loop—Extract, Refine, Reveal.
 
 They add optional “active play edges”.
 
-They **do not** rewrite the core RNG model in [2: The Mechanics](../../game-overview/2-the-mechanics/).
+They **do not** rewrite the core RNG model in [2: The Mechanics](../../game-overview/2-the-mechanics.md).
 
 #### 1. The "Seismic Surge" (Active Extraction)
 

@@ -18,7 +18,7 @@ It never changes stage tables or rarity odds.
 
 Canon anchors:
 
-* Lab stages, base stability, and fail types: [2: The Mechanics](../2-the-mechanics/)
+* Lab stages, base stability, and fail types: [2: The Mechanics](../2-the-mechanics.md)
 * Triage layer: [Active Stabilization (Lab Triage)](../../expansion-plan/micro-loop-expansion/2.-active-stabilization-lab-triage.md)
 * 60+ reaction: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 
@@ -83,7 +83,7 @@ Recommended clamp:
 Stage 0 remains `100%` by definition.
 
 {% hint style="info" %}
-Canon base stage stabilities are defined in [2: The Mechanics](../2-the-mechanics/).
+Canon base stage stabilities are defined in [2: The Mechanics](../2-the-mechanics.md).
 {% endhint %}
 
 ### Key milestones (player-facing)
@@ -181,7 +181,7 @@ If both are available:
 
 Canon references:
 
-* Salvage: [2: The Mechanics](../2-the-mechanics/)
+* Salvage: [2: The Mechanics](../2-the-mechanics.md)
 * Glue: [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 
 ### Worked examples
@@ -274,7 +274,7 @@ Track:
 
 ### Links
 
-* Canon Lab rules + fail states: [2: The Mechanics](../2-the-mechanics/)
+* Canon Lab rules + fail states: [2: The Mechanics](../2-the-mechanics.md)
 * Core skilling model and mastery perks: [5 - RPG Skilling System](./)
 * Active abilities (Emergency Glue): [Active Skill Abilities](../../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md)
 * Branch picks: [Skill Sub-Specializations](../../expansion-plan/skills-expansion/2.-skill-sub-specializations-the-branching-path.md)
