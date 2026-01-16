@@ -66,4 +66,4 @@ Build contract: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-
 
 Goal: make the UI feel premium and ship.
 
-Plan: [Phase 5: The "Polished Vault" (Juice & Launch)](phase-5-the-polished-vault-juice-and-launch.md)
+Plan: [Phase 5: The "Polished Vault" (Juice & Launch)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/MGuFQHUR4VBl7odVipkA)
