@@ -35,7 +35,7 @@ These are lifted from the phase “build contract” pages.
 
 <summary><strong>Phase 1 gaps</strong> (Field → Lab → Vault MVP)</summary>
 
-Source: [Phase 1 (MVP) requirements](phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
+Source: [Phase 1 (MVP) requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/whZFSOeTpyhQynDJUqds)
 
 * [ ] Field screen:
   * [ ] Show Scrap balance + tray count.
@@ -69,7 +69,7 @@ Source: [Phase 1 (MVP) requirements](phase-1-the-clicker-foundation-mvp/phase-1-
 
 <summary><strong>Phase 2 gaps</strong> (progression + persistence)</summary>
 
-Source: [Phase 2 requirements](phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md)
+Source: [Phase 2 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3UMkX37vTIwHL0uoayLS)
 
 * [ ] XP + levels:
   * [ ] Track Excavation + Restoration XP server-side.
@@ -109,7 +109,7 @@ Source: [Phase 2 requirements](phase-2-the-amateur-archaeologist-progression/pha
 
 <summary><strong>Phase 3 gaps</strong> (MMO layer)</summary>
 
-Source: [Phase 3 requirements](phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
+Source: [Phase 3 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/GcPUD3swAP8KbhaBt30Q)
 
 * [ ] Global Activity Feed:
   * [ ] Visible on all primary decks.
@@ -144,7 +144,7 @@ Source: [Phase 3 requirements](phase-3-the-connected-world-the-mmo-layer/phase-3
 
 <summary><strong>Phase 4 gaps</strong> (Archive meta-game + advanced skills)</summary>
 
-Source: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
+Source: [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm)
 
 * [ ] Archive deck exists:
   * [ ] Museum
@@ -199,7 +199,7 @@ Source: [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requir
 
 <summary><strong>Phase 5 gaps</strong> (V1 polish + monetization)</summary>
 
-Source: [Phase 5 requirements](phase-5-v1-polish/phase-5-requirements.md)
+Source: [Phase 5 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/CuGFgLZMnJn3FCWcFAB7)
 
 * [ ] Sensory coverage:
   * [ ] Sound + visual cue for every high-frequency action.
@@ -505,11 +505,11 @@ Backlog:
 
 This mirrors the roadmap pages:
 
-1. Phase 1: [Phase 1: The "Clicker" Foundation (MVP)](phase-1-the-clicker-foundation-mvp/)
-2. Phase 2: [Phase 2: The "Amateur Archaeologist" (Progression)](phase-2-the-amateur-archaeologist-progression/)
-3. Phase 3: [Phase 3: The "Connected World" (The MMO Layer)](phase-3-the-connected-world-the-mmo-layer/)
-4. Phase 4: [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)
-5. Phase 5: [Phase 5: V1 Polish](phase-5-v1-polish/)
+1. Phase 1: [Phase 1: The "Clicker" Foundation (MVP)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/vXgJqkczaUUC4axkOsrA)
+2. Phase 2: [Phase 2: The "Amateur Archaeologist" (Progression)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/9CdolvIw9isrCE0LzFzC)
+3. Phase 3: [Phase 3: The "Connected World" (The MMO Layer)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/4rU38xhwZ4ktq4Txw2Ib)
+4. Phase 4: [Phase 4: The "High Curator" (Meta-Game)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3uQOaWYvcOgpxH24hlV2)
+5. Phase 5: [Phase 5: V1 Polish](/broken/spaces/W0NXJBdtLzebirumENnw/pages/ZdcsomiEpbMvVDZ0OJsb)
 
 ### Full documentation index (all other docs)
 
@@ -553,16 +553,16 @@ This mirrors the roadmap pages:
 
 * [Summary](summary.md)
 * [Technical Framework (Vue + Supabase)](technical-framework-vue-+-supabase.md)
-* [Phase 1: The "Clicker" Foundation (MVP)](phase-1-the-clicker-foundation-mvp/)
-  * [Phase 1 (MVP) requirements](phase-1-the-clicker-foundation-mvp/phase-1-mvp-requirements.md)
-* [Phase 2: The "Amateur Archaeologist" (Progression)](phase-2-the-amateur-archaeologist-progression/)
-  * [Phase 2 requirements](phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md)
-* [Phase 3: The "Connected World" (The MMO Layer)](phase-3-the-connected-world-the-mmo-layer/)
-  * [Phase 3 requirements](phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
-* [Phase 4: The "High Curator" (Meta-Game)](phase-4-the-high-curator-meta-game/)
-  * [Phase 4 requirements](phase-4-the-high-curator-meta-game/phase-4-requirements.md)
-* [Phase 5: V1 Polish](phase-5-v1-polish/)
-  * [Phase 5 requirements](phase-5-v1-polish/phase-5-requirements.md)
+* [Phase 1: The "Clicker" Foundation (MVP)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/vXgJqkczaUUC4axkOsrA)
+  * [Phase 1 (MVP) requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/whZFSOeTpyhQynDJUqds)
+* [Phase 2: The "Amateur Archaeologist" (Progression)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/9CdolvIw9isrCE0LzFzC)
+  * [Phase 2 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3UMkX37vTIwHL0uoayLS)
+* [Phase 3: The "Connected World" (The MMO Layer)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/4rU38xhwZ4ktq4Txw2Ib)
+  * [Phase 3 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/GcPUD3swAP8KbhaBt30Q)
+* [Phase 4: The "High Curator" (Meta-Game)](/broken/spaces/W0NXJBdtLzebirumENnw/pages/3uQOaWYvcOgpxH24hlV2)
+  * [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm)
+* [Phase 5: V1 Polish](/broken/spaces/W0NXJBdtLzebirumENnw/pages/ZdcsomiEpbMvVDZ0OJsb)
+  * [Phase 5 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/CuGFgLZMnJn3FCWcFAB7)
 
 #### Expansion plan
 

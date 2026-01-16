@@ -156,7 +156,7 @@ If the game uses the HI-gated training model:
 * Smelting is capped at `90` by default.
 * An Influence Shop unlock lifts the cap to `99`.
 
-Canon requirement spec: [Phase 4 requirements](../../implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md).
+Canon requirement spec: [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm).
 
 #### Level 99: Mastery — “Pure Yield”
 

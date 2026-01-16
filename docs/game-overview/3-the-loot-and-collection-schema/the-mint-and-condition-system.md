@@ -64,7 +64,7 @@ Two simultaneous drops must never receive the same mint.
 
 This is a Phase 3 “server authority” cornerstone.
 
-See [Phase 3 requirements](../../implementation-plan/phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md).
+See [Phase 3 requirements](/broken/pages/GcPUD3swAP8KbhaBt30Q).
 
 #### Low-mint prestige multiplier (canon)
 
@@ -248,5 +248,5 @@ Prismatic does not change the mint number.
 
 See:
 
-* [Phase 3 requirements](../../implementation-plan/phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md)
-* [Phase 4 requirements](../../implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md)
+* [Phase 3 requirements](/broken/pages/GcPUD3swAP8KbhaBt30Q)
+* [Phase 4 requirements](/broken/pages/W0goIsLgTGnXgIRcgKtm)

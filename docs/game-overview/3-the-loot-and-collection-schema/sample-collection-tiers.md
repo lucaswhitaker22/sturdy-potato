@@ -84,7 +84,7 @@ See [4 - The MMO & Economy (Macro)](../4-the-mmo-and-economy-macro.md).
 Phase alignment:
 
 * **Phase 2** only needs auto-completion + auto-locking + one modifier type (`[EXTRACT]` cooldown).
-  * See “Collections feature” in [Phase 2 requirements](../../implementation-plan/phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md).
+  * See “Collections feature” in [Phase 2 requirements](/broken/pages/3UMkX37vTIwHL0uoayLS).
 * Manual “choose what to lock” UX can ship later.
   * The system rules above still apply.
 {% endhint %}
@@ -189,7 +189,7 @@ Any numeric values marked “tunable” are not canon.
 * Required items: Ceramic Mug, Rusty Toaster, Spoon
 * Reward name: **Caffeine Rush**
 * Reward: permanently reduces `[EXTRACT]` cooldown by `0.5s` (canon, required in Phase 2)
-  * See [Phase 2 requirements](../../implementation-plan/phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md).
+  * See [Phase 2 requirements](/broken/pages/3UMkX37vTIwHL0uoayLS).
 
 #### T1 — Beginner Field sets (Scrap + tempo)
 
@@ -215,7 +215,7 @@ Any numeric values marked “tunable” are not canon.
 
 * Reward (tunable): `+5%` Scrap Yield (global)
   * Keep it explicit and not RNG-based.
-  * Mentioned as a message example in [Phase 2 requirements](../../implementation-plan/phase-2-the-amateur-archaeologist-progression/phase-2-requirements.md).
+  * Mentioned as a message example in [Phase 2 requirements](/broken/pages/3UMkX37vTIwHL0uoayLS).
 
 #### T3 — Specialist Lab sets (stability + failure economy)
 

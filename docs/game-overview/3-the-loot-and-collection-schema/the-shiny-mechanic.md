@@ -53,7 +53,7 @@ Minimum UI beats:
 * A prismatic color-burst during the Lab reveal.
 * A distinct badge/tag: `PRISMATIC`.
 
-Polish expectations: [Phase 5 requirements](../../implementation-plan/phase-5-v1-polish/phase-5-requirements.md).
+Polish expectations: [Phase 5 requirements](/broken/pages/CuGFgLZMnJn3FCWcFAB7).
 
 ### Social proof (global feed)
 
@@ -63,7 +63,7 @@ Example string:
 
 * `"<Player> just unearthed [Prismatic] <Item Name> #<Mint>!"`
 
-Feed rules live in [Phase 3 requirements](../../implementation-plan/phase-3-the-connected-world-the-mmo-layer/phase-3-requirements.md).
+Feed rules live in [Phase 3 requirements](/broken/pages/GcPUD3swAP8KbhaBt30Q).
 
 ### The “Dissolve” sink (Vault Credits)
 
@@ -105,5 +105,5 @@ They are called out as out-of-scope in Phase 4 requirements.
 
 See:
 
-* [Phase 4 requirements](../../implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md)
-* [Phase 5 requirements](../../implementation-plan/phase-5-v1-polish/phase-5-requirements.md)
+* [Phase 4 requirements](/broken/pages/W0goIsLgTGnXgIRcgKtm)
+* [Phase 5 requirements](/broken/pages/CuGFgLZMnJn3FCWcFAB7)

@@ -133,7 +133,7 @@ If the game uses the HI-gated training model:
 * Appraisal is capped at `90` by default.
 * An Influence Shop unlock lifts the cap to `99`.
 
-Canon requirement spec: [Phase 4 requirements](../../implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md).
+Canon requirement spec: [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm).
 
 #### Level 99: Mastery — “The Oracle” + “Master Trader”
 
@@ -197,7 +197,7 @@ Key integrity rules:
   * `certified_by_player_id`
 * Scope must be enforced (self-owned or explicit request flow).
 
-Canon requirement spec: [Phase 4 requirements](../../implementation-plan/phase-4-the-high-curator-meta-game/phase-4-requirements.md).
+Canon requirement spec: [Phase 4 requirements](/broken/spaces/W0NXJBdtLzebirumENnw/pages/W0goIsLgTGnXgIRcgKtm).
 
 #### HV bonuses (stacking guardrails)
 
