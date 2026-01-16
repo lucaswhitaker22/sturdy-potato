@@ -55,7 +55,7 @@ class AudioService {
     }
   }
 
-  playCompletion(tier: 'common' | 'rare' | 'mythic' | 'unique' = 'common') {
+  playCompletion(tier: 'junk' | 'common' | 'uncommon' | 'rare' | 'epic' | 'mythic' | 'unique' = 'common') {
     if (!this.soundEnabled || !this.ctx) return;
     this.init();
 

@@ -7,7 +7,7 @@ const store = useGameStore();
 
 const vaultGrid = computed(() => {
   // If catalog is empty (loading), might want to fallback or show nothing
-  return store.catalog.map((def) => {
+  return store.catalog.map((def: ItemDefinition) => {
     const ownedInstances = store.inventory.filter((i) => i.item_id === def.id);
 
     // Find the "Best" instance to display

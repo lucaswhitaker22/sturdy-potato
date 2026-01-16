@@ -1,3 +1,4 @@
+<script setup lang="ts">
 import { useGameStore } from "@/stores/game";
 import { computed, ref } from "vue";
 import { audio } from "@/services/audio";
@@ -37,7 +38,7 @@ async function handleClaim() {
   isShaking.value = false;
 
   if (result) {
-    audio.playCompletion(result.tier?.toLowerCase() || 'common');
+    audio.playCompletion((result.tier?.toLowerCase() || "common") as any);
     revealedItem.value = result;
   }
 }
@@ -198,7 +199,6 @@ async function handleClaim() {
                   ? "Stabilizing..."
                   : `Process Layer ${store.labState.currentStage + 1}`
               }}</span>
-              <!-- Ink fill hover effect could go here -->
             </button>
             <div class="text-center font-mono text-[10px] text-gray-400 py-1">
               - OR -
@@ -235,15 +235,19 @@ async function handleClaim() {
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
       @click="revealedItem = null"
     >
-      <div v-if="!revealedItem.is_prismatic" class="flash-overlay"></div>
-      
       <!-- Prismatic Burst Background -->
-      <div v-if="revealedItem.is_prismatic" class="absolute inset-0 bg-gradient-conic from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-red-500 animate-spin-slow opacity-50 z-0"></div>
+      <div
+        v-if="revealedItem.is_prismatic"
+        class="absolute inset-0 bg-gradient-to-tr from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-red-500 animate-spin-slow opacity-50 z-0"
+      ></div>
 
       <!-- Main Card -->
       <div
         class="bg-white p-12 border-4 border-ink-black shadow-[20px_20px_0_0_rgba(255,255,255,0.2)] text-center animate-shake-heavy relative max-w-md w-full z-10"
-        :class="{ 'ring-8 ring-offset-4 ring-offset-black ring-gradient-to-r from-pink-500 to-blue-500': revealedItem.is_prismatic }"
+        :class="{
+          'ring-8 ring-offset-4 ring-offset-black ring-yellow-400':
+            revealedItem.is_prismatic,
+        }"
         @click.stop
       >
         <!-- Header -->
@@ -252,11 +256,11 @@ async function handleClaim() {
         >
           CATALOG SUCCESS
         </div>
-        
+
         <!-- Prismatic Badge -->
         <div
           v-if="revealedItem.is_prismatic"
-           class="absolute -top-12 right-0 animate-bounce text-4xl"
+          class="absolute -top-12 right-0 animate-bounce text-4xl"
         >
           🌈
         </div>
@@ -266,25 +270,32 @@ async function handleClaim() {
           class="text-9xl mb-8 filter drop-shadow-xl crt-flicker animate-bounce pt-6"
         >
           {{
-            revealedItem.tier === "mythic" ? "👑"
-            : revealedItem.tier === "unique" ? "🏺"
-            : revealedItem.tier === "epic" ? "🏛️"
-            : revealedItem.tier === "rare" ? "💎"
-            : "📦"
+            revealedItem.tier === "mythic"
+              ? "👑"
+              : revealedItem.tier === "unique"
+              ? "🏺"
+              : revealedItem.tier === "epic"
+              ? "🏛️"
+              : revealedItem.tier === "rare"
+              ? "💎"
+              : "📦"
           }}
         </div>
 
         <div class="space-y-4">
           <h2
             class="text-4xl font-serif font-black uppercase leading-none tracking-tight"
-             :class="{ 'text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600': revealedItem.is_prismatic }"
+            :class="{
+              'text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600':
+                revealedItem.is_prismatic,
+            }"
           >
             {{ revealedItem.name || revealedItem.item_id.replace(/_/g, " ") }}
           </h2>
 
           <!-- Stats/Tags -->
           <div class="flex flex-col gap-2 items-center">
-             <!-- Mint Number -->
+            <!-- Mint Number -->
             <div
               class="text-xl font-mono font-bold inline-block px-3 py-1 border-2 border-ink-black bg-gray-100"
               :class="
@@ -297,22 +308,27 @@ async function handleClaim() {
             </div>
 
             <!-- Condition -->
-             <div class="flex gap-2 justify-center">
-                 <span v-if="revealedItem.condition" 
-                    class="text-xs uppercase font-bold px-2 py-0.5 border"
-                    :class="{
-                        'bg-green-100 border-green-500 text-green-700': revealedItem.condition === 'mint',
-                        'bg-gray-100 border-gray-400 text-gray-700': revealedItem.condition === 'preserved',
-                        'bg-yellow-50 border-yellow-600 text-yellow-800': revealedItem.condition === 'weathered',
-                        'bg-red-50 border-red-800 text-red-900 line-through': revealedItem.condition === 'wrecked'
-                    }"
-                 >
-                     {{ revealedItem.condition }}
-                 </span>
-                 <span class="text-xs font-mono text-gray-500 py-0.5">
-                     VAL: {{ revealedItem.historical_value }} HV
-                 </span>
-             </div>
+            <div class="flex gap-2 justify-center">
+              <span
+                v-if="revealedItem.condition"
+                class="text-xs uppercase font-bold px-2 py-0.5 border"
+                :class="{
+                  'bg-green-100 border-green-500 text-green-700':
+                    revealedItem.condition === 'mint',
+                  'bg-gray-100 border-gray-400 text-gray-700':
+                    revealedItem.condition === 'preserved',
+                  'bg-yellow-50 border-yellow-600 text-yellow-800':
+                    revealedItem.condition === 'weathered',
+                  'bg-red-50 border-red-800 text-red-900 line-through':
+                    revealedItem.condition === 'wrecked',
+                }"
+              >
+                {{ revealedItem.condition }}
+              </span>
+              <span class="text-xs font-mono text-gray-500 py-0.5">
+                VAL: {{ revealedItem.historical_value }} HV
+              </span>
+            </div>
           </div>
 
           <div class="pt-6 mt-6 border-t border-gray-200">
@@ -331,19 +347,32 @@ async function handleClaim() {
 
 <style scoped>
 @keyframes scan {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
+
 .animate-spin-slow {
   animation: spin 8s linear infinite;
 }
+
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.bg-gradient-conic {
-  background-image: conic-gradient(var(--tw-gradient-stops));
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

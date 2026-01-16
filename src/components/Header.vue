@@ -136,7 +136,7 @@ const displayedInfluence = computed(() =>
           class="text-[10px] font-mono border border-gray-400 px-2 text-gray-700 mb-1"
           title="Max offline accumulation time"
         >
-          BATTERY: 8.0h
+          BATTERY: {{ store.batteryCapacity.toFixed(1) }}h
         </div>
       </div>
 

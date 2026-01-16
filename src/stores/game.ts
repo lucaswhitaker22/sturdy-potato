@@ -40,6 +40,7 @@ export const useGameStore = defineStore('game', () => {
   const ownedTools = ref<Record<string, number>>({ 'rusty_shovel': 1 }); // tool_id -> level
   const completedSetIds = ref<string[]>([]);
   const overclockBonus = ref(0);
+  const batteryCapacity = ref(8.0);
   const lastExtractAt = ref<Date | null>(null);
 
   // Animation State
@@ -83,7 +84,14 @@ export const useGameStore = defineStore('game', () => {
   const surveyDurationMs = computed(() => {
     // 0.5s to 2s depending on tool? 
     // Simplified: Base 2s, reduced by 10% per tool tier?
-    const tiers: Record<string, number> = { 'rusty_shovel': 2000, 'pneumatic_pick': 1500, 'ground_radar': 1000, 'industrial_drill': 500 };
+    const tiers: Record<string, number> = {
+      'rusty_shovel': 2000,
+      'pneumatic_pick': 1500,
+      'ground_radar': 1000,
+      'industrial_drill': 500,
+      'seismic_array': 250,
+      'satellite_uplink': 100
+    };
     return tiers[activeToolId.value] || 2000;
   });
 
@@ -590,6 +598,7 @@ export const useGameStore = defineStore('game', () => {
     historicalInfluence,
     trayCount,
     inventory,
+    catalog,
     vaultItems, // backward compat
     activeListings,
     labState,
@@ -625,6 +634,7 @@ export const useGameStore = defineStore('game', () => {
     surveyDurationMs,
     surveyProgress,
     isCooldown,
-    lastExtractAt
+    lastExtractAt,
+    batteryCapacity
   };
 });
