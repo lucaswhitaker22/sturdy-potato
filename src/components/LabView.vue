@@ -263,8 +263,14 @@ async function handleClaim() {
   }
 }
 // Appraisal Config
-const appraisalCost = computed(() => (store.appraisalLevel * 50) + 100);
-const successChance = computed(() => Math.min(90, 30 + (store.appraisalLevel * 0.6)));
+const appraisalCost = computed(() => 50 + (store.appraisalLevel * 50));
+const successChance = computed(() => {
+  const level = store.appraisalLevel;
+  if (level >= 99) return 90;
+  if (level >= 61) return Math.floor((0.70 + (level - 60) * 0.004) * 100);
+  if (level >= 31) return Math.floor((0.50 + (level - 30) * 0.006) * 100);
+  return Math.floor((0.30 + (level * 0.0067)) * 100);
+});
 const isOracle = computed(() => store.appraisalLevel >= 99);
 
 const appraisingCrateId = ref<string | null>(null);
@@ -284,13 +290,17 @@ async function handleAppraise(crateId: string) {
 function getCrateIntel(crate: any) {
   const intel = [...(crate.intel || [])];
   
-  // Oracle auto-reveal
-  if (isOracle.value && !intel.find((i: any) => i.type === 'condition')) {
-    intel.push({
-      type: 'condition',
-      label: 'ORACLE: INTEGRITY',
-      value: crate.contents?.condition || 'UNKNOWN'
-    });
+  // Oracle auto-reveal: Condition
+  // If we are Lvl 99, we see the condition even if not appraised or appraisal failed.
+  if (isOracle.value) {
+    const existingCondition = intel.find((i: any) => i.type === 'condition');
+    if (!existingCondition) {
+      intel.unshift({
+        type: 'condition',
+        label: 'ORACLE: INTEGRITY',
+        value: crate.contents?.condition?.toUpperCase() || 'UNKNOWN'
+      });
+    }
   }
   
   return intel;
