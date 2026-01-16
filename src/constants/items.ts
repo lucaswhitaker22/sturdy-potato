@@ -1,7 +1,7 @@
 export interface Item {
   id: string;
   name: string;
-  tier: 'common' | 'rare';
+  tier: 'common' | 'rare' | 'mythic' | 'unique';
   flavorText: string;
 }
 

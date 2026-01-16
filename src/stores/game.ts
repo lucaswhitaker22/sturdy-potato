@@ -402,12 +402,14 @@ export const useGameStore = defineStore('game', () => {
         addLog(`ANALYSIS COMPLETE: Identified ${data.tier} item: ${data.item_id.toUpperCase()} #${data.mint_number}`);
         labState.value.isActive = false;
         labState.value.currentStage = 0;
-        // Inventory update handled by subscription
+        return data; // Return data for UI
       } else {
         addLog(`Claim Error: ${data.error}`);
+        return null;
       }
     } catch (err: any) {
       addLog(`Error: ${err.message}`);
+      return null;
     }
   }
 
@@ -464,20 +466,24 @@ export const useGameStore = defineStore('game', () => {
   }
 
   async function placeBid(listingId: string, amount: number) {
+    if (scrapBalance.value < amount) return false;
+    
+    // Optimistic update
+    const previousBalance = scrapBalance.value;
+    scrapBalance.value -= amount;
+
     const { data, error } = await supabase.rpc('rpc_place_bid', {
       p_listing_id: listingId,
       p_amount: amount,
       p_user_id: userSessionId.value
     });
     
-    if (error) {
-      addLog(`Bid Error: ${error.message}`);
+    if (error || !data?.success) {
+      addLog(`Bid Error: ${error?.message || data?.error}`);
+      scrapBalance.value = previousBalance; // Rollback
       return false;
     }
-    if (!data.success) {
-       addLog(`Bid Failed: ${data.error}`);
-       return false;
-    }
+
     addLog(`Bid placed: ${amount} scrap.`);
     return true;
   }

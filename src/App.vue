@@ -16,9 +16,28 @@ import InfluenceShop from "@/components/shop/InfluenceShop.vue";
 import { useMMOStore } from "@/stores/mmo";
 import NotificationManager from "@/components/mmo/NotificationManager.vue";
 
+import { audio } from "@/services/audio";
+import { onMounted } from "vue";
+
 const store = useGameStore();
 const mmoStore = useMMOStore();
 mmoStore.init();
+
+// Global Audio Interactions
+onMounted(() => {
+  window.addEventListener("click", (e: MouseEvent) => {
+    // Play sound if clicked element is interactive
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === "BUTTON" ||
+      target.closest("button") ||
+      target.closest("a")
+    ) {
+      audio.playClick("heavy");
+    }
+  });
+});
+
 type Deck =
   | "FIELD"
   | "LAB"
@@ -37,7 +56,7 @@ const setDeck = (deck: Deck) => {
 
 <template>
   <div
-    class="min-h-screen p-2 md:p-6 mx-auto max-w-[1400px] flex flex-col gap-4 text-ink-black"
+    class="min-h-screen p-2 md:p-6 mx-auto max-w-[1400px] flex flex-col gap-4 text-ink-black crt-overlay"
   >
     <!-- World Event Banner -->
     <WorldEventBanner />

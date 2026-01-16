@@ -107,3 +107,119 @@ body {
 .ink-filter {
     filter: grayscale(100%) contrast(150%) brightness(0.9) sepia(0.2);
 }
+
+/* --- PHASE 5: THE POLISHED VAULT (SENSORY DESIGN) --- */
+
+/* CRT Overlay Effect */
+.crt-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.05) 50%
+  ), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+@keyframes flicker {
+  0% { opacity: 0.98; }
+  5% { opacity: 0.95; }
+  10% { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+.crt-flicker {
+  animation: flicker 0.15s infinite;
+}
+
+/* Animations: Shake */
+@keyframes shake-mild {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(1px, 1px); }
+  50% { transform: translate(-1px, -1px); }
+  75% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+.animate-shake-mild {
+  animation: shake-mild 0.2s ease-in-out;
+}
+
+@keyframes shake-heavy {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-3px, -3px) rotate(-1deg); }
+  20% { transform: translate(3px, 3px) rotate(1deg); }
+  30% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(0, 0); }
+  100% { transform: translate(0, 0); }
+}
+.animate-shake-heavy {
+  animation: shake-heavy 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Animations: Pulse (Rare Items) */
+@keyframes pulse-glow-rare {
+  0% { box-shadow: 0 0 5px rgba(50, 50, 255, 0.2); border-color: rgba(50, 50, 255, 0.5); }
+  50% { box-shadow: 0 0 15px rgba(50, 50, 255, 0.6); border-color: rgba(50, 50, 255, 0.9); }
+  100% { box-shadow: 0 0 5px rgba(50, 50, 255, 0.2); border-color: rgba(50, 50, 255, 0.5); }
+}
+.rare-pulse {
+  animation: pulse-glow-rare 2s infinite;
+}
+
+/* Animations: Prismatic Border (Mythic Items) */
+@keyframes prismatic-border {
+  0% { border-color: #ff0000; box-shadow: 0 0 5px #ff0000; }
+  20% { border-color: #ffff00; box-shadow: 0 0 5px #ffff00; }
+  40% { border-color: #00ff00; box-shadow: 0 0 5px #00ff00; }
+  60% { border-color: #00ffff; box-shadow: 0 0 5px #00ffff; }
+  80% { border-color: #0000ff; box-shadow: 0 0 5px #0000ff; }
+  100% { border-color: #ff00ff; box-shadow: 0 0 5px #ff00ff; }
+}
+.mythic-border {
+  animation: prismatic-border 4s linear infinite;
+  border-width: 2px;
+  border-style: solid;
+}
+
+/* Glitch Effect */
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-10deg); filter: invert(0.2); }
+  40% { transform: skew(10deg); filter: invert(0); }
+  60% { transform: skew(-5deg); }
+  80% { transform: skew(5deg); }
+  100% { transform: skew(0deg); }
+}
+.glitch-flash {
+  animation: glitch-skew 0.3s steps(3);
+}
+
+/* Reveal Flash */
+@keyframes white-flash {
+  0% { background-color: white; opacity: 1; }
+  100% { background-color: transparent; opacity: 0; }
+}
+.flash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  animation: white-flash 0.5s ease-out forwards;
+}

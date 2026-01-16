@@ -1,6 +1,6 @@
-<script setup lang="ts">
 import { useGameStore } from "@/stores/game";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { audio } from "@/services/audio";
 const store = useGameStore();
 
 const currentStability = computed(() => {
@@ -15,6 +15,32 @@ const currentStability = computed(() => {
   const bonus = store.restorationLevel * 0.1 + store.overclockBonus * 100;
   return (base + bonus).toFixed(1) + "%";
 });
+
+const isShaking = ref(false);
+const revealedItem = ref<any>(null);
+
+async function handleSift() {
+  if (store.isExtracting) return;
+  isShaking.value = true;
+  await store.sift();
+  setTimeout(() => (isShaking.value = false), 500);
+}
+
+async function handleClaim() {
+  if (store.isExtracting) return;
+
+  // Tension Shake
+  isShaking.value = true;
+  await new Promise((resolve) => setTimeout(resolve, 800)); // Build tension
+
+  const result = await store.claim();
+  isShaking.value = false;
+
+  if (result) {
+    audio.playCompletion(result.tier?.toLowerCase() || 'common');
+    revealedItem.value = result;
+  }
+}
 </script>
 
 <template>
@@ -74,7 +100,10 @@ const currentStability = computed(() => {
         class="flex-1 flex flex-col md:flex-row items-center justify-center gap-12"
       >
         <!-- The "Specimen" (Crate) -->
-        <div class="relative group">
+        <div
+          class="relative group"
+          :class="{ 'animate-shake-heavy': isShaking }"
+        >
           <!-- Stability Tag -->
           <div class="absolute -top-6 -right-6 z-20 transform rotate-6">
             <div
@@ -108,8 +137,12 @@ const currentStability = computed(() => {
             <!-- The Item/Crate -->
             <div
               class="relative z-10 w-full h-full flex items-center justify-center grayscale contrast-125 sepia-[.3]"
+              :class="{ 'crt-flicker': store.labState.currentStage >= 4 }"
             >
-              <span class="text-8xl filter drop-shadow-md">📦</span>
+              <span
+                class="text-8xl filter drop-shadow-md transition-transform duration-300 transform group-hover:scale-110"
+                >📦</span
+              >
             </div>
 
             <!-- Scanning Line (Ruler) -->
@@ -156,7 +189,7 @@ const currentStability = computed(() => {
 
           <div class="flex flex-col gap-3">
             <button
-              @click="store.sift()"
+              @click="handleSift()"
               :disabled="store.isExtracting"
               class="w-full py-3 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors relative overflow-hidden group disabled:opacity-50"
             >
@@ -171,7 +204,7 @@ const currentStability = computed(() => {
               - OR -
             </div>
             <button
-              @click="store.claim()"
+              @click="handleClaim()"
               :disabled="store.isExtracting"
               class="w-full py-3 border-2 border-dashed border-green-600 text-green-700 font-bold uppercase hover:bg-green-50 transition-colors disabled:opacity-50"
             >
@@ -193,6 +226,70 @@ const currentStability = computed(() => {
             >cannot be recovered</span
           >.
         </p>
+      </div>
+    </div>
+
+    <!-- REVEAL OVERLAY -->
+    <div
+      v-if="revealedItem"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      @click="revealedItem = null"
+    >
+      <div class="flash-overlay"></div>
+      <!-- White flash animation -->
+      <div
+        class="bg-white p-12 border-4 border-ink-black shadow-[20px_20px_0_0_rgba(255,255,255,0.2)] text-center animate-shake-heavy relative max-w-md w-full"
+        @click.stop
+      >
+        <!-- Header -->
+        <div
+          class="absolute -top-6 left-1/2 -translate-x-1/2 bg-stamp-red text-white px-4 py-1 font-mono font-bold rotate-[-2deg] shadow-lg border-2 border-white"
+        >
+          CATALOG SUCCESS
+        </div>
+
+        <!-- Item Icon -->
+        <div
+          class="text-9xl mb-8 filter drop-shadow-xl crt-flicker animate-bounce pt-6"
+        >
+          {{
+            revealedItem.tier === "mythic"
+              ? "👑"
+              : revealedItem.tier === "unique"
+              ? "🏺"
+              : "💎"
+          }}
+        </div>
+
+        <div class="space-y-4">
+          <h2
+            class="text-4xl font-serif font-black uppercase leading-none tracking-tight"
+          >
+            {{ revealedItem.item_id.replace(/_/g, " ") }}
+          </h2>
+
+          <div class="flex justify-center gap-2">
+            <div
+              class="text-xl font-mono font-bold inline-block px-3 py-1 border-2 border-ink-black bg-gray-100"
+              :class="
+                revealedItem.mint_number <= 10
+                  ? 'text-stamp-red border-stamp-red bg-red-50'
+                  : 'text-gray-700'
+              "
+            >
+              MINT #{{ String(revealedItem.mint_number).padStart(3, "0") }}
+            </div>
+          </div>
+
+          <div class="pt-6 mt-6 border-t border-gray-200">
+            <button
+              @click="revealedItem = null"
+              class="px-8 py-2 bg-black text-white font-bold hover:bg-gray-800 transition-colors uppercase font-mono text-sm"
+            >
+              Secure to Vault
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

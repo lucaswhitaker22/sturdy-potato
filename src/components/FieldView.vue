@@ -46,7 +46,11 @@ onUnmounted(() => {
   if (passiveAnimInterval) clearInterval(passiveAnimInterval);
 });
 
+const isShaking = ref(false);
+
 async function handleExtract() {
+  isShaking.value = true;
+  setTimeout(() => (isShaking.value = false), 200);
   if (store.isExtracting || store.isCooldown) return;
   store.extract();
 }
@@ -106,11 +110,12 @@ async function handleExtract() {
           <!-- Red Ink Stamp Effect -->
           <div
             class="relative w-72 h-32 bg-[#FDFDF5] border-4 border-ink-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex flex-col items-center justify-center overflow-hidden"
-            :class="
+            :class="[
               store.isExtracting || store.isCooldown
                 ? 'bg-gray-50 opacity-90'
-                : 'bg-[#FFFFF0]'
-            "
+                : 'bg-[#FFFFF0]',
+              isShaking ? 'animate-shake-mild' : '',
+            ]"
           >
             <!-- Texture Layers -->
             <div

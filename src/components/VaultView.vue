@@ -128,11 +128,13 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
           <!-- The Polaroid/Stamp Frame -->
           <div
             class="absolute inset-0 bg-white border shadow-sm p-1 flex flex-col items-center"
-            :class="
+            :class="[
               item.found
                 ? 'border-gray-400'
-                : 'border-gray-200 border-dashed bg-transparent'
-            "
+                : 'border-gray-200 border-dashed bg-transparent',
+              item.found && item.tier === 'rare' ? 'rare-pulse' : '',
+              item.found && item.tier === 'mythic' ? 'mythic-border' : '',
+            ]"
           >
             <div
               class="flex-1 w-full flex items-center justify-center bg-gray-100 overflow-hidden relative"
@@ -141,7 +143,15 @@ const selectItem = (item: (typeof vaultGrid.value)[0]) => {
               "
             >
               <span class="text-2xl">{{
-                item.found ? (item.tier === "rare" ? "🏆" : "📦") : ""
+                item.found
+                  ? item.tier === "mythic"
+                    ? "👑"
+                    : item.tier === "unique"
+                    ? "🏺"
+                    : item.tier === "rare"
+                    ? "💎"
+                    : "📦"
+                  : ""
               }}</span>
               <!-- Grain Overlay -->
               <div
