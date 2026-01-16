@@ -25,43 +25,53 @@ export const useMMOStore = defineStore('mmo', () => {
     const unreadCount = computed(() => notifications.value.filter(n => !n.is_read).length);
 
     async function init() {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        try {
+            let skipAuth = false;
+            try { skipAuth = localStorage.getItem('skip_auth_check') === 'true'; } catch { }
+            if (skipAuth) return;
 
-        // Fetch initial feed (last 50)
-        const { data: feedData } = await supabase
-            .from('global_events')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(50);
+            const { data, error } = await supabase.auth.getSession(); // getSession is faster & less likely to trigger security blocks than getUser
+            if (error) throw error;
+            const user = data?.session?.user;
+            if (!user) return;
 
-        if (feedData) {
-            // We want latest at the "end" of the list if we append, or beginning if we prepend.
-            // Let's store newest last (chronological order) so we can auto-scroll or just show list.
-            feed.value = (feedData as GlobalEvent[]).reverse();
+            // Fetch initial feed (last 50)
+            const { data: feedData } = await supabase
+                .from('global_events')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(50);
+
+            if (feedData) {
+                // We want latest at the "end" of the list if we append, or beginning if we prepend.
+                // Let's store newest last (chronological order) so we can auto-scroll or just show list.
+                feed.value = (feedData as GlobalEvent[]).reverse();
+            }
+
+            // Fetch Notifications
+            const { data: notifData } = await supabase
+                .from('notifications')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            if (notifData) notifications.value = notifData as Notification[];
+
+            // Subscriptions
+            supabase.channel('mmo-channels')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'global_events' }, (payload) => {
+                    const newEvent = payload.new as GlobalEvent;
+                    feed.value.push(newEvent);
+                    if (feed.value.length > 50) feed.value.shift();
+                })
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` }, (payload) => {
+                    notifications.value.unshift(payload.new as Notification);
+                })
+                .subscribe();
+        } catch (err) {
+            console.warn('[MMOStore] Init failed (Security/Network):', err);
         }
-
-        // Fetch Notifications
-        const { data: notifData } = await supabase
-            .from('notifications')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(20);
-
-        if (notifData) notifications.value = notifData as Notification[];
-
-        // Subscriptions
-        supabase.channel('mmo-channels')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'global_events' }, (payload) => {
-                const newEvent = payload.new as GlobalEvent;
-                feed.value.push(newEvent);
-                if (feed.value.length > 50) feed.value.shift();
-            })
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` }, (payload) => {
-                notifications.value.unshift(payload.new as Notification);
-            })
-            .subscribe();
     }
 
     async function markRead(id: string) {

@@ -176,30 +176,75 @@ export const useGameStore = defineStore('game', () => {
       if (data.success && data.scrap_gain > 0) {
         addLog(`OFFLINE REPORT: Yield: +${data.scrap_gain} Scrap.`);
       }
-    } catch (err) {
-      console.error('Offline gains error', err);
+    } catch (err: any) {
+      if (err.message?.includes('SecurityError')) {
+        console.warn('[Store] Offline gains check blocked by security policy.');
+      } else {
+        console.error('Offline gains error', err);
+      }
     }
   }
 
   async function init() {
     console.log('[Store] Initializing system sequence...');
-    let { data: { user } } = await supabase.auth.getUser();
+    let user = null;
+
+    // Check if we previously failed due to SecurityError to avoid console spam/lag
+    let skipAuth = false;
+    try {
+      skipAuth = localStorage.getItem('skip_auth_check') === 'true';
+    } catch { }
+
+    if (!skipAuth) {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) {
+          if (error.message?.includes('SecurityError')) {
+            try { localStorage.setItem('skip_auth_check', 'true'); } catch { }
+          }
+          throw error;
+        }
+        user = data?.user;
+      } catch (err: any) {
+        console.warn('[Store] Auth check failed (Security/Network):', err);
+      }
+    }
 
     if (!user) {
       console.log('[Store] No active session. Using local identity...');
-      let localId = localStorage.getItem('local_user_id');
-      if (!localId) {
+      let localId = null;
+      try {
+        localId = localStorage.getItem('local_user_id');
+        if (!localId) {
+          localId = crypto.randomUUID();
+          localStorage.setItem('local_user_id', localId);
+        }
+      } catch (e) {
+        console.warn('[Store] Local storage restricted, using session-only identity');
         localId = crypto.randomUUID();
-        localStorage.setItem('local_user_id', localId);
       }
       user = { id: localId } as any;
     }
 
     // Debug Ping
-    supabase.rpc('rpc_ping').then(({ data, error }) => {
-      if (error) console.error('Ping failed:', error);
-      else console.log('Ping success:', data);
-    });
+    supabase.rpc('rpc_ping').then(
+      ({ data, error }) => {
+        if (error) {
+          if (!error.message?.includes('SecurityError')) {
+            console.error('Ping failed:', error);
+          } else {
+            console.warn('[Store] Ping blocked by security.');
+          }
+        } else {
+          console.log('Ping success:', data);
+        }
+      },
+      (err: any) => {
+        if (!err.message?.includes('SecurityError')) {
+          console.error('Ping promise error:', err);
+        }
+      }
+    );
 
     if (!user) {
       addLog('CRITICAL: Access Denied. Sector lock active.');
@@ -227,11 +272,13 @@ export const useGameStore = defineStore('game', () => {
       skillsStore.appraisalXP = Number(profile.appraisal_xp || 0);
       skillsStore.smeltingXP = Number(profile.smelting_xp || 0);
 
-      // Note: Owned tools and inventory are more efficiently handled by their stores if needed, 
-      // but for now we load here to ensure sync.
       inventoryStore.activeToolId = profile.active_tool_id || 'rusty_shovel';
     } else if (profileErr) {
-      console.error('Profile fetch failed:', profileErr);
+      if (profileErr.message?.includes('SecurityError')) {
+        console.warn('[Store] Profile fetch blocked by security policy. Using local defaults.');
+      } else {
+        console.error('Profile fetch failed:', profileErr);
+      }
     }
 
     // 2. Fetch Lab State

@@ -19,15 +19,23 @@ export const useWorldEventStore = defineStore('worldEvent', () => {
     const activeEvent = ref<WorldEvent | null>(null);
 
     async function fetchActiveEvent() {
-        const { data, error } = await supabase.rpc('rpc_world_event_get_active', {});
-        if (error) {
-            console.error('Failed to fetch active world event', error);
-            return;
-        }
-        if (data.success && data.active_event) {
-            activeEvent.value = data.active_event;
-        } else {
-            activeEvent.value = null;
+        try {
+            const { data, error } = await supabase.rpc('rpc_world_event_get_active', {});
+            if (error) {
+                if (error.message?.includes('SecurityError')) {
+                    // Silent fail for security restrictions
+                    return;
+                }
+                console.error('Failed to fetch active world event', error);
+                return;
+            }
+            if (data?.success && data.active_event) {
+                activeEvent.value = data.active_event;
+            } else {
+                activeEvent.value = null;
+            }
+        } catch (err) {
+            console.warn('[WorldEvent] Fetch error (Security/Network):', err);
         }
     }
 
