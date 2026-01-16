@@ -370,7 +370,7 @@ Backlog:
   * [x] “Cursed Fragment” currency: recovery logic (Stage 3+).
   * [x] Fragment Alchemist bonus: higher recovery chance at high-level failures.
 * [ ] **Emergency Glue (Lv 60+)** (defined in [Active Skill Abilities (Tactile Commands)](../expansion-plan/skills-expansion/1.-active-skill-abilities-tactile-commands.md))
-  * [ ] 1-second “save” window on critical fails.
+  * [ ] 1-second “save” window on **Standard Fail** only (never on overheat).
   * [ ] `STABILIZED` stamp result.
 
 #### Crate intelligence (Appraisal)
@@ -382,9 +382,9 @@ Spec anchors:
 
 Backlog:
 
-* [ ] **Pre-Sift Appraisal** ([4. "Pre-Sift Appraisal" (Crate Prep)](../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md))
-  * [ ] Level 60+: reveal hidden sub-stat **keys** before deeper sifting.
-  * [ ] Level 99 “The Oracle”: zone trending catalog IDs.
+* [x] **Pre-Sift Appraisal** ([4. "Pre-Sift Appraisal" (Crate Prep)](../expansion-plan/micro-loop-expansion/4.-pre-sift-appraisal-crate-prep.md))
+  * [x] Level 60+: reveal hidden sub-stat **keys** before deeper sifting.
+  * [x] Level 99 “The Oracle”: zone trending catalog IDs.
 
 #### Fever mode (combo system)
 
@@ -412,9 +412,9 @@ Spec anchor:
 Backlog:
 
 * [ ] Specialization dashboard UI.
-* [ ] Excavation branches: Deep Seeker vs Area Specialist.
-* [ ] Restoration branches: Master Preserver vs Swift Handler.
-* [ ] Appraisal branches: Market Maker vs Authenticator.
+* [ ] Excavation branches: Urban Scavenger vs Tech Hunter.
+* [ ] Restoration branches: Stable Hand vs Quantum Gambler.
+* [ ] Appraisal branches: Certified Valuator vs Economic Insider.
 * [ ] Smelting branches: Fragment Alchemist vs Scrap Tycoon.
 
 #### Mastery + synergies

@@ -41,7 +41,11 @@ Every item dropped from a Crate is assigned a Rarity Tier. This determines its b
 | Rare     | Blue         | 250         | Complex tech (Phones, Calculators, Watches).         |
 | Epic     | Purple       | 1,000       | Cultural touchstones (Game consoles, Designer bags). |
 | Mythic   | Orange       | 5,000+      | Masterpieces (Prototypes, High-end jewelry).         |
-| Unique   | Red/Glow     | ???         | One-of-a-kind items with global announcements.       |
+| Unique   | Red/Glow     | 20,000      | One-of-a-kind items with global announcements.       |
+
+{% hint style="info" %}
+Unique base HV is a tuning knob.\n Use `20,000` as a starting anchor.\n Individual Unique catalog entries can override this.
+{% endhint %}
 
 ***
 
@@ -137,8 +141,6 @@ Beyond individual account buffs, collection sets play a critical role in the Pha
 ***
 
 ### 3.4 Flavor Text & World Building
-
-#### 3.4 Flavor Text & World Building
 
 In a UI-centric world without traditional graphics, the Description and Flavor Text perform the heavy lifting of immersion. Every item in the game includes a "Vault Research Note"—a diegetic piece of text written from the perspective of a bureaucratic, slightly clueless researcher from "The Archive".
 
