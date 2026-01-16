@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores/game";
-import { computed, ref } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 import { audio } from "@/services/audio";
 const store = useGameStore();
 
 const currentStability = computed(() => {
   const stage = store.labState.currentStage;
+  // Visual only - server authority
   let base = 0;
   if (stage === 0) base = 90;
   else if (stage === 1) base = 75;
@@ -17,26 +18,127 @@ const currentStability = computed(() => {
   return (base + bonus).toFixed(1) + "%";
 });
 
-const isShaking = ref(false);
-const revealedItem = ref<any>(null);
+// Active Stabilization State
+const isActiveStabilizing = ref(false);
+const needlePos = ref(50); // 0-100
+const tetherCount = ref(0);
+const isStopped = ref(false);
+const swingDirection = ref(1);
 
-async function handleSift() {
-  if (store.isExtracting) return;
-  isShaking.value = true;
-  await store.sift();
-  setTimeout(() => (isShaking.value = false), 500);
+// Animation
+let animationFrame = 0;
+let lastTime = 0;
+
+// Zone Configuration (Danger Zones at edges)
+// Safe Zone center, Danger edges? OR Danger specific spots?
+// Doc: "Danger Zone: overheated range." Usually implies high swing areas.
+// Let's say Danger is 0-20 and 80-100? Or just > 80?
+// Simple implementation: Safe 20-80, Danger 0-20 & 80-100.
+function getZone(pos: number) {
+  if (pos < 20 || pos > 80) return 1; // Danger
+  return 0; // Safe
 }
+
+const zoneStatus = computed(() => {
+  if (getZone(needlePos.value) === 1) return { label: 'DANGER', color: 'text-red-500' };
+  return { label: 'SAFE', color: 'text-green-500' };
+});
+
+const tetherCost = computed(() => store.getTetherCost(store.labState.currentStage));
+const tetherCap = computed(() => store.getTetherCap(store.labState.currentStage));
+const canTether = computed(() => {
+  return !isStopped.value && 
+         store.fineDustBalance >= tetherCost.value && 
+         tetherCount.value < tetherCap.value;
+});
+
+function startStabilization() {
+  if (store.isExtracting) return;
+  isActiveStabilizing.value = true;
+  isStopped.value = false;
+  tetherCount.value = 0;
+  needlePos.value = 50;
+  swingDirection.value = Math.random() > 0.5 ? 1 : -1;
+  lastTime = performance.now();
+  animate();
+}
+
+function animate() {
+  if (!isActiveStabilizing.value || isStopped.value) return;
+
+  const now = performance.now();
+  const delta = (now - lastTime) / 1000;
+  lastTime = now;
+
+  // Swing Logic
+  // Base Speed increases with Stage?
+  const stage = store.labState.currentStage;
+  let speed = 40 + (stage * 10); // 40-90 units/sec
+  
+  // Tether Slowdown (20% per tether? Doc says time window?
+  // "Slows needle movement for a short window."
+  // Simplified: Permanent slow for this sift?
+  // Doc 2.6: "Slows needle movement for a short window... Grants cooling buffer."
+  // If I implement "short window", I need timers.
+  // For simplicity MVP: Tethers apply a slowdown for the duration of the sift (or 2s).
+  // Let's apply speed reduction per tether count permanently for the sift action.
+  // 10% slow per tether.
+  if (tetherCount.value > 0) {
+    speed *= Math.pow(0.8, tetherCount.value); 
+  }
+
+  // Update Pos
+  needlePos.value += speed * delta * swingDirection.value;
+
+  // Bounce
+  if (needlePos.value >= 100) {
+    needlePos.value = 100;
+    swingDirection.value = -1;
+  } else if (needlePos.value <= 0) {
+    needlePos.value = 0;
+    swingDirection.value = 1;
+  }
+
+  animationFrame = requestAnimationFrame(animate);
+}
+
+function handleTether() {
+  if (!canTether.value) return;
+  // Optimistic update
+  store.fineDustBalance -= tetherCost.value; 
+  tetherCount.value++;
+  // Visual effect
+  audio.playClick(); // or specific sound
+}
+
+async function handleForceStop() {
+  if (isStopped.value) return;
+  isStopped.value = true;
+  cancelAnimationFrame(animationFrame);
+  
+  // Determine Zone
+  const zone = getZone(needlePos.value);
+  
+  await store.sift(tetherCount.value, zone);
+  
+  // Reset after short delay
+  setTimeout(() => {
+    isActiveStabilizing.value = false;
+    isStopped.value = false;
+  }, 1000);
+}
+
+// Fallback: If user waits too long? No, force stop works at any time. Sift doesn't auto-resolve here.
+// But to prevent infinite stall, maybe auto-stop after 10s?
+// For now, let it ride.
+
+onUnmounted(() => cancelAnimationFrame(animationFrame));
+
+const revealedItem = ref<any>(null); // Legacy support
 
 async function handleClaim() {
   if (store.isExtracting) return;
-
-  // Tension Shake
-  isShaking.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 800)); // Build tension
-
   const result = await store.claim();
-  isShaking.value = false;
-
   if (result) {
     audio.playCompletion((result.tier?.toLowerCase() || "common") as any);
     revealedItem.value = result;
@@ -50,11 +152,15 @@ async function handleClaim() {
     <div
       class="flex justify-between items-center border-b-2 border-black pb-2 form-line"
     >
-      <h2
-        class="text-2xl font-serif font-black text-ink-black uppercase tracking-tight"
-      >
-        Analysis Lab
-      </h2>
+      <div class="flex flex-col">
+        <h2 class="text-2xl font-serif font-black text-ink-black uppercase tracking-tight">
+          Analysis Lab
+        </h2>
+         <div class="text-xs font-mono text-gray-600 flex gap-2">
+            <span>FINE DUST: {{ store.fineDustBalance }}mg</span>
+         </div>
+      </div>
+     
       <div
         v-if="store.labState.isActive"
         class="px-2 py-1 font-mono text-xs border border-black bg-white shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
@@ -66,313 +172,103 @@ async function handleClaim() {
     <!-- Empty State -->
     <div
       v-if="!store.labState.isActive"
-      class="flex-1 flex flex-col items-center justify-center gap-6"
+      class="flex-1 flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50"
     >
-      <div
-        class="w-48 h-48 border-4 border-dashed border-gray-400 flex items-center justify-center bg-gray-100 rounded-sm"
-      >
-        <div class="text-center grayscale rotate-12">
-          <span class="text-6xl block mb-2 opacity-50">📦</span>
-          <span class="font-serif font-bold italic text-gray-600"
-            >No Specimen</span
-          >
-        </div>
-      </div>
-
-      <div class="flex flex-col items-center gap-2">
-        <button
+      <div class="text-4xl mb-4 opacity-20">🔬</div>
+      <p class="text-gray-500 font-serif italic mb-4">No active specimen.</p>
+      
+      <div v-if="store.trayCount > 0">
+         <button
           @click="store.startSifting()"
-          :disabled="store.trayCount === 0"
-          class="px-8 py-3 bg-ink-black text-white font-serif font-bold hover:bg-gray-800 shadow-[4px_4px_0_0_#999] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0_0_#999] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-6 py-2 bg-black text-white font-mono hover:bg-gray-800 transition-all shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none"
         >
-          Retrieve Specimen from Tray
+          [INITIATE_SCAN]
         </button>
-        <span
-          class="font-mono text-[10px] text-gray-500 uppercase tracking-widest"
-        >
-          Available Units: {{ store.trayCount }}/5
-        </span>
+      </div>
+       <div v-else class="text-sm font-mono text-red-500">
+          [CRATE_REQUIRED]
       </div>
     </div>
 
-    <!-- Active Lab View -->
-    <div v-else class="flex-1 flex flex-col gap-8">
-      <div
-        class="flex-1 flex flex-col md:flex-row items-center justify-center gap-12"
-      >
-        <!-- The "Specimen" (Crate) -->
-        <div
-          class="relative group"
-          :class="{ 'animate-shake-heavy': isShaking }"
-        >
-          <!-- Stability Tag -->
-          <div class="absolute -top-6 -right-6 z-20 transform rotate-6">
-            <div
-              class="bg-gray-100 border-2 border-dashed border-red-500 text-red-600 px-3 py-1 font-black font-mono text-sm shadow-sm"
-            >
-              STABILITY:
-              {{ currentStability }}
-            </div>
-            <!-- Tape effect -->
-            <div
-              class="absolute -top-2 left-1/2 w-8 h-4 bg-yellow-100/80 transform -rotate-45 border-l border-r border-white/50"
-            ></div>
-          </div>
-
-          <!-- Crate Visual: Sketch Style -->
-          <div
-            class="w-64 h-64 border-4 border-black bg-white shadow-[8px_8px_0_0_rgba(0,0,0,0.1)] relative overflow-hidden ring-4 ring-white ring-offset-2 ring-offset-gray-200"
-          >
-            <!-- Paper texture overlay -->
-            <div class="absolute inset-0 bg-[#fdfdfd] opacity-90 z-0"></div>
-            <!-- Grid for analysis -->
-            <div
-              class="absolute inset-0 z-0 opacity-20"
-              style="
-                background-image: linear-gradient(#000 1px, transparent 1px),
-                  linear-gradient(90deg, #000 1px, transparent 1px);
-                background-size: 20px 20px;
-              "
-            ></div>
-
-            <!-- The Item/Crate -->
-            <div
-              class="relative z-10 w-full h-full flex items-center justify-center grayscale contrast-125 sepia-[.3]"
-              :class="{ 'crt-flicker': store.labState.currentStage >= 4 }"
-            >
-              <span
-                class="text-8xl filter drop-shadow-md transition-transform duration-300 transform group-hover:scale-110"
-                >📦</span
-              >
-            </div>
-
-            <!-- Scanning Line (Ruler) -->
-            <div
-              class="absolute top-0 left-0 w-full h-[1px] bg-red-500 z-20 animate-[scan_3s_ease-in-out_infinite] opacity-50"
-            ></div>
-          </div>
-        </div>
-
-        <!-- Controls (Clipboard Form) -->
-        <div
-          class="flex flex-col gap-0 min-w-[300px] paper-card bg-white p-6 rotate-1"
-        >
-          <!-- Clip visual -->
-          <div
-            class="h-4 bg-gray-300 rounded-t-lg mx-auto w-24 -mt-8 mb-4 border border-gray-400 relative"
-          >
-            <div
-              class="absolute top-1 left-2 right-2 h-1 bg-black/10 rounded-full"
-            ></div>
-          </div>
-
-          <div class="font-mono text-xs mb-6 border-b border-gray-200 pb-4">
-            <div class="flex justify-between mb-1">
-              <span class="text-gray-600">Subject ID:</span>
-              <span class="font-bold"
-                >UNK-{{ Math.floor(Math.random() * 9999) }}</span
-              >
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-gray-600">Potential:</span>
-              <span
-                class="font-bold px-1"
-                :class="store.labState.currentStage >= 3 ? 'bg-yellow-200' : ''"
-              >
-                {{
-                  store.labState.currentStage >= 3
-                    ? "HIGH VALUE WARNING"
-                    : "STANDARD"
-                }}
-              </span>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-3">
-            <button
-              @click="handleSift()"
-              :disabled="store.isExtracting"
-              class="w-full py-3 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors relative overflow-hidden group disabled:opacity-50"
-            >
-              <span class="relative z-10">{{
-                store.isExtracting
-                  ? "Stabilizing..."
-                  : `Process Layer ${store.labState.currentStage + 1}`
-              }}</span>
-            </button>
-            <div class="text-center font-mono text-[10px] text-gray-400 py-1">
-              - OR -
-            </div>
-            <button
-              @click="handleClaim()"
-              :disabled="store.isExtracting"
-              class="w-full py-3 border-2 border-dashed border-green-600 text-green-700 font-bold uppercase hover:bg-green-50 transition-colors disabled:opacity-50"
-            >
-              Catalog Now
-            </button>
-          </div>
-        </div>
+    <!-- Active State -->
+    <div v-else class="flex-1 flex flex-col items-center justify-between py-4">
+      
+      <!-- Stability Core Info -->
+      <div class="w-full flex justify-between items-end px-4 mb-4">
+         <div class="flex flex-col">
+            <span class="text-xs font-mono text-gray-500 uppercase">Structural Integrity</span>
+            <span class="text-3xl font-black font-mono tracking-tighter">{{ currentStability }}</span>
+         </div>
+         <div class="flex flex-col items-end">
+             <span class="text-xs font-mono text-gray-500 uppercase">Risk Assessment</span>
+             <span :class="['text-sm font-black font-mono', zoneStatus.color]">
+                {{ isActiveStabilizing ? zoneStatus.label : 'WAITING' }}
+             </span>
+         </div>
       </div>
 
-      <!-- Footer Warning sticker -->
-      <div
-        class="bg-yellow-50 border border-yellow-200 p-3 flex items-start gap-3 max-w-2xl mx-auto shadow-sm"
-      >
-        <span class="text-xl">⚠️</span>
-        <p class="text-xs text-yellow-800 font-sans leading-relaxed">
-          <strong>CAUTION:</strong> Continued processing increases specimen
-          granularity but risks total decoherence. Shattered specimens
-          <span class="underline decoration-red-400 decoration-wavy"
-            >cannot be recovered</span
-          >.
-        </p>
+      <!-- Stability Gauge -->
+      <div class="relative w-full h-16 bg-gray-200 border-2 border-black mb-6 overflow-hidden">
+         <!-- Zones -->
+         <div class="absolute inset-0 flex h-full w-full">
+            <div class="h-full w-[20%] bg-red-100 border-r border-red-200 opacity-50 relative">
+                 <div class="absolute bottom-1 left-1 text-[10px] font-mono text-red-500 font-bold">DANGER</div>
+            </div>
+            <div class="h-full w-[60%] bg-green-50 opacity-50 relative flex justify-center">
+                 <div class="absolute bottom-1 text-[10px] font-mono text-green-600 font-bold">SAFE</div>
+            </div>
+            <div class="h-full w-[20%] bg-red-100 border-l border-red-200 opacity-50 relative">
+                  <div class="absolute bottom-1 right-1 text-[10px] font-mono text-red-500 font-bold">DANGER</div>
+            </div>
+         </div>
+
+         <!-- Needle -->
+         <div 
+            class="absolute top-0 bottom-0 w-1 bg-black z-10 transition-transform duration-75"
+            :style="{ left: `${needlePos}%` }"
+         >
+            <div class="absolute -top-1 -left-1.5 w-4 h-4 bg-black rounded-full"></div>
+         </div>
       </div>
-    </div>
 
-    <!-- REVEAL OVERLAY -->
-    <div
-      v-if="revealedItem"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-      @click="revealedItem = null"
-    >
-      <!-- Prismatic Burst Background -->
-      <div
-        v-if="revealedItem.is_prismatic"
-        class="absolute inset-0 bg-gradient-to-tr from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-red-500 animate-spin-slow opacity-50 z-0"
-      ></div>
-
-      <!-- Main Card -->
-      <div
-        class="bg-white p-12 border-4 border-ink-black shadow-[20px_20px_0_0_rgba(255,255,255,0.2)] text-center animate-shake-heavy relative max-w-md w-full z-10"
-        :class="{
-          'ring-8 ring-offset-4 ring-offset-black ring-yellow-400':
-            revealedItem.is_prismatic,
-        }"
-        @click.stop
-      >
-        <!-- Header -->
-        <div
-          class="absolute -top-6 left-1/2 -translate-x-1/2 bg-stamp-red text-white px-4 py-1 font-mono font-bold rotate-[-2deg] shadow-lg border-2 border-white"
-        >
-          CATALOG SUCCESS
-        </div>
-
-        <!-- Prismatic Badge -->
-        <div
-          v-if="revealedItem.is_prismatic"
-          class="absolute -top-12 right-0 animate-bounce text-4xl"
-        >
-          🌈
-        </div>
-
-        <!-- Item Icon -->
-        <div
-          class="text-9xl mb-8 filter drop-shadow-xl crt-flicker animate-bounce pt-6"
-        >
-          {{
-            revealedItem.tier === "mythic"
-              ? "👑"
-              : revealedItem.tier === "unique"
-              ? "🏺"
-              : revealedItem.tier === "epic"
-              ? "🏛️"
-              : revealedItem.tier === "rare"
-              ? "💎"
-              : "📦"
-          }}
-        </div>
-
-        <div class="space-y-4">
-          <h2
-            class="text-4xl font-serif font-black uppercase leading-none tracking-tight"
-            :class="{
-              'text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600':
-                revealedItem.is_prismatic,
-            }"
+      <!-- Controls -->
+      <div class="w-full grid grid-cols-2 gap-4" v-if="isActiveStabilizing">
+          <!-- Tether -->
+          <button
+            @click="handleTether"
+            :disabled="!canTether"
+            class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-400 font-mono transition-all hover:bg-blue-50 active:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed group"
           >
-            {{ revealedItem.name || revealedItem.item_id.replace(/_/g, " ") }}
-          </h2>
-
-          <!-- Stats/Tags -->
-          <div class="flex flex-col gap-2 items-center">
-            <!-- Mint Number -->
-            <div
-              class="text-xl font-mono font-bold inline-block px-3 py-1 border-2 border-ink-black bg-gray-100"
-              :class="
-                revealedItem.mint_number <= 10
-                  ? 'text-stamp-red border-stamp-red bg-red-50'
-                  : 'text-gray-700'
-              "
-            >
-              MINT #{{ String(revealedItem.mint_number).padStart(3, "0") }}
-            </div>
-
-            <!-- Condition -->
-            <div class="flex gap-2 justify-center">
-              <span
-                v-if="revealedItem.condition"
-                class="text-xs uppercase font-bold px-2 py-0.5 border"
-                :class="{
-                  'bg-green-100 border-green-500 text-green-700':
-                    revealedItem.condition === 'mint',
-                  'bg-gray-100 border-gray-400 text-gray-700':
-                    revealedItem.condition === 'preserved',
-                  'bg-yellow-50 border-yellow-600 text-yellow-800':
-                    revealedItem.condition === 'weathered',
-                  'bg-red-50 border-red-800 text-red-900 line-through':
-                    revealedItem.condition === 'wrecked',
-                }"
-              >
-                {{ revealedItem.condition }}
-              </span>
-              <span class="text-xs font-mono text-gray-500 py-0.5">
-                VAL: {{ revealedItem.historical_value }} HV
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-6 mt-6 border-t border-gray-200">
+             <span class="text-lg font-bold group-hover:scale-105 transition-transform">[TETHER]</span>
+             <span class="text-xs text-blue-600 font-bold mt-1">-{{ tetherCost }}mg Dust</span>
+             <span class="text-[10px] text-gray-400 mt-1">{{ tetherCount }} / {{ tetherCap }} Active</span>
+          </button>
+          
+          <!-- Force Stop -->
             <button
-              @click="revealedItem = null"
-              class="px-8 py-2 bg-black text-white font-bold hover:bg-gray-800 transition-colors uppercase font-mono text-sm"
-            >
-              Secure to Vault
-            </button>
-          </div>
-        </div>
+            @click="handleForceStop"
+            class="flex flex-col items-center justify-center p-4 border-2 border-black bg-red-50 font-mono hover:bg-red-100 active:bg-red-200 shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none transition-all"
+          >
+             <span class="text-xl font-black text-red-600 animate-pulse">[FORCE STOP]</span>
+             <span class="text-xs font-bold mt-1">COMMIT STAGE</span>
+          </button>
       </div>
+
+      <!-- Initial Start Button -->
+      <div class="w-full px-8" v-else>
+         <button
+            @click="startStabilization"
+            class="w-full py-6 bg-black text-white font-mono text-xl font-bold hover:bg-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all"
+         >
+            [BEGIN STABILIZATION]
+         </button>
+      </div>
+      
+      <!-- Info Footer -->
+      <div class="mt-4 text-[10px] font-mono text-gray-400 text-center max-w-[80%]">
+         Secure the needle in the SAFE ZONE to minimize failure risk. Use TETHERS to slow fluctuations.
+      </div>
+      
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes scan {
-  0% {
-    top: 0;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    top: 100%;
-    opacity: 0;
-  }
-}
-
-.animate-spin-slow {
-  animation: spin 8s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-</style>

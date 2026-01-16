@@ -28,6 +28,7 @@ export const useGameStore = defineStore('game', () => {
   const userSessionId = ref<string | null>(null);
   const scrapBalance = ref(0);
   const historicalInfluence = ref(0); // [NEW]
+  const fineDustBalance = ref(0); // [Active Stabilization]
   const trayCount = ref(0);
   const inventory = ref<VaultItem[]>([]);
   const catalog = ref<ItemDefinition[]>([]);
@@ -129,6 +130,23 @@ export const useGameStore = defineStore('game', () => {
     return Math.floor(tool.cost * Math.pow(1.5, level));
   }
 
+  // Active Stabilization Helpers
+  function getTetherCost(stage: number) {
+    let base = 2; // stage 1
+    if (stage === 2) base = 3;
+    if (stage === 3) base = 5;
+    if (stage === 4) base = 8;
+    if (stage === 5) base = 12;
+
+    const discount = Math.min(0.4, restorationLevel.value * 0.004);
+    return Math.ceil(base * (1 - discount));
+  }
+
+  function getTetherCap(stage: number) {
+    if (stage <= 2) return 1;
+    return 2;
+  }
+
   // Actions
   function addLog(message: string) {
     log.value.unshift(`> ${message}`);
@@ -219,6 +237,7 @@ export const useGameStore = defineStore('game', () => {
     if (profile) {
       console.log('[Store] Profile state recovered:', profile);
       scrapBalance.value = Number(profile.scrap_balance || 0);
+      fineDustBalance.value = Number(profile.fine_dust_balance || 0);
       historicalInfluence.value = Number(profile.historical_influence || 0);
       trayCount.value = Number(profile.tray_count || 0);
       excavationXP.value = Number(profile.excavation_xp || 0);
@@ -286,6 +305,7 @@ export const useGameStore = defineStore('game', () => {
         const newProfile = payload.new as any;
         console.log('[Store] Profile Update Received:', newProfile);
         scrapBalance.value = Number(newProfile.scrap_balance ?? 0);
+        fineDustBalance.value = Number(newProfile.fine_dust_balance ?? 0);
         historicalInfluence.value = Number(newProfile.historical_influence ?? 0);
         trayCount.value = Number(newProfile.tray_count ?? 0);
         excavationXP.value = Number(newProfile.excavation_xp ?? 0);
@@ -398,7 +418,7 @@ export const useGameStore = defineStore('game', () => {
         : null;
 
       // Note: We use the local userSessionId as a param if auth is NULL on server
-      const { data, error } = await supabase.rpc('rpc_extract_v2', {
+      const { data, error } = await supabase.rpc('rpc_extract', {
         p_user_id: userSessionId.value,
         p_seismic_grade: gradesStr
       });
@@ -456,12 +476,16 @@ export const useGameStore = defineStore('game', () => {
     return grade;
   }
 
-  async function sift() {
+  async function sift(tethersUsed: number = 0, finalZone: number = 0) {
     if (isExtracting.value || !labState.value.isActive) return;
     isExtracting.value = true;
 
     try {
-      const { data, error } = await supabase.rpc('rpc_sift', { p_user_id: userSessionId.value });
+      const { data, error } = await supabase.rpc('rpc_sift', {
+        p_user_id: userSessionId.value,
+        p_tethers_used: tethersUsed,
+        p_zone: finalZone
+      });
       if (error) throw error;
 
       if (data.success) {
@@ -472,6 +496,12 @@ export const useGameStore = defineStore('game', () => {
           addLog('⚠ CRITICAL FAILURE: Specimen shattered. Structural integrity lost.');
           labState.value.isActive = false;
           labState.value.currentStage = 0;
+          trayCount.value = Number(trayCount.value || 0) - 1;
+        } else if (data.outcome === 'STABILIZED_FAIL') {
+          addLog(`⚠ STABILIZED FAILURE: Specimen lost, but Fine Dust recovered (+${data.dust_payout}).`);
+          labState.value.isActive = false;
+          labState.value.currentStage = 0;
+          fineDustBalance.value = Number(data.new_dust_balance ?? fineDustBalance.value);
           trayCount.value = Number(trayCount.value || 0) - 1;
         } else if (data.outcome === 'ANOMALY') {
           addLog('⚠ TEMPORAL RIFT: Sifting process bypassed dimensional limits.');
@@ -737,6 +767,7 @@ export const useGameStore = defineStore('game', () => {
 
   return {
     scrapBalance,
+    fineDustBalance,
     historicalInfluence,
     trayCount,
     inventory,
@@ -785,6 +816,8 @@ export const useGameStore = defineStore('game', () => {
     batteryCapacity,
     userSessionId,
     seismicState,
-    strike
+    strike,
+    getTetherCost,
+    getTetherCap
   };
 });
