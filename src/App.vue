@@ -16,6 +16,7 @@ import InfluenceShop from "@/components/shop/InfluenceShop.vue";
 import { useMMOStore } from "@/stores/mmo";
 import NotificationManager from "@/components/mmo/NotificationManager.vue";
 import StatsView from "@/components/StatsView.vue";
+import DevTools from "@/components/DevTools.vue";
 
 import { audio } from "@/services/audio";
 import { onMounted } from "vue";
@@ -184,6 +185,7 @@ const setDeck = (deck: Deck) => {
       </footer>
     </div>
     <NotificationManager />
+    <DevTools />
   </div>
 </template>
 

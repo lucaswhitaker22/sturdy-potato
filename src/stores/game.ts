@@ -875,5 +875,8 @@ export const useGameStore = defineStore('game', () => {
 
     // Skill Actions
     chooseSpecialization, respecSpecialization, certifyItem,
+
+    // Debug / Dev
+    checkOfflineGains,
   };
 });
