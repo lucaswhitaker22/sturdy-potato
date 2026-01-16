@@ -17,7 +17,7 @@ async function runVerification() {
 
     await supabase.from('profiles').update({
         tray_count: 5,
-        fine_dust_balance: 100
+        fine_dust_balance: 1000
     }).eq('id', userId);
 
     console.log('SUCCESS: Profile initialized.');
@@ -26,15 +26,23 @@ async function runVerification() {
     let salvageData = null;
     let attempts = 0;
 
-    while (attempts < 50) {
+    const testCrate = { id: crypto.randomUUID(), appraised: false, contents: {} };
+
+    while (attempts < 20) {
         attempts++;
-        await supabase.rpc('rpc_start_sifting', {
-            payload: { p_user_id: userId, p_crate_id: 'test' }
+        console.log(`\nAttempt ${attempts}: Activating lab...`);
+        await supabase.from('lab_state').upsert({
+            user_id: userId,
+            is_active: true,
+            current_stage: 0,
+            last_action_at: new Date().toISOString(),
+            active_crate: testCrate
         });
 
         let stage = 0;
         let active = true;
         while (active && stage < 5) {
+            console.log(`- Stage ${stage}: Sifting...`);
             const { data, error } = await supabase.rpc('rpc_sift', {
                 p_user_id: userId,
                 p_tethers_used: 0,
@@ -42,26 +50,28 @@ async function runVerification() {
             });
 
             if (error) {
-                console.error(`Attempt ${attempts} Sift Error:`, error);
+                console.error(`  ERROR:`, error);
                 active = false;
                 break;
             }
+
+            console.log(`  Data:`, JSON.stringify(data));
+
             if (data.outcome === 'SUCCESS') {
-                console.log(`Attempt ${attempts}: Stage ${stage} -> SUCCESS -> New Stage: ${data.new_stage}`);
                 stage = data.new_stage;
             } else if (data.outcome === 'STABILIZED_FAIL') {
                 active = false;
                 if (data.salvage_token) {
                     salvageData = data;
-                    console.log(`Attempt ${attempts}: SUCCESS! STABILIZED_FAIL at stage ${stage} with token.`);
+                    console.log(`  FAIL (Stabilized) -> Token: ${data.salvage_token}`);
                     break;
                 } else {
-                    console.log(`Attempt ${attempts}: STABILIZED_FAIL at stage ${stage} (No Token)`);
+                    console.log(`  FAIL (Stabilized) -> No Token in data`);
                     break;
                 }
             } else if (data.outcome === 'SHATTERED') {
                 active = false;
-                console.log(`Attempt ${attempts}: CRITICAL SHATTER at stage ${stage}`);
+                console.log(`  CRITICAL FAIL (Shattered)`);
                 break;
             }
         }
@@ -69,7 +79,7 @@ async function runVerification() {
     }
 
     if (!salvageData) {
-        console.error('ERROR: Could not trigger salvage window after 50 attempts.');
+        console.error('ERROR: Could not trigger salvage window after limited attempts.');
         return;
     }
 
