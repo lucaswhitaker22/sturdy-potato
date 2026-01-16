@@ -14,12 +14,12 @@ It stitches together systems that already have canonical specs.
 
 Related:
 
-* Loop context: [0 - Game Loop](0-game-loop.md)
-* Tools and automation: [The Workshop (Progression)](2-the-mechanics/the-workshop-progression.md)
-* Skill model and gates: [5 - RPG Skilling System](5-rpg-skilling-system/)
-* Currencies and sinks: [Currency Systems](4-the-mmo-and-economy-macro/currency-systems.md)
-* Weekly competition: [The Global Museum (Social Leaderboard)](4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
-* Player economy: [The Bazaar (Auction House)](4-the-mmo-and-economy-macro/the-bazaar-auction-house.md)
+* Loop context: [0 - Game Loop](../0-game-loop.md)
+* Tools and automation: [The Workshop (Progression)](../2-the-mechanics/the-workshop-progression.md)
+* Skill model and gates: [5 - RPG Skilling System](../5-rpg-skilling-system/)
+* Currencies and sinks: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md)
+* Weekly competition: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
+* Player economy: [The Bazaar (Auction House)](../4-the-mmo-and-economy-macro/the-bazaar-auction-house.md)
 
 ***
 
@@ -52,7 +52,7 @@ Core actions:
 * Earn Scrap in the Field and by Smelting.
 * Spend Scrap on tools, upgrades, and offline capacity.
 
-Canon: [The Workshop (Progression)](2-the-mechanics/the-workshop-progression.md).
+Canon: [The Workshop (Progression)](../2-the-mechanics/the-workshop-progression.md).
 
 #### 2) Mastery progression (skills 1–99)
 
@@ -64,7 +64,7 @@ Core properties:
 * Skills unlock active abilities and builds at 60+.
 * Total Level gates late zones and content.
 
-Canon: [5 - RPG Skilling System](5-rpg-skilling-system/).
+Canon: [5 - RPG Skilling System](../5-rpg-skilling-system/).
 
 #### 3) Collection progression (sets and identity)
 
@@ -76,7 +76,7 @@ Core properties:
 * Set completion grants permanent account buffs.
 * Set locking removes items from free use.
 
-Canon: [3 - The Loot & Collection Schema](3-the-loot-and-collection-schema.md).
+Canon: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
 
 #### 4) Prestige progression (Museum + HI)
 
@@ -88,7 +88,7 @@ Core properties:
 * HI buys permits and status.
 * Museum submissions lock items for the week.
 
-Canon: [The Global Museum (Social Leaderboard)](4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
+Canon: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
 
 ***
 
@@ -119,7 +119,7 @@ These already exist in the skill spec.
 * Corporate Archive: Total Level `250`
 * Sovereign Vault: Total Level `380`
 
-Canon: [5 - RPG Skilling System](5-rpg-skilling-system/).
+Canon: [5 - RPG Skilling System](../5-rpg-skilling-system/).
 
 {% hint style="info" %}
 Do not use quests to bypass Total Level gates.
@@ -145,7 +145,7 @@ Location: **\[05] ARCHIVE**.
 
 This aligns with the “mission control” vibe in the UI map.
 
-Canon nav model: [6 - UI/UX Wireframe & Flow](6-ui-ux-wireframe-and-flow.md).
+Canon nav model: [6 - UI/UX Wireframe & Flow](../6-ui-ux-wireframe-and-flow.md).
 
 #### Quest types (baseline)
 
@@ -175,7 +175,7 @@ These attach to world events.
 
 They must be explicit about timing and modifiers.
 
-Canon event model: ["The Great Static" Events (incl. Static Pulses)](../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
+Canon event model: ["The Great Static" Events (incl. Static Pulses)](../../expansion-plan/macro-loop-expansion/5.-the-great-static-events-incl.-static-pulses.md).
 
 #### Quest anatomy (data shape)
 
@@ -318,7 +318,7 @@ Broadcast only high-signal achievements:
 
 Everything else should be local-only.
 
-Canon feed usage tone: [The Dig Site (Main Screen)](2-the-mechanics/the-dig-site-main-screen.md).
+Canon feed usage tone: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md).
 
 ***
 
@@ -328,10 +328,10 @@ Quests and achievements must not rewrite core system math.
 
 Hard rules:
 
-* The Field’s `5%` Anomaly roll never changes.\n Canon: [The Dig Site (Main Screen)](2-the-mechanics/the-dig-site-main-screen.md).
-* The Lab stage table is canonical.\n Canon: [The Refiner (The Gambling Hub)](2-the-mechanics/the-refiner-the-gambling-hub.md).
-* HI cannot be purchased or traded.\n Canon: [Currency Systems](4-the-mmo-and-economy-macro/currency-systems.md).
-* Museum submissions lock items for the week.\n Canon: [The Global Museum (Social Leaderboard)](4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
+* The Field’s `5%` Anomaly roll never changes.\n Canon: [The Dig Site (Main Screen)](../2-the-mechanics/the-dig-site-main-screen.md).
+* The Lab stage table is canonical.\n Canon: [The Refiner (The Gambling Hub)](../2-the-mechanics/the-refiner-the-gambling-hub.md).
+* HI cannot be purchased or traded.\n Canon: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md).
+* Museum submissions lock items for the week.\n Canon: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md).
 
 ***
 
@@ -364,11 +364,11 @@ It also turns mastery into visible status.
 
 Related anchors:
 
-* Loop context: [0 - Game Loop](0-game-loop.md)
-* Permanent power: [The Workshop (Progression)](2-the-mechanics/the-workshop-progression.md)
-* Skill gates: [5 - RPG Skilling System](5-rpg-skilling-system/)
-* Prestige currency: [Currency Systems](4-the-mmo-and-economy-macro/currency-systems.md)
-* Weekly loop: [The Global Museum (Social Leaderboard)](4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
+* Loop context: [0 - Game Loop](../0-game-loop.md)
+* Permanent power: [The Workshop (Progression)](../2-the-mechanics/the-workshop-progression.md)
+* Skill gates: [5 - RPG Skilling System](../5-rpg-skilling-system/)
+* Prestige currency: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md)
+* Weekly loop: [The Global Museum (Social Leaderboard)](../4-the-mmo-and-economy-macro/the-global-museum-social-leaderboard.md)
 
 ***
 
@@ -410,7 +410,7 @@ This is your “account output.”
 
 It increases Scrap/hour and Crate frequency.
 
-Canonical sink: [The Workshop (Progression)](2-the-mechanics/the-workshop-progression.md).
+Canonical sink: [The Workshop (Progression)](../2-the-mechanics/the-workshop-progression.md).
 
 #### Stack B — Competence power (Skills)
 
@@ -418,7 +418,7 @@ This is your “success rate and information edge.”
 
 It makes deeper Lab gambling viable.
 
-Canonical gates: [5 - RPG Skilling System](5-rpg-skilling-system/).
+Canonical gates: [5 - RPG Skilling System](../5-rpg-skilling-system/).
 
 #### Stack C — Collection power (Sets)
 
@@ -426,7 +426,7 @@ Sets are long-horizon goals.
 
 They pay passive bonuses and identity.
 
-Schema anchor: [3 - The Loot & Collection Schema](3-the-loot-and-collection-schema.md).
+Schema anchor: [3 - The Loot & Collection Schema](../3-the-loot-and-collection-schema.md).
 
 #### Stack D — Economic power (Bazaar mastery)
 
@@ -434,7 +434,7 @@ This is your ability to convert finds into capital.
 
 It should be knowledge-gated, not luck-gated.
 
-Market anchor: [The Bazaar (Auction House)](4-the-mmo-and-economy-macro/the-bazaar-auction-house.md).
+Market anchor: [The Bazaar (Auction House)](../4-the-mmo-and-economy-macro/the-bazaar-auction-house.md).
 
 #### Stack E — Social prestige (HI + Museum)
 
@@ -442,7 +442,7 @@ This is server-facing rank.
 
 It unlocks permits, titles, and elite systems.
 
-Currency anchor: [Currency Systems](4-the-mmo-and-economy-macro/currency-systems.md).
+Currency anchor: [Currency Systems](../4-the-mmo-and-economy-macro/currency-systems.md).
 
 ***
 
@@ -465,7 +465,7 @@ Hard rule:
 
 Spec reference for total level gates:
 
-* See “Total Level Gates” in [5 - RPG Skilling System](5-rpg-skilling-system/).
+* See “Total Level Gates” in [5 - RPG Skilling System](../5-rpg-skilling-system/).
 
 ***
 
@@ -612,7 +612,7 @@ Examples:
 
 Reference behavior:
 
-* See Mastery signals in [5 - RPG Skilling System](5-rpg-skilling-system/).
+* See Mastery signals in [5 - RPG Skilling System](../5-rpg-skilling-system/).
 
 #### Track 3 — Collection (completionism)
 
@@ -672,7 +672,7 @@ If you grant power:
 
 This page defines behavior.\n Layout lives in the UI/UX spec.
 
-UI anchor: [6 - UI/UX Wireframe & Flow](6-ui-ux-wireframe-and-flow.md).
+UI anchor: [6 - UI/UX Wireframe & Flow](../6-ui-ux-wireframe-and-flow.md).
 
 Rules:
 

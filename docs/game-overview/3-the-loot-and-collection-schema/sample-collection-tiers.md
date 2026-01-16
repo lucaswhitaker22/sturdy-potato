@@ -40,7 +40,7 @@ It can only apply explicit modifiers that are:
 
 {% stepper %}
 {% step %}
-### 1) Acquire the items
+#### 1) Acquire the items
 
 Items enter the Vault by being **claimed** from the Lab loop.
 
@@ -48,7 +48,7 @@ See [2: The Mechanics](../2-the-mechanics.md).
 {% endstep %}
 
 {% step %}
-### 2) The set check runs automatically
+#### 2) The set check runs automatically
 
 When a new item is added to your Vault:
 
@@ -58,7 +58,7 @@ When a new item is added to your Vault:
 {% endstep %}
 
 {% step %}
-### 3) “Set-lock” the items
+#### 3) “Set-lock” the items
 
 On completion, the required items become **set-locked**.
 
