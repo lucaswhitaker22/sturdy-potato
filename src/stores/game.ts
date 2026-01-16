@@ -417,10 +417,14 @@ export const useGameStore = defineStore('game', () => {
         ? seismicState.value.grades.join(',')
         : null;
 
-      // Note: We use the local userSessionId as a param if auth is NULL on server
-      const { data, error } = await supabase.rpc('rpc_extract', {
+      // Use JSON-based RPC to bypass parameter matching issues
+      const payload = {
         p_user_id: userSessionId.value,
         p_seismic_grade: gradesStr
+      };
+
+      const { data, error } = await supabase.rpc('rpc_extract_json', {
+        payload: payload
       });
       if (error) throw error;
       if (data.success) {

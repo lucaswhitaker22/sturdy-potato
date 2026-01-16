@@ -13,9 +13,11 @@ async function verify() {
     console.log('Testing rpc_extract...');
 
     // Test with explicit null
-    const { data, error } = await supabase.rpc('rpc_extract_seismic', {
-        p_user_id: testId,
-        p_seismic_grade: null
+    const { data, error } = await supabase.rpc('rpc_extract_json', {
+        payload: {
+            p_user_id: testId,
+            p_seismic_grade: null
+        }
     });
 
     if (error) {
