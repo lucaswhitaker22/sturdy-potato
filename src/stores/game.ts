@@ -305,6 +305,12 @@ export const useGameStore = defineStore('game', () => {
       smeltingBranch.value = profile.smelting_branch || null;
 
       // Sync Sub-Stores
+      skillsStore.specializations = {
+        excavation: profile.excavation_branch,
+        restoration: profile.restoration_branch,
+        appraisal: profile.appraisal_branch,
+        smelting: profile.smelting_branch
+      };
       skillsStore.excavationXP = Number(profile.excavation_xp || 0);
       skillsStore.restorationXP = Number(profile.restoration_xp || 0);
       skillsStore.appraisalXP = Number(profile.appraisal_xp || 0);
@@ -427,8 +433,8 @@ export const useGameStore = defineStore('game', () => {
       const gradesStr = seismicStore.seismicState.grades.length > 0
         ? seismicStore.seismicState.grades.join(',') : null;
 
-      // Use the new v6 extractor
-      const { data, error } = await supabase.rpc('rpc_extract_v6', {
+      // Use the new v7 extractor
+      const { data, error } = await supabase.rpc('rpc_extract_v7', {
         payload: {
           p_user_id: userSessionId.value,
           p_seismic_grade: gradesStr
@@ -542,7 +548,7 @@ export const useGameStore = defineStore('game', () => {
     if (isExtracting.value || !labState.value.isActive) return;
     isExtracting.value = true;
     try {
-      const { data, error } = await supabase.rpc('rpc_sift_v2', {
+      const { data, error } = await supabase.rpc('rpc_sift_v3', {
         p_user_id: userSessionId.value, p_tethers_used: tethersUsed, p_zone: finalZone
       });
       if (data?.success) {

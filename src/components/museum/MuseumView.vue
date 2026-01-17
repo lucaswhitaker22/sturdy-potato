@@ -78,9 +78,17 @@
               <div
                 class="text-[10px] uppercase font-mono tracking-widest text-gray-400"
               >
-                Total Score
+                Historical Influence
               </div>
-              <div class="text-2xl font-black">
+              <div class="text-2xl font-black text-yellow-500">
+                {{ gameStore.historicalInfluence.toLocaleString() }}
+              </div>
+              <div
+                class="text-[10px] uppercase font-mono tracking-widest text-gray-400 mt-2"
+              >
+                Current Week Score
+              </div>
+              <div class="text-xl font-black">
                 {{ totalScore.toLocaleString() }}
               </div>
               <div
@@ -90,6 +98,7 @@
                 SET BONUS ACTIVE (1.5x)
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -216,7 +225,10 @@ async function submit(item: any) {
     )
   )
     return;
-  await museumStore.submitItem(item.id);
+  const result = await museumStore.submitItem(item.id);
+  if (result) {
+    gameStore.addLog(`MUSEUM: ${item.item_id} loaned. Entry Score: ${result.score}`);
+  }
 }
 </script>
 

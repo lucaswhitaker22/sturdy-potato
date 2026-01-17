@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getToolLevel } from '@/lib/tools'; // Assuming this utility exists or need to move it
+import { supabase } from '@/lib/supabase';
+import { getToolLevel } from '@/lib/tools';
 
 export const useSkillsStore = defineStore('skills', () => {
     // State
@@ -15,6 +16,37 @@ export const useSkillsStore = defineStore('skills', () => {
     const appraisalLevel = computed(() => getToolLevel(appraisalXP.value));
     const smeltingLevel = computed(() => getToolLevel(smeltingXP.value));
 
+    // Specializations
+    const specializations = ref<{
+        excavation?: string;
+        restoration?: string;
+        appraisal?: string;
+        smelting?: string;
+    }>({});
+
+    async function chooseSpecialization(skill: string, branch: string) {
+        const { data, error } = await supabase.rpc('rpc_choose_specialization', {
+            p_skill: skill,
+            p_branch: branch
+        });
+        if (data?.success) {
+            specializations.value[skill as keyof typeof specializations.value] = branch;
+            return true;
+        }
+        return false;
+    }
+
+    async function respec(skill: string) {
+        const { data, error } = await supabase.rpc('rpc_respec_specialization', {
+            p_skill: skill
+        });
+        if (data?.success) {
+            delete specializations.value[skill as keyof typeof specializations.value];
+            return true;
+        }
+        return false;
+    }
+
     return {
         excavationXP,
         restorationXP,
@@ -23,6 +55,10 @@ export const useSkillsStore = defineStore('skills', () => {
         excavationLevel,
         restorationLevel,
         appraisalLevel,
-        smeltingLevel
+        smeltingLevel,
+        specializations,
+        chooseSpecialization,
+        respec
     };
 });
+

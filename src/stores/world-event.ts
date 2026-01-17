@@ -53,9 +53,25 @@ export const useWorldEventStore = defineStore('worldEvent', () => {
             .subscribe();
     }
 
+    async function contribute(amount: number, currency: 'scrap' | 'dust') {
+        const { data, error } = await supabase.rpc('rpc_world_event_contribute', {
+            p_amount: amount,
+            p_currency: currency
+        });
+        if (data?.success) {
+            if (activeEvent.value) {
+                activeEvent.value.global_goal_progress = data.new_progress;
+            }
+            return true;
+        }
+        return false;
+    }
+
     return {
         activeEvent,
         fetchActiveEvent,
-        subscribe
+        subscribe,
+        contribute
     };
 });
+

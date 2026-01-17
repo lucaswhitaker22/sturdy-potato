@@ -35,6 +35,7 @@ const skills = computed(() => [
     name: "Excavation",
     level: store.excavationLevel,
     xp: store.excavationXP,
+    storeBranch: 'excavationBranch',
     progress: getLevelProgress(store.excavationXP),
     nextLevelAt: getLevelThreshold(store.excavationXP),
     description:
@@ -42,11 +43,16 @@ const skills = computed(() => [
     bonusText: `+${(Math.floor(store.excavationLevel / 5) * 0.5).toFixed(
       1
     )}% Find Rate`,
+    branches: [
+      { id: 'area_specialist', label: 'Area Specialist', desc: 'Urban & Branded focus. Higher yields in Industrial/Suburbs.' },
+      { id: 'deep_seeker', label: 'Deep Seeker', desc: 'Tech & Cultural focus. Better for finding high-tier artifacts.' }
+    ]
   },
   {
     name: "Restoration",
     level: store.restorationLevel,
     xp: store.restorationXP,
+    storeBranch: 'restorationBranch',
     progress: getLevelProgress(store.restorationXP),
     nextLevelAt: getLevelThreshold(store.restorationXP),
     description:
@@ -55,28 +61,43 @@ const skills = computed(() => [
       store.restorationLevel * 0.1 +
       store.overclockBonus * 100
     ).toFixed(1)}% Stability`,
+    branches: [
+      { id: 'master_preserver', label: 'Master Preserver', desc: 'Stability bonus in early stages (0-3).' },
+      { id: 'swift_handler', label: 'Swift Handler', desc: 'Stability bonus in late stages (4+).' }
+    ]
   },
   {
     name: "Appraisal",
     level: store.appraisalLevel,
     xp: store.appraisalXP,
+    storeBranch: 'appraisalBranch',
     progress: getLevelProgress(store.appraisalXP),
     nextLevelAt: getLevelThreshold(store.appraisalXP),
     description:
       "Knowledge of item value. Grants access to market features and insights.",
     bonusText: `Market Access`,
+    branches: [
+      { id: 'authenticator', label: 'Authenticator', desc: 'Lower certification costs and higher value bonus.' },
+      { id: 'insider', label: 'Insider', desc: 'Reduces Counter-Bazaar risk and listing fees.' }
+    ]
   },
   {
     name: "Smelting",
     level: store.smeltingLevel,
     xp: store.smeltingXP,
+    storeBranch: 'smeltingBranch',
     progress: getLevelProgress(store.smeltingXP),
     nextLevelAt: getLevelThreshold(store.smeltingXP),
     description:
       "Efficiency in recycling materials. Level 99 doubles scrap from junk.",
     bonusText: `Recycling Eff.`,
+    branches: [
+      { id: 'scrap_tycoon', label: 'Scrap Tycoon', desc: '+25% Scrap balance from smelting junk items.' },
+      { id: 'fragment_alchemist', label: 'Fragment Alchemist', desc: 'Chance to find Cursed Fragments during failure salvage.' }
+    ]
   },
 ]);
+
 
 const totalLevel = computed(
   () =>
@@ -223,15 +244,43 @@ const totalTools = TOOL_CATALOG.length;
           {{ skill.description }}
         </p>
 
-        <div
-          class="mt-auto pt-2 border-t border-dashed border-gray-300 flex justify-between items-center bg-gray-50 p-2"
-        >
-          <span class="text-[10px] font-bold uppercase text-gray-500"
-            >Current Efficiency</span
-          >
           <span class="font-mono font-bold text-ink-black">{{
             skill.bonusText
           }}</span>
+
+        <!-- Specialization Section (Lv 60+) -->
+
+        <div v-if="skill.level >= 60" class="mt-4 pt-4 border-t-2 border-black">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-black uppercase text-inking-blue">Specialization</span>
+            <span v-if="store[skill.storeBranch as keyof typeof store]" class="bg-black text-white px-2 py-0.5 text-[10px] font-mono uppercase">
+              {{ (store[skill.storeBranch as keyof typeof store] as string).replace(/_/g, ' ') }}
+            </span>
+            <span v-else class="text-[10px] font-mono text-gray-400">UNSET</span>
+          </div>
+
+          <div v-if="!store[skill.storeBranch as keyof typeof store]" class="grid grid-cols-2 gap-2">
+            <button 
+              v-for="branch in skill.branches" 
+              :key="branch.id"
+              @click="store.chooseSpecialization(skill.name.toLowerCase(), branch.id)"
+              class="border border-black p-2 text-[10px] font-bold hover:bg-black hover:text-white transition-colors text-left flex flex-col gap-1"
+            >
+              <span class="uppercase">{{ branch.label }}</span>
+              <span class="text-[8px] font-normal leading-tight opacity-70">{{ branch.desc }}</span>
+            </button>
+          </div>
+          <div v-else class="flex justify-between items-center">
+            <p class="text-[9px] font-serif italic text-gray-600">
+              {{ skill.branches.find(b => b.id === store[skill.storeBranch as keyof typeof store])?.desc }}
+            </p>
+            <button 
+              @click="store.respecSpecialization(skill.name.toLowerCase())"
+              class="text-[8px] font-mono border-b border-gray-400 hover:text-red-600 hover:border-red-600 transition-colors"
+            >
+              RESPEC (2.5k)
+            </button>
+          </div>
         </div>
       </div>
     </div>

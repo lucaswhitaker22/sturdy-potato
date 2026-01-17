@@ -35,7 +35,23 @@
         </div>
       </div>
 
-      <div class="text-sm">Ends: {{ timeLeft }}</div>
+      <div class="text-sm flex flex-col items-center gap-2">
+        <div>Ends: {{ timeLeft }}</div>
+        <div class="flex gap-2">
+          <button 
+            @click="eventStore.contribute(50, 'scrap')"
+            class="bg-black border border-red-500 hover:bg-red-800 text-[10px] px-2 py-1 transition-colors"
+          >
+            +50 SCRAP
+          </button>
+          <button 
+            @click="eventStore.contribute(10, 'dust')"
+            class="bg-black border border-red-500 hover:bg-red-800 text-[10px] px-2 py-1 transition-colors"
+          >
+            +10 DUST
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

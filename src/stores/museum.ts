@@ -64,7 +64,7 @@ export const useMuseumStore = defineStore('museum', () => {
 
         gameStore.addLog(`Item submitted to Museum! Score: ${data.score}`);
         await fetchActiveWeek(); // Refresh to show new submission
-        return true;
+        return data;
     }
 
     return {
