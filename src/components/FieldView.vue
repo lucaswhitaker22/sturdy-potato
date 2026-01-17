@@ -127,16 +127,61 @@ const isShaking = ref(false);
 
         <!-- ZONE SELECTOR -->
         <div class="flex flex-col gap-1">
-           <select 
-             v-model="store.activeZoneId" 
-             @change="store.setZone(store.activeZoneId)"
-             class="bg-white border-2 border-black text-[9px] font-mono px-2 py-1 uppercase outline-none focus:ring-2 focus:ring-stamp-blue"
-           >
-             <option value="industrial_zone">Industrial Zone</option>
-             <option value="suburbs">Residential Suburbs</option>
-             <option value="mall">Sunken Mall</option>
-             <option value="sovereign_vault">Sovereign Vault</option>
-           </select>
+           <div class="flex gap-2 items-center">
+             <select 
+               v-model="store.activeZoneId" 
+               @change="store.setZone(store.activeZoneId)"
+               class="bg-white border-2 border-black text-[9px] font-mono px-2 py-1 uppercase outline-none focus:ring-2 focus:ring-stamp-blue"
+             >
+               <option value="industrial_zone">Industrial Zone</option>
+               <option value="suburbs">Residential Suburbs</option>
+               <option value="mall">Sunken Mall</option>
+               <option value="sovereign_vault">Sovereign Vault</option>
+             </select>
+
+             <!-- Heatmap Chip -->
+             <div 
+               v-if="store.vaultHeatmaps[store.activeZoneId]"
+               class="px-2 py-1 border border-black font-mono text-[8px] font-bold group relative cursor-help"
+               :class="{
+                 'bg-cyan-100 text-cyan-800': store.vaultHeatmaps[store.activeZoneId].tier === 'LOW',
+                 'bg-orange-100 text-orange-800': store.vaultHeatmaps[store.activeZoneId].tier === 'MED',
+                 'bg-red-500 text-white animate-pulse': store.vaultHeatmaps[store.activeZoneId].tier === 'HIGH'
+               }"
+             >
+               STATIC: {{ store.vaultHeatmaps[store.activeZoneId].tier }}
+               
+               <!-- Tooltip -->
+               <div class="hidden group-hover:block absolute left-0 top-full mt-2 w-48 bg-black text-white p-2 z-50 shadow-xl border border-white/20">
+                 <p class="font-bold border-b border-white/20 mb-1">INTENSITY MODIFIERS:</p>
+                 <div v-if="store.vaultHeatmaps[store.activeZoneId].tier === 'LOW'" class="text-[7px]">
+                   • FIND RATE: +0%<br/>
+                   • LAB STABILITY: BASE
+                 </div>
+                 <div v-else-if="store.vaultHeatmaps[store.activeZoneId].tier === 'MED'" class="text-[7px]">
+                   • FIND RATE: +1% (STATIC)<br/>
+                   • LAB STABILITY: -2.5% PENALTY
+                 </div>
+                 <div v-else-if="store.vaultHeatmaps[store.activeZoneId].tier === 'HIGH'" class="text-[7px]">
+                   • FIND RATE: +2% (STATIC)<br/>
+                   • LAB STABILITY: -5% PENALTY
+                 </div>
+               </div>
+             </div>
+           </div>
+
+           <!-- Oracle Forecast -->
+           <div v-if="store.appraisalLevel >= 99" class="mt-2 paper-card bg-black/5 border border-black/10 p-2 max-w-[150px]">
+             <span class="block text-[7px] font-black uppercase text-black/40 mb-1 tracking-tighter">[ ORACLE FORECAST ]</span>
+             <div class="flex flex-wrap gap-1">
+               <span v-for="trend in (store.vaultHeatmaps[store.activeZoneId]?.trending || [])" 
+                     :key="trend" 
+                     class="text-[7px] font-mono bg-white px-1 border border-black/10">
+                 {{ trend }}
+               </span>
+               <span v-if="!(store.vaultHeatmaps[store.activeZoneId]?.trending?.length)" class="text-[7px] italic text-black/30">Scanning trends...</span>
+             </div>
+           </div>
         </div>
       </div>
 
@@ -145,7 +190,7 @@ const isShaking = ref(false);
         class="absolute top-6 right-6 text-right font-mono text-[10px] text-gray-400"
       >
         ACTIVE ZONE: {{ store.activeZoneId.replace('_', ' ').toUpperCase() }}<br />
-        STATIC INTENSITY: {{ (store.vaultHeatmaps[store.activeZoneId] * 100 || 0).toFixed(1) }}%<br />
+        STATIC TIER: {{ store.vaultHeatmaps[store.activeZoneId]?.tier || '---' }}<br />
         DENSITY: 87.2%
       </div>
 

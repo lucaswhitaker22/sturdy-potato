@@ -15,7 +15,31 @@ const currentStability = computed(() => {
   else if (stage === 4) base = 10;
 
   const bonus = store.restorationLevel * 0.1 + store.overclockBonus * 100;
-  return (base + bonus).toFixed(1) + "%";
+  
+  // Heatmap Penalty
+  const crate = store.labState.activeCrate;
+  let penalty = 0;
+  if (crate?.source_static_tier === 'HIGH') penalty = 5.0;
+  else if (crate?.source_static_tier === 'MED') penalty = 2.5;
+
+  // Survey Mitigation
+  if (store.lastSurveyAt && (Date.now() - store.lastSurveyAt < 600000)) {
+    penalty = penalty * 0.5;
+  }
+
+  return (base + bonus - penalty).toFixed(1) + "%";
+});
+
+const staticPenalty = computed(() => {
+  const crate = store.labState.activeCrate;
+  let penalty = 0;
+  if (crate?.source_static_tier === 'HIGH') penalty = 5.0;
+  else if (crate?.source_static_tier === 'MED') penalty = 2.5;
+  
+  if (store.lastSurveyAt && (Date.now() - store.lastSurveyAt < 600000)) {
+    penalty = penalty * 0.5;
+  }
+  return penalty > 0 ? `-${penalty.toFixed(1)}%` : '0%';
 });
 
 // Active Stabilization State

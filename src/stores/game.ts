@@ -63,7 +63,7 @@ export const useGameStore = defineStore('game', () => {
   // Expansion State
   const activeZoneId = ref('industrial_zone');
   const isFocusedSurveyActive = ref(false);
-  const vaultHeatmaps = ref<Record<string, number>>({});
+  const vaultHeatmaps = ref<Record<string, { tier: 'LOW' | 'MED' | 'HIGH', trending?: string[], updated_at: string }>>({});
   const lastSurveyAt = ref<number | null>(null);
   const excavationBranch = ref<string | null>(null);
   const restorationBranch = ref<string | null>(null);
@@ -516,6 +516,12 @@ export const useGameStore = defineStore('game', () => {
       vaultHeatmaps.value = data;
     }
   }
+
+  // Appraisal Level 99 Mastery: The Oracle
+  const oracleTrendSight = computed(() => {
+    if (appraisalLevel.value < 99) return null;
+    return vaultHeatmaps.value[activeZoneId.value]?.trending || [];
+  });
 
   function strike() {
     const pos = seismicStore.seismicState.impactPos;
