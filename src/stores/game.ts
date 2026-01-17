@@ -439,7 +439,12 @@ export const useGameStore = defineStore('game', () => {
       if (error) throw error;
       if (data.success) {
         if (data.result === 'ANOMALY') addLog('⚠ ANOMALY DETECTED.');
-        else if (data.crate_dropped) addLog('CRATE FOUND!');
+        else if (data.crate_dropped) {
+          addLog('CRATE FOUND!');
+          if (vaultHeatmaps.value[activeZoneId.value]?.tier !== 'LOW') {
+            addLog('HOT ZONE BONUS: Discovery chance significantly increased.');
+          }
+        }
         else if (data.result === 'SCRAP_FOUND') addLog(`Extraction complete. +${data.scrap_gain} Scrap.`);
         else addLog('Nothing found.');
 
@@ -594,7 +599,7 @@ export const useGameStore = defineStore('game', () => {
       labState.value = {
         isActive: lab.is_active,
         currentStage: lab.current_stage,
-        activeCrate: lab.active_crate
+        activeCrate: lab.crate_info || { id: lab.active_crate }
       };
     }
   }
@@ -738,11 +743,15 @@ export const useGameStore = defineStore('game', () => {
     salvageOpportunity.value = null;
   }
 
-  async function listItem(vaultItemId: string, price: number) {
-    return inventoryStore.listItem(vaultItemId, price, 24).then(({ data }) => {
+  async function listItem(vaultItemId: string, price: number, isCounter: boolean = false) {
+    return inventoryStore.listItem(vaultItemId, price, 24, isCounter).then(({ data }) => {
       if (data?.success) {
-        appraisalXP.value += 50;
-        addLog('Item listed.');
+        appraisalXP.value += isCounter ? 100 : 50;
+        if (data.is_under_the_table) {
+          addLog('MASTER PERK: Listing published Under-the-Table (Masters only).');
+        } else {
+          addLog(isCounter ? 'Black Market listing published.' : 'Item listed.');
+        }
         return true;
       }
       return false;

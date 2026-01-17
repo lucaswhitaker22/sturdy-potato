@@ -16,6 +16,8 @@ export interface MarketListing {
     highest_bid: number;
     ends_at: string;
     mint_number?: number;
+    is_counter: boolean;
+    is_under_the_table: boolean;
 }
 
 export const useInventoryStore = defineStore('inventory', () => {
@@ -36,11 +38,12 @@ export const useInventoryStore = defineStore('inventory', () => {
         }
     }
 
-    async function listItem(vaultItemId: string, price: number, durationHours: number) {
+    async function listItem(vaultItemId: string, price: number, durationHours: number, isCounter: boolean = false) {
         const { data, error } = await supabase.rpc('rpc_list_item', {
             p_vault_item_id: vaultItemId,
             p_price: price,
-            p_duration_hours: durationHours
+            p_hours: durationHours,
+            p_is_counter: isCounter
         });
         return { data, error };
     }

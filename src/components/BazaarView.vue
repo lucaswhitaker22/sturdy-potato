@@ -5,6 +5,7 @@ import { useMMOStore } from "@/stores/mmo";
 
 const store = useGameStore();
 const activeTab = ref<"MARKET" | "SELL">("MARKET");
+const isCounterMode = ref(false);
 
 onMounted(() => {
   store.fetchMarket();
@@ -62,6 +63,16 @@ const isExpired = (ends_at: string) => {
   return new Date(ends_at) < new Date();
 };
 
+const filteredListings = computed(() => {
+  return store.activeListings.filter(l => !!l.is_counter === isCounterMode.value);
+});
+
+const calculateRisk = computed(() => {
+  const lvl = Math.floor(Math.sqrt(store.appraisalXP / 10));
+  const risk = Math.max(0.5, 2.0 - (Math.min(lvl, 99) / 10 * 0.25));
+  return risk.toFixed(1);
+});
+
 // Selling Logic
 const sellPrice = ref(100);
 const selectedSellItem = ref<string | null>(null);
@@ -81,13 +92,16 @@ const handleList = async () => {
 
   if (
     !confirm(
-      `List ${selectedSellItem.value} for ${sellPrice.value} Scrap?\nDeposit of 50 Scrap will be deducted.`
+      `List ${selectedSellItem.value} for ${sellPrice.value} Scrap?\n` +
+      (isCounterMode.value 
+        ? `WARNING: This is a COUNTER-BAZAAR listing. Risk of confiscation: ${calculateRisk.value}% per 24h.` 
+        : `Deposit of 50 Scrap will be deducted.`)
     )
   ) {
     return;
   }
 
-  const success = await store.listItem(selectedSellItem.value, sellPrice.value);
+  const success = await store.listItem(selectedSellItem.value, sellPrice.value, isCounterMode.value);
   if (success) {
     selectedSellItem.value = null;
     activeTab.value = "MARKET";
@@ -107,9 +121,10 @@ const sellableItems = computed(() => [...store.inventory].reverse());
     >
       <div>
         <h2
-          class="text-2xl font-serif font-black uppercase text-ink-black tracking-tight"
+          class="text-2xl font-serif font-black uppercase tracking-tight transition-colors duration-500"
+          :class="isCounterMode ? 'text-red-700' : 'text-ink-black'"
         >
-          Public Auction House
+          {{ isCounterMode ? 'The Counter-Bazaar' : 'Public Auction House' }}
         </h2>
         <!-- TICKER START -->
         <div
@@ -136,6 +151,10 @@ const sellableItems = computed(() => [...store.inventory].reverse());
                 >LISTED {{ event.details.item_id }} FOR
                 {{ event.details.price }} SCRAP</span
               >
+              <span v-else-if="event.event_type === 'counter_listing'"
+                >BLACK MARKET: {{ event.details.item_id }} FOR
+                {{ event.details.price }} SCRAP</span
+              >
               <span v-else-if="event.event_type === 'sale'"
                 >SOLD {{ event.details.item_id }} FOR
                 {{ event.details.price }} SCRAP</span
@@ -143,6 +162,9 @@ const sellableItems = computed(() => [...store.inventory].reverse());
               <span v-else-if="event.event_type === 'find'"
                 >FOUND {{ event.details.item_id }} (HV:
                 {{ event.details.hv }})</span
+              >
+              <span v-else-if="event.event_type === 'static_shift'"
+                >STATIC PULSE: {{ event.details.zone_id.replace('_', ' ') }} IS NOW {{ event.details.tier }}</span
               >
               <span v-else>updated the ledger</span>
             </span>
@@ -188,6 +210,19 @@ const sellableItems = computed(() => [...store.inventory].reverse());
         Consign Item
       </button>
 
+      <div class="ml-6 flex items-center bg-gray-200 p-1 rounded-sm border border-gray-300">
+         <button 
+           @click="isCounterMode = false"
+           class="px-3 py-1 text-[9px] font-black uppercase tracking-widest transition-all"
+           :class="!isCounterMode ? 'bg-white text-black shadow-sm' : 'text-gray-500'"
+         >Standard</button>
+         <button 
+           @click="isCounterMode = true"
+           class="px-3 py-1 text-[9px] font-black uppercase tracking-widest transition-all"
+           :class="isCounterMode ? 'bg-red-600 text-white shadow-sm' : 'text-gray-500'"
+         >Counter</button>
+      </div>
+
       <button
         @click="refreshMarket"
         class="ml-auto text-[10px] font-mono uppercase text-blue-600 hover:underline flex items-center gap-1"
@@ -210,13 +245,23 @@ const sellableItems = computed(() => [...store.inventory].reverse());
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div
-          v-for="listing in store.activeListings"
+          v-for="listing in filteredListings"
           :key="listing.id"
-          class="border-2 border-dashed border-gray-300 p-4 hover:border-black transition-colors group relative bg-[#fafafa]"
+          class="border-2 border-dashed p-4 hover:border-black transition-colors group relative bg-[#fafafa]"
+          :class="isCounterMode ? 'border-red-300 bg-red-50/20' : 'border-gray-300'"
         >
+          <!-- Counter Badge -->
+          <div v-if="listing.is_counter" class="absolute top-2 right-12 bg-red-600 text-white text-[7px] px-1 font-mono animate-pulse z-10">
+            COUNTER-BAZAAR
+          </div>
+          <div v-if="listing.is_under_the_table" class="absolute top-5 right-12 bg-black text-yellow-400 text-[7px] px-1 font-mono z-10">
+            UNDER-THE-TABLE
+          </div>
+
           <!-- Lot Number Stamp -->
           <div
             class="absolute -top-3 -left-3 bg-white border border-black px-2 py-0.5 text-[10px] font-bold shadow-sm transform -rotate-3 group-hover:rotate-0 transition-transform"
+            :class="isCounterMode ? 'border-red-600 text-red-600' : ''"
           >
             LOT #{{ listing.id.substring(0, 4).toUpperCase() }}
           </div>
@@ -331,19 +376,25 @@ const sellableItems = computed(() => [...store.inventory].reverse());
           </div>
 
           <div
-            class="text-[10px] font-mono text-gray-500 mb-6 italic border-l-2 border-gray-300 pl-2"
+            class="text-[10px] font-mono text-gray-500 mb-6 italic border-l-2 pl-2"
+            :class="isCounterMode ? 'border-red-600' : 'border-gray-300'"
           >
             NOTICE: <br />
             * Auction duration fixed at 24 hours.<br />
             * Listing Deposit: 50 Scrap (Refunded if sold/expired).<br />
-            * Archive Tax: 5% of final sale price.
+            <span v-if="!isCounterMode">* Archive Tax: 5% of final sale price.</span>
+            <span v-else class="text-red-600 font-bold">
+              * Archive Tax: 0% (COUNTER MODE)<br/>
+              * CONFISCATION RISK: {{ calculateRisk }}% / 24H
+            </span>
           </div>
 
           <button
             @click="handleList"
-            class="w-full bg-ink-black text-white font-bold uppercase py-3 hover:bg-gray-800 transition-all shadow-md active:translate-y-1 active:shadow-none"
+            class="w-full text-white font-bold uppercase py-3 hover:opacity-90 transition-all shadow-md active:translate-y-1 active:shadow-none"
+            :class="isCounterMode ? 'bg-red-700' : 'bg-ink-black'"
           >
-            Confirm & Publish Listing
+            {{ isCounterMode ? 'PUBLISH TO BLACK MARKET' : 'Confirm & Publish Listing' }}
           </button>
         </div>
         <div

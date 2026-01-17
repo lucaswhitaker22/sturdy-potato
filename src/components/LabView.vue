@@ -36,10 +36,15 @@ const staticPenalty = computed(() => {
   if (crate?.source_static_tier === 'HIGH') penalty = 5.0;
   else if (crate?.source_static_tier === 'MED') penalty = 2.5;
   
-  if (store.lastSurveyAt && (Date.now() - store.lastSurveyAt < 600000)) {
+  const isMitigated = store.lastSurveyAt && (Date.now() - store.lastSurveyAt < 600000);
+  if (isMitigated) {
     penalty = penalty * 0.5;
   }
-  return penalty > 0 ? `-${penalty.toFixed(1)}%` : '0%';
+  return {
+    value: penalty > 0 ? `-${penalty.toFixed(1)}%` : '0%',
+    raw: penalty,
+    isMitigated
+  };
 });
 
 // Active Stabilization State
@@ -463,6 +468,13 @@ function getCrateIntel(crate: any) {
                    <span class="text-[9px] font-mono text-gray-400 uppercase">{{ info.label }}</span>
                    <span class="text-[10px] font-mono font-black uppercase text-blue-600">{{ info.value }}</span>
                  </div>
+                  <!-- SOURCE INFO -->
+                  <div class="flex justify-between items-center border-t border-gray-100 pt-1 mt-1">
+                    <span class="text-[9px] font-mono text-gray-400 uppercase">SOURCE</span>
+                    <span class="text-[9px] font-mono font-bold text-gray-600 truncate max-w-[80px]">
+                      {{ (crate.source_zone_id || 'UNKNOWN').replace('_', ' ').toUpperCase() }}
+                    </span>
+                  </div>
                </template>
                <div v-else class="flex items-center justify-center py-2 opacity-30 grayscale">
                  <span class="text-[10px] font-mono italic">No sensor data.</span>
@@ -529,11 +541,11 @@ function getCrateIntel(crate: any) {
          <!-- STATIC PENALTY DISPLAY -->
          <div class="flex flex-col items-center">
             <span class="text-xs font-mono text-gray-500 uppercase">Static Penalty</span>
-             <span class="text-sm font-black font-mono text-purple-600">
-                -{{ (store.labState.activeCrate?.contents?.found_in_static_intensity * 0.05 * 100 || 0).toFixed(1) }}%
+             <span class="text-sm font-black font-mono" :class="staticPenalty.isMitigated ? 'text-green-600' : 'text-purple-600'">
+                {{ staticPenalty.value }}
              </span>
-             <div v-if="store.lastSurveyAt && Date.now() - store.lastSurveyAt < 600000" class="text-[8px] text-green-600 font-bold uppercase mt-1">
-                 Survey Active: -50% Penalty
+             <div v-if="staticPenalty.isMitigated" class="text-[8px] text-green-600 font-bold uppercase mt-1 animate-pulse">
+                 SURVEY MITIGATION ACTIVE
              </div>
          </div>
          <div class="flex flex-col items-end">

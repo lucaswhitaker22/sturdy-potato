@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 export interface GlobalEvent {
     id: string;
-    event_type: 'find' | 'listing' | 'sale' | 'gamble' | 'anomaly';
+    event_type: 'find' | 'listing' | 'sale' | 'gamble' | 'anomaly' | 'counter_listing' | 'static_shift';
     user_id: string;
     details: any;
     created_at: string;
