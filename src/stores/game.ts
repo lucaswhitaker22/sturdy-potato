@@ -286,7 +286,77 @@ export const useGameStore = defineStore('game', () => {
     userSessionId.value = user.id;
     addLog(`Operator Identified: ${user.id.substring(0, 8)}`);
 
-    // 1. Fetch Profile via RPC (Bypasses RLS for local users)
+    await syncProfile();
+
+    // 2. Fetch Lab State
+    const { data: labResp } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userSessionId.value });
+    if (labResp?.success && labResp.lab_state) {
+      const lab = labResp.lab_state;
+      labState.value = {
+        isActive: lab.is_active,
+        currentStage: lab.current_stage,
+        activeCrate: lab.active_crate
+      };
+    }
+
+    // 3. Inventory & Tools
+    const { data: defs } = await supabase.from('item_definitions').select('*');
+    if (defs) inventoryStore.catalog = defs as ItemDefinition[];
+
+    const { data: items } = await supabase.from('vault_items').select('*').eq('user_id', user.id);
+    if (items) {
+      inventoryStore.inventory = items.map((i: any) => {
+        const def = inventoryStore.catalog.find(d => d.id === i.item_id);
+        return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
+      }) as VaultItem[];
+    }
+
+    const { data: tools } = await supabase.from('owned_tools').select('tool_id, level').eq('user_id', user.id);
+    if (tools) {
+      const toolMap: Record<string, number> = {};
+      tools.forEach(t => toolMap[t.tool_id] = t.level);
+      inventoryStore.ownedTools = toolMap;
+      if (!inventoryStore.ownedTools['rusty_shovel']) inventoryStore.ownedTools['rusty_shovel'] = 1;
+    }
+
+    const { data: sets } = await supabase.from('completed_sets').select('set_id').eq('user_id', user.id);
+    if (sets) inventoryStore.completedSetIds = sets.map(s => s.set_id);
+
+    // 4. Realtime Subscription
+    supabase.channel('game-state')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, (payload) => {
+        const p = payload.new as any;
+        scrapBalance.value = Number(p.scrap_balance ?? 0);
+        fineDustBalance.value = Number(p.fine_dust_balance ?? 0);
+        cursedFragmentBalance.value = Number(p.cursed_fragment_balance ?? 0);
+        trayCount.value = Number(p.tray_count ?? 0);
+        crateTray.value = p.crate_tray || [];
+        skillsStore.excavationXP = Number(p.excavation_xp ?? 0);
+        skillsStore.restorationXP = Number(p.restoration_xp ?? 0);
+        skillsStore.appraisalXP = Number(p.appraisal_xp ?? 0);
+        skillsStore.smeltingXP = Number(p.smelting_xp ?? 0);
+        inventoryStore.activeToolId = p.active_tool_id;
+
+        // Expansion Sync
+        activeZoneId.value = p.active_zone_id || 'industrial_zone';
+        isFocusedSurveyActive.value = p.is_focused_survey_active ?? false;
+        lastSurveyAt.value = p.last_survey_at ? new Date(p.last_survey_at).getTime() : null;
+        excavationBranch.value = p.excavation_branch || null;
+        restorationBranch.value = p.restoration_branch || null;
+        appraisalBranch.value = p.appraisal_branch || null;
+        smeltingBranch.value = p.smelting_branch || null;
+      })
+      .subscribe();
+
+    await checkOfflineGains();
+    await fetchHeatmaps();
+    startPassiveLoop();
+  }
+
+  async function syncProfile() {
+    if (!userSessionId.value) return;
+    
+    // 1. Fetch Profile via RPC
     const { data: profileResp, error: profileErr } = await supabase.rpc('rpc_get_profile', { p_user_id: userSessionId.value });
 
     if (profileResp?.success && profileResp.profile) {
@@ -324,72 +394,6 @@ export const useGameStore = defineStore('game', () => {
         console.error('Profile fetch failed:', profileErr);
       }
     }
-
-    // 2. Fetch Lab State
-    const { data: labResp } = await supabase.rpc('rpc_get_lab_state', { p_user_id: userSessionId.value });
-    if (labResp?.success && labResp.lab_state) {
-      const lab = labResp.lab_state;
-      labState.value = {
-        isActive: lab.is_active,
-        currentStage: lab.current_stage,
-        activeCrate: lab.active_crate
-      };
-    }
-
-    // 3. Inventory & Tools (Delegated logic but we fetch here for strict procedural init if preferred)
-    // Let's refetch via RPC or standard Select for completeness, updating the Sub Stores
-    const { data: defs } = await supabase.from('item_definitions').select('*');
-    if (defs) inventoryStore.catalog = defs as ItemDefinition[];
-
-    const { data: items } = await supabase.from('vault_items').select('*').eq('user_id', user.id);
-    if (items) {
-      inventoryStore.inventory = items.map((i: any) => {
-        const def = inventoryStore.catalog.find(d => d.id === i.item_id);
-        return { ...i, item: def, name: def?.name, tier: def?.tier, flavorText: def?.flavor_text };
-      }) as VaultItem[];
-    }
-
-    const { data: tools } = await supabase.from('owned_tools').select('tool_id, level').eq('user_id', user.id);
-    if (tools) {
-      const toolMap: Record<string, number> = {};
-      tools.forEach(t => toolMap[t.tool_id] = t.level);
-      inventoryStore.ownedTools = toolMap;
-      if (!inventoryStore.ownedTools['rusty_shovel']) inventoryStore.ownedTools['rusty_shovel'] = 1;
-    }
-
-    const { data: sets } = await supabase.from('completed_sets').select('set_id').eq('user_id', user.id);
-    if (sets) inventoryStore.completedSetIds = sets.map(s => s.set_id);
-
-    // 4. Realtime Subscription (Simplified)
-    supabase.channel('game-state')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, (payload) => {
-        const p = payload.new as any;
-        scrapBalance.value = Number(p.scrap_balance ?? 0);
-        fineDustBalance.value = Number(p.fine_dust_balance ?? 0);
-        cursedFragmentBalance.value = Number(p.cursed_fragment_balance ?? 0);
-        trayCount.value = Number(p.tray_count ?? 0);
-        crateTray.value = p.crate_tray || [];
-        skillsStore.excavationXP = Number(p.excavation_xp ?? 0);
-        skillsStore.restorationXP = Number(p.restoration_xp ?? 0);
-        skillsStore.appraisalXP = Number(p.appraisal_xp ?? 0);
-        skillsStore.smeltingXP = Number(p.smelting_xp ?? 0);
-        inventoryStore.activeToolId = p.active_tool_id;
-
-        // Expansion Sync
-        activeZoneId.value = p.active_zone_id || 'industrial_zone';
-        isFocusedSurveyActive.value = p.is_focused_survey_active ?? false;
-        lastSurveyAt.value = p.last_survey_at ? new Date(p.last_survey_at).getTime() : null;
-        excavationBranch.value = p.excavation_branch || null;
-        restorationBranch.value = p.restoration_branch || null;
-        appraisalBranch.value = p.appraisal_branch || null;
-        smeltingBranch.value = p.smelting_branch || null;
-      })
-      // Inventory updates omitted for brevity but should be here
-      .subscribe();
-
-    await checkOfflineGains();
-    await fetchHeatmaps();
-    startPassiveLoop();
   }
 
   async function extract() {
@@ -912,7 +916,7 @@ export const useGameStore = defineStore('game', () => {
 
     // Actions
     init, extract, strike, sift, startSifting, appraiseCrate, claim,
-    salvage, useEmergencyGlue, clearSalvage,
+    salvage, useEmergencyGlue, clearSalvage, syncProfile,
     fetchMarket: inventoryStore.fetchMarket,
     listItem, placeBid,
     upgradeTool, setActiveTool, claimSet,

@@ -15,6 +15,8 @@ import MuseumView from "@/components/museum/MuseumView.vue";
 import InfluenceShop from "@/components/shop/InfluenceShop.vue";
 import { useMMOStore } from "@/stores/mmo";
 import NotificationManager from "@/components/mmo/NotificationManager.vue";
+import QuestBoard from "@/components/quests/QuestBoard.vue";
+import QuestTracker from "@/components/quests/QuestTracker.vue";
 import StatsView from "@/components/StatsView.vue";
 import DevTools from "@/components/DevTools.vue";
 
@@ -45,6 +47,7 @@ type Deck =
   | "LAB"
   | "WORKSHOP"
   | "COLLECTIONS"
+  | "ARCHIVE"
   | "BAZAAR"
   | "MUSEUM"
   | "SHOP"
@@ -75,7 +78,7 @@ const setDeck = (deck: Deck) => {
         class="flex px-4 border-b-2 border-ink-black gap-1 translate-y-[2px] z-10 flex-wrap"
       >
         <button
-          v-for="deck in ['FIELD', 'LAB', 'WORKSHOP', 'COLLECTIONS', 'BAZAAR', 'MUSEUM', 'SHOP', 'VAULT', 'STATS'] as Deck[]"
+          v-for="deck in ['FIELD', 'LAB', 'WORKSHOP', 'COLLECTIONS', 'ARCHIVE', 'BAZAAR', 'MUSEUM', 'SHOP', 'VAULT', 'STATS'] as Deck[]"
           :key="deck"
           @click="setDeck(deck)"
           :class="[
@@ -94,6 +97,7 @@ const setDeck = (deck: Deck) => {
                   "LAB",
                   "WORKSHOP",
                   "COLLECTIONS",
+                  "ARCHIVE",
                   "BAZAAR",
                   "MUSEUM",
                   "SHOP",
@@ -125,6 +129,7 @@ const setDeck = (deck: Deck) => {
             <LabView v-if="currentDeck === 'LAB'" />
             <WorkshopView v-if="currentDeck === 'WORKSHOP'" />
             <CollectionsView v-if="currentDeck === 'COLLECTIONS'" />
+            <QuestBoard v-if="currentDeck === 'ARCHIVE'" />
             <BazaarView v-if="currentDeck === 'BAZAAR'" />
             <MuseumView v-if="currentDeck === 'MUSEUM'" />
             <InfluenceShop v-if="currentDeck === 'SHOP'" />
@@ -133,8 +138,13 @@ const setDeck = (deck: Deck) => {
           </div>
         </section>
 
-        <!-- Right Workspace (The "Notepad" Side) -->
+      <!-- Right Workspace (The "Notepad" Side) -->
         <aside class="lg:col-span-4 flex flex-col gap-6 h-full">
+          <!-- Quest Tracker: Pinned Directives -->
+          <div class="paper-card p-0 bg-transparent border-none">
+             <QuestTracker />
+          </div>
+
           <!-- Activity Feed: Ticker Tape Style -->
           <div
             class="h-64 paper-card p-3 relative overflow-hidden bg-[#FAF9F6]"
@@ -154,13 +164,6 @@ const setDeck = (deck: Deck) => {
           >
             <TerminalLog />
           </div>
-
-          <!-- Vault View: Mini Reference Card -->
-          <!-- <div
-            class="h-80 paper-card p-2 bg-[#F5F5F0] border-2 border-dashed border-gray-400"
-          >
-            <VaultView />
-          </div> -->
         </aside>
       </main>
 

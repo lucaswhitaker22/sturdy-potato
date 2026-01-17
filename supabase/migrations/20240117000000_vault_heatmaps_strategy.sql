@@ -174,6 +174,8 @@ END;
 $$;
 
 -- 6. Update rpc_sift_v2 to use source static tier
+DROP FUNCTION IF EXISTS public.rpc_sift_v2(UUID, INT, INT);
+
 CREATE OR REPLACE FUNCTION public.rpc_sift_v2(p_user_id UUID, p_tethers_used INT DEFAULT 0, p_zone INT DEFAULT 0)
 RETURNS JSONB
 LANGUAGE plpgsql
